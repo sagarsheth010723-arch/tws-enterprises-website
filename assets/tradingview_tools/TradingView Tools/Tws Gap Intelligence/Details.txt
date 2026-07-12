@@ -1,0 +1,20 @@
+TWS Gap Intelligence Engine is a gap-based market analysis tool designed to evaluate the quality, strength, and potential outcome of opening gaps.
+
+The indicator combines multiple analytical engines including Gap Classification, Gap Acceptance, Liquidity Void Detection, Trap Absorption Analysis, Market State Evaluation, Target Projection, Closing Pressure Assessment, and Next Day Forecasting.
+
+Key Features:
+• Gap Type Classification (Gap Up, Gap Down, Flat Open)
+• Gap Strength Assessment
+• Real vs Fake Gap Detection
+• Gap Fill Probability Analysis
+• Market State Identification
+• Projection-Based Target Calculation
+• Intraday Bias Evaluation
+• Next Day Opening Forecast
+• Clean Dashboard-Based Interface
+
+The objective of this indicator is not to generate buy or sell signals, but to provide a structured framework for understanding how the market is reacting to an opening gap and what outcomes are statistically more likely.
+
+All projections and forecasts are derived from price action, volatility, momentum, and internal market structure analysis.
+
+This tool is intended for traders who want additional context around gap behavior, market acceptance, continuation potential, and forecasted market conditions.

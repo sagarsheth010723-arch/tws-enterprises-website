@@ -1,0 +1,37 @@
+TWS APEX SMC — Indian Markets Optimized
+
+TWS APEX SMC is a comprehensive Smart Money Concepts (SMC) indicator designed to help traders analyze market structure, institutional order flow, liquidity zones, and high-probability trading areas. Built for precision and clarity, the indicator combines multiple institutional trading concepts into a single customizable tool.
+
+Key Features:
+* Internal & Swing Market Structure (BOS / CHoCH)
+* Smart Order Block Detection
+* Fair Value Gaps (FVG)
+* Equal Highs & Equal Lows
+* Premium, Equilibrium & Discount Zones
+* Previous Daily, Weekly & Monthly High/Low Levels
+* Opening Gap Detection
+* Market Session Support
+* Auto Instrument Optimization
+* Fully Customizable Settings
+* Multiple Built-in Alert Conditions
+
+Best Suitable For:
+* Nifty 50
+* Bank Nifty
+* Sensex
+* F&O Stocks
+* Equity Cash Stocks
+
+Recommended Timeframes:
+* 5 Minutes
+* 15 Minutes
+* 30 Minutes
+* 1 Hour
+* 4 Hours
+* Daily
+
+How to Use:
+TWS APEX SMC is designed to assist traders in identifying institutional market structure and key liquidity areas. The indicator performs best when multiple concepts align, such as BOS/CHoCH, Order Blocks, Fair Value Gaps, and Premium/Discount Zones. Use it as a confluence tool within your existing trading strategy rather than as a standalone buy or sell signal.
+
+Disclaimer:
+This indicator is intended for educational and analytical purposes only. It does not provide financial or investment advice and should not be considered a guarantee of future performance. Always perform your own analysis and practice proper risk management before taking any trade.

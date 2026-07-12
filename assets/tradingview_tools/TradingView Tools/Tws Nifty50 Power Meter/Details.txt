@@ -1,0 +1,17 @@
+TWS Nifty50 Power Meter
+
+A real-time Nifty breadth and strength dashboard designed to track participation across major Nifty constituents. The indicator provides a live stock grid, bullish/bearish participation, market mode detection, and a proprietary Power Score to help traders assess overall market strength at a glance.
+
+Features
+✅ NIFTY Chart Only
+✅ Multi-Timeframe Compatible
+✅ Live Stock Participation Grid
+✅ Bullish / Bearish / Neutral Count
+✅ Market Breadth Analysis
+✅ Power Score Engine
+✅ Market Mode Detection
+✅ Real-Time Visual Dashboard
+✅ Lightweight 40-Stock Architecture
+
+Disclaimer
+This indicator is designed for educational and informational purposes only. It should not be considered investment advice. Always use proper risk management and perform your own analysis before making trading decisions.

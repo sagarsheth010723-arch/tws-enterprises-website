@@ -1,0 +1,715 @@
+# TWS Trend Intelligence V2.0.3
+
+
+
+A powerful all-in-one market intelligence dashboard designed for traders who want trend clarity, market context, volatility awareness, and actionable insights in a single view.
+
+
+
+## Features
+
+
+
+• FRAMA Trend Engine
+
+Detects the dominant market trend using a Fractal Adaptive Moving Average.
+
+
+
+• SSL Hybrid Confirmation
+
+Provides bullish and bearish trend confirmation while reducing market noise.
+
+
+
+• ADX Strength Analysis
+
+Measures trend strength and classifies conditions as LOW, MEDIUM, HIGH, or EXTREME.
+
+
+
+• Choppiness Detection (CHOP)
+
+Identifies trending and sideways market conditions to help avoid low-quality setups.
+
+
+
+• ATR Room Meter
+
+Displays how much of the day's Average True Range (ATR) has already been consumed.
+
+
+
+• ATR Left Projection
+
+Shows the estimated remaining ATR expansion potential based on the previous day's closing price.
+
+
+
+• Gap Intelligence Engine
+
+Analyzes Gap-Up and Gap-Down openings and provides contextual market guidance during the opening phase.
+
+
+
+• Smart Entry Plan Engine
+
+Generates adaptive market guidance such as:
+
+
+
+* Trade Ready Long
+
+* Trade Ready Short
+
+* Look For Long
+
+* Look For Short
+
+* Wait Breakout
+
+
+
+• Dynamic Action Engine
+
+Automatically shifts based on market progression:
+
+
+
+* Buy Ready
+
+* Sell Ready
+
+* Trail Profits
+
+* Book Profits
+
+
+
+• Volume Intelligence
+
+Tracks buy-side and sell-side participation to help traders understand market pressure and momentum.
+
+
+
+• Market Mood Engine
+
+Classifies market behavior into:
+
+
+
+* Bullish Control
+
+* Bearish Control
+
+* Bullish Expansion
+
+* Bearish Expansion
+
+* Sideways Compression
+
+
+
+• Trade Quality Rating
+
+Grades setups based on overall market conditions:
+
+
+
+* A+
+
+* A
+
+* B
+
+* Avoid
+
+
+
+• Multi-Timeframe Alignment Matrix
+
+Monitor trend alignment across user-configurable timeframes and identify high-conviction opportunities.
+
+
+
+## Suitable For
+
+
+
+✔ Intraday Trading
+
+✔ Index Trading
+
+✔ Options Trading
+
+✔ Futures Trading
+
+✔ Swing Trading
+
+✔ Momentum Trading
+
+
+
+## Recommended Markets
+
+
+
+• NIFTY
+
+• BANKNIFTY
+
+• FINNIFTY
+
+• SENSEX
+
+• Stocks
+
+• ETFs
+
+
+
+## Disclaimer
+
+
+
+This indicator is intended for educational and decision-support purposes only. It does not provide financial advice or guarantee future results. Always use proper risk management and perform your own analysis before taking any trade.
+
+
+
+Developed by TradeWithSaagar (TWS Enterprises Pvt. Ltd.)
+
+
+
+Version 2.0.1
+Jun 18
+Release Notes
+TWS Trend Intelligence V2.0
+
+
+
+A powerful all-in-one market intelligence dashboard designed for traders who want trend clarity, market context, volatility awareness, and actionable insights in a single view.
+
+
+
+## Features
+
+
+
+• FRAMA Trend Engine
+
+Detects the dominant market trend using a Fractal Adaptive Moving Average.
+
+
+
+• SSL Hybrid Confirmation
+
+Provides bullish and bearish trend confirmation while reducing market noise.
+
+
+
+• ADX Strength Analysis
+
+Measures trend strength and classifies conditions as LOW, MEDIUM, HIGH, or EXTREME.
+
+
+
+• Choppiness Detection (CHOP)
+
+Identifies trending and sideways market conditions to help avoid low-quality setups.
+
+
+
+• ATR Room Meter
+
+Displays how much of the day's Average True Range (ATR) has already been consumed.
+
+
+
+• ATR Left Projection
+
+Shows the estimated remaining ATR expansion potential based on the previous day's closing price.
+
+
+
+• Gap Intelligence Engine
+
+Analyzes Gap-Up and Gap-Down openings and provides contextual market guidance during the opening phase.
+
+
+
+• Smart Entry Plan Engine
+
+Generates adaptive market guidance such as:
+
+
+
+* Trade Ready Long
+
+* Trade Ready Short
+
+* Look For Long
+
+* Look For Short
+
+* Wait Breakout
+
+
+
+• Dynamic Action Engine
+
+Automatically shifts based on market progression:
+
+
+
+* Buy Ready
+
+* Sell Ready
+
+* Trail Profits
+
+* Book Profits
+
+
+
+• Volume Intelligence
+
+Tracks buy-side and sell-side participation to help traders understand market pressure and momentum.
+
+
+
+• Market Mood Engine
+
+Classifies market behavior into:
+
+
+
+* Bullish Control
+
+* Bearish Control
+
+* Bullish Expansion
+
+* Bearish Expansion
+
+* Sideways Compression
+
+
+
+• Trade Quality Rating
+
+Grades setups based on overall market conditions:
+
+
+
+* A+
+
+* A
+
+* B
+
+* Avoid
+
+
+
+• Multi-Timeframe Alignment Matrix
+
+Monitor trend alignment across user-configurable timeframes and identify high-conviction opportunities.
+
+
+
+## Suitable For
+
+
+
+✔ Intraday Trading
+
+✔ Index Trading
+
+✔ Options Trading
+
+✔ Futures Trading
+
+✔ Swing Trading
+
+✔ Momentum Trading
+
+
+
+## Recommended Markets
+
+
+
+• NIFTY
+
+• BANKNIFTY
+
+• FINNIFTY
+
+• SENSEX
+
+• Stocks
+
+• ETFs
+
+
+
+## Disclaimer
+
+
+
+This indicator is intended for educational and decision-support purposes only. It does not provide financial advice or guarantee future results. Always use proper risk management and perform your own analysis before taking any trade.
+
+
+
+Developed by TradeWithSaagar (TWS Enterprises Pvt. Ltd.)
+
+
+
+Version 2.0.3
+Jun 18
+Release Notes
+# TWS Trend Intelligence V2.0.3
+
+
+
+A powerful all-in-one market intelligence dashboard designed for traders who want trend clarity, market context, volatility awareness, and actionable insights in a single view.
+
+
+
+## Features
+
+
+
+• FRAMA Trend Engine
+
+Detects the dominant market trend using a Fractal Adaptive Moving Average.
+
+
+
+• SSL Hybrid Confirmation
+
+Provides bullish and bearish trend confirmation while reducing market noise.
+
+
+
+• ADX Strength Analysis
+
+Measures trend strength and classifies conditions as LOW, MEDIUM, HIGH, or EXTREME.
+
+
+
+• Choppiness Detection (CHOP)
+
+Identifies trending and sideways market conditions to help avoid low-quality setups.
+
+
+
+• ATR Room Meter
+
+Displays how much of the day's Average True Range (ATR) has already been consumed.
+
+
+
+• ATR Left Projection
+
+Shows the estimated remaining ATR expansion potential based on the previous day's closing price.
+
+
+
+• Gap Intelligence Engine
+
+Analyzes Gap-Up and Gap-Down openings and provides contextual market guidance during the opening phase.
+
+
+
+• Smart Entry Plan Engine
+
+Generates adaptive market guidance such as:
+
+
+
+* Trade Ready Long
+
+* Trade Ready Short
+
+* Look For Long
+
+* Look For Short
+
+* Wait Breakout
+
+
+
+• Dynamic Action Engine
+
+Automatically shifts based on market progression:
+
+
+
+* Buy Ready
+
+* Sell Ready
+
+* Trail Profits
+
+* Book Profits
+
+
+
+• Volume Intelligence
+
+Tracks buy-side and sell-side participation to help traders understand market pressure and momentum.
+
+
+
+• Market Mood Engine
+
+Classifies market behavior into:
+
+
+
+* Bullish Control
+
+* Bearish Control
+
+* Bullish Expansion
+
+* Bearish Expansion
+
+* Sideways Compression
+
+
+
+• Trade Quality Rating
+
+Grades setups based on overall market conditions:
+
+
+
+* A+
+
+* A
+
+* B
+
+* Avoid
+
+
+
+• Multi-Timeframe Alignment Matrix
+
+Monitor trend alignment across user-configurable timeframes and identify high-conviction opportunities.
+
+
+
+## Suitable For
+
+
+
+✔ Intraday Trading
+
+✔ Index Trading
+
+✔ Options Trading
+
+✔ Futures Trading
+
+✔ Swing Trading
+
+✔ Momentum Trading
+
+
+
+## Recommended Markets
+
+
+
+• NIFTY
+
+• BANKNIFTY
+
+• FINNIFTY
+
+• SENSEX
+
+• Stocks
+
+• ETFs
+
+
+
+## Disclaimer
+
+
+
+This indicator is intended for educational and decision-support purposes only. It does not provide financial advice or guarantee future results. Always use proper risk management and perform your own analysis before taking any trade.
+
+
+
+Developed by TradesWithSaagar (TWS Enterprises Pvt. Ltd.)
+
+
+
+Version 2.0.3
+Jun 19
+Release Notes
+# TWS Beast Mode Trend Matrix
+
+## Overview
+
+TWS Beast Mode Trend Matrix is a multi-layer trend analysis system designed to help traders identify trend direction, trend quality, market structure, liquidity targets, volatility conditions, and multi-timeframe alignment from a single dashboard.
+
+The indicator combines FRAMA, SSL Hybrid, ADX, ATR, CHOP, VWAP, Volume Analysis, Market Regime Detection, Institutional Flow Analysis, Liquidity Mapping, and MTF Alignment into one decision-support framework.
+
+It is built for traders who prefer clean charts and objective market analysis rather than relying on traditional buy/sell signal indicators.
+
+---
+
+## Key Features
+
+### Trader Mode Profiles
+
+The indicator automatically adapts its internal settings based on trading style:
+
+* Normal Mode
+* Intraday Mode
+* Scalper Mode
+* Swing Mode
+
+Each profile automatically adjusts trend sensitivity and filtering logic.
+
+Dashboard Profile Display:
+
+* F34 | S10 | A25 (Intraday)
+* F21 | S5 | A20 (Scalper)
+* F55 | S20 | A30 (Swing)
+
+---
+
+### Trend Engine
+
+Uses FRAMA and SSL Hybrid alignment to classify market structure:
+
+* Strong Long
+* Long
+* Strong Short
+* Short
+* Sideways
+
+Designed to reduce noise and avoid low-quality trend conditions.
+
+---
+
+### Market Strength Analysis
+
+Combines:
+
+* ADX
+* ATR Expansion
+* CHOP Index
+
+To determine:
+
+* Trend Strength
+* Market Condition
+* Risk Environment
+
+---
+
+### Multi-Timeframe Matrix
+
+Monitors trend alignment across multiple user-selected timeframes.
+
+Provides:
+
+* Alignment Score
+* Trend Direction Per Timeframe
+* Overall Trend Consensus
+
+Useful for confirmation before entering trades.
+
+---
+
+### Liquidity Target Engine
+
+Automatically identifies likely liquidity destinations:
+
+* PDH (Previous Day High)
+* PDL (Previous Day Low)
+* SH (Swing High)
+* SL (Swing Low)
+* WH (Weekly High)
+* WL (Weekly Low)
+
+Dashboard examples:
+
+* PDH@25184
+* PDL@24952
+* SH@25240
+* WL@24320
+
+---
+
+### ATR Room Engine
+
+Tracks how much of the current ATR range has already been consumed.
+
+Provides:
+
+* ATR Usage %
+* ATR Remaining %
+* Daily ATR Projection
+
+Useful for avoiding late entries when most of the expected move is already completed.
+
+---
+
+### Institutional & Market Regime Engines
+
+Analyzes:
+
+* Institutional Participation
+* Smart Money Bias
+* Market Regime Conditions
+* Probability Framework
+
+Helps distinguish trending markets from inefficient or low-conviction environments.
+
+---
+
+### Dashboard System
+
+Desktop and Mobile dashboards include:
+
+* Trader Mode
+* Trend Bias
+* ADX Strength
+* ATR Status
+* CHOP Condition
+* VWAP Bias
+* Volume Strength
+* Liquidity Targets
+* Institutional Confidence
+* Smart Money Flow
+* Market Regime
+* Market Score
+
+All major decision metrics are available without cluttering the chart.
+
+---
+
+## Best Use Cases
+
+* Index Trading
+* Futures Trading
+* Options Trading
+* Intraday Trading
+* Scalping
+* Swing Trading
+* Trend Following Strategies
+
+---
+
+## Notes
+
+This indicator is designed as a market analysis and decision-support tool. It is not intended to provide guaranteed trading signals or financial advice. Always use proper risk management and confirm setups with your own trading plan.
