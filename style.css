@@ -2241,3 +2241,25 @@ strong{
     transform:none !important;
   }
 }
+
+
+
+/* =========================
+   V13 Menu Fix Safeguard
+   Ensures dropdown opens reliably on live GitHub Pages
+   ========================= */
+
+.top-right-menu-header.menu-open .right-dropdown-panel,
+.mobile-optimized-header.menu-open .right-dropdown-panel{
+  opacity:1 !important;
+  visibility:visible !important;
+  transform:translateY(0) scale(1) !important;
+  pointer-events:auto !important;
+}
+
+@media(max-width:700px){
+  .top-right-menu-header.menu-open .right-dropdown-panel,
+  .mobile-optimized-header.menu-open .right-dropdown-panel{
+    display:block !important;
+  }
+}
