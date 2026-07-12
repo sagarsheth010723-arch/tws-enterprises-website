@@ -181,3 +181,41 @@ document.head.appendChild(rippleStyle);
     }, { passive: true });
   });
 })();
+
+
+
+// V15 Application Form conditional fields
+(() => {
+  document.querySelectorAll('[data-select-other]').forEach(select => {
+    const target = document.getElementById(select.dataset.selectOther);
+    if (!target) return;
+
+    const sync = () => {
+      const show = select.value === 'Other';
+      target.classList.toggle('show', show);
+      target.querySelectorAll('input, textarea, select').forEach(input => {
+        input.required = show;
+      });
+    };
+
+    select.addEventListener('change', sync);
+    sync();
+  });
+
+  document.querySelectorAll('[data-show-field]').forEach(radio => {
+    const group = document.querySelectorAll(`input[name="${radio.name}"]`);
+    const target = document.getElementById(radio.dataset.showField);
+    if (!target) return;
+
+    const sync = () => {
+      const show = radio.checked;
+      target.classList.toggle('show', show);
+      target.querySelectorAll('input, textarea, select').forEach(input => {
+        input.required = show;
+      });
+    };
+
+    group.forEach(item => item.addEventListener('change', sync));
+    sync();
+  });
+})();

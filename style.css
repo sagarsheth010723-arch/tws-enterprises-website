@@ -2263,3 +2263,535 @@ strong{
     display:block !important;
   }
 }
+
+
+
+/* =========================
+   V15 Premium Application Form
+   ========================= */
+
+.centered-application-hero{
+  text-align:center;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(8,122,53,.10), transparent 26%),
+    radial-gradient(circle at 86% 14%, rgba(196,31,31,.045), transparent 28%),
+    linear-gradient(180deg,#f8fbf9 0%, #ffffff 82%);
+}
+
+.centered-application-hero .container{
+  max-width:920px;
+}
+
+.centered-application-hero .eyebrow{
+  margin-inline:auto;
+}
+
+.centered-application-hero h1{
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.centered-application-hero p{
+  margin-left:auto;
+  margin-right:auto;
+}
+
+.application-section{
+  padding:76px 0 98px;
+  background:
+    linear-gradient(180deg,#f7faf8 0%,#ffffff 100%);
+}
+
+.application-shell{
+  max-width:1020px;
+}
+
+.application-top-card{
+  display:grid;
+  grid-template-columns:80px 1fr;
+  gap:18px;
+  align-items:center;
+  background:#0b1510;
+  color:#fff;
+  border-radius:30px;
+  padding:26px;
+  margin-bottom:24px;
+  box-shadow:0 24px 70px rgba(16,24,32,.13);
+  position:relative;
+  overflow:hidden;
+}
+
+.application-top-card:before{
+  content:"";
+  position:absolute;
+  right:-90px;
+  top:-90px;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(8,122,53,.36),transparent 70%);
+}
+
+.application-top-card > *{
+  position:relative;
+}
+
+.application-top-card img{
+  width:80px;
+  height:80px;
+  border-radius:22px;
+  padding:10px;
+  background:#fff;
+  object-fit:contain;
+}
+
+.application-top-card span{
+  display:block;
+  color:#c9f3d8;
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-weight:700;
+  margin-bottom:7px;
+}
+
+.application-top-card strong{
+  display:block;
+  font-size:28px;
+  line-height:1.15;
+  margin-bottom:8px;
+}
+
+.application-top-card p{
+  margin:0;
+  color:rgba(255,255,255,.72);
+}
+
+.tws-application-form{
+  display:grid;
+  gap:24px;
+}
+
+.form-card{
+  background:#ffffff;
+  border:1px solid var(--line);
+  border-radius:30px;
+  padding:30px;
+  box-shadow:var(--shadow2);
+  position:relative;
+  overflow:hidden;
+}
+
+.form-card:before{
+  content:"";
+  position:absolute;
+  right:-70px;
+  top:-70px;
+  width:170px;
+  height:170px;
+  border-radius:50%;
+  background:rgba(8,122,53,.045);
+  pointer-events:none;
+}
+
+.form-card > *{
+  position:relative;
+}
+
+.form-section-head{
+  display:flex;
+  align-items:flex-start;
+  gap:16px;
+  padding-bottom:22px;
+  margin-bottom:24px;
+  border-bottom:1px solid var(--line);
+}
+
+.form-section-head > span{
+  width:48px;
+  height:48px;
+  display:grid;
+  place-items:center;
+  border-radius:16px;
+  background:var(--green-soft);
+  color:var(--green);
+  font-weight:700;
+  flex:0 0 auto;
+}
+
+.form-section-head h2{
+  font-size:30px;
+  line-height:1.1;
+  margin:0 0 7px;
+  letter-spacing:-.03em;
+}
+
+.form-section-head p{
+  margin:0;
+  color:var(--muted);
+}
+
+.form-grid{
+  display:grid;
+  gap:18px;
+  margin-bottom:18px;
+}
+
+.form-grid.two{grid-template-columns:1fr 1fr}
+.form-grid.three{grid-template-columns:1fr 1fr .7fr}
+
+.tws-application-form label,
+.full-label{
+  display:grid;
+  gap:8px;
+  color:#1f2937;
+  font-size:14px;
+  font-weight:600;
+}
+
+.tws-application-form em{
+  color:#d22;
+  font-style:normal;
+}
+
+.tws-application-form input[type="text"],
+.tws-application-form input[type="email"],
+.tws-application-form input[type="tel"],
+.tws-application-form input[type="date"],
+.tws-application-form select,
+.tws-application-form textarea{
+  width:100%;
+  min-height:48px;
+  border:1px solid #dce5df;
+  border-radius:15px;
+  background:#fff;
+  color:var(--ink);
+  font:inherit;
+  padding:12px 14px;
+  outline:none;
+  transition:border-color .18s var(--ease), box-shadow .18s var(--ease), transform .18s var(--ease);
+}
+
+.tws-application-form textarea{
+  resize:vertical;
+  min-height:120px;
+}
+
+.tws-application-form input:focus,
+.tws-application-form select:focus,
+.tws-application-form textarea:focus{
+  border-color:rgba(8,122,53,.58);
+  box-shadow:0 0 0 4px rgba(8,122,53,.10);
+}
+
+.field-block{margin:0 0 24px}
+
+.field-block h3{
+  font-size:16px;
+  margin:0 0 12px;
+  font-weight:650;
+}
+
+.option-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px 16px;
+}
+
+.option-grid.compact{
+  grid-template-columns:repeat(4, auto);
+  justify-content:start;
+}
+
+.option-grid label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:44px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:#fbfdfb;
+  font-weight:500;
+  cursor:pointer;
+  transition:background .18s var(--ease), border-color .18s var(--ease), transform .18s var(--ease);
+}
+
+.option-grid label:hover{
+  background:var(--green-soft);
+  border-color:rgba(8,122,53,.18);
+  transform:translateY(-1px);
+}
+
+.option-grid input{accent-color:var(--green)}
+
+.conditional-field{
+  display:none;
+  margin:-8px 0 20px;
+}
+
+.conditional-field.show{
+  display:block;
+  animation:conditionalIn .22s var(--ease);
+}
+
+@keyframes conditionalIn{
+  from{opacity:0;transform:translateY(-6px)}
+  to{opacity:1;transform:none}
+}
+
+.dark-input-field{
+  background:#0b1510;
+  border-radius:20px;
+  padding:18px;
+  color:#fff;
+  box-shadow:0 18px 40px rgba(16,24,32,.10);
+}
+
+.dark-input-field label{
+  color:#fff;
+}
+
+.dark-input-field input{
+  background:#111f17 !important;
+  border-color:rgba(255,255,255,.16) !important;
+  color:#fff !important;
+}
+
+.dark-input-field input::placeholder{
+  color:rgba(255,255,255,.48);
+}
+
+.terms-box{
+  max-height:520px;
+  overflow:auto;
+  border:1px solid var(--line);
+  background:#fbfdfb;
+  border-radius:20px;
+  padding:20px;
+  color:#344054;
+  margin-bottom:18px;
+  scroll-behavior:smooth;
+}
+
+.legal-terms-content h3{
+  font-size:22px;
+  color:var(--ink);
+  margin:0 0 14px;
+}
+
+.legal-terms-content h4{
+  color:var(--green);
+  font-size:16px;
+  margin:22px 0 8px;
+}
+
+.legal-terms-content p{
+  margin:0 0 10px;
+  color:#344054;
+  font-size:14px;
+  line-height:1.62;
+}
+
+.consent-line{
+  display:flex !important;
+  align-items:flex-start;
+  gap:12px !important;
+  padding:15px;
+  background:var(--green-soft);
+  border:1px solid rgba(8,122,53,.16);
+  border-radius:18px;
+}
+
+.consent-line input{
+  margin-top:4px;
+  accent-color:var(--green);
+}
+
+.submit-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-top:24px;
+}
+
+.submit-row p{
+  margin:0;
+  color:var(--muted);
+  max-width:550px;
+  font-size:14px;
+}
+
+.hidden-field{display:none !important}
+
+@media(max-width:760px){
+  .application-section{padding:48px 0 72px}
+  .application-top-card{grid-template-columns:1fr;text-align:left;padding:22px;border-radius:24px}
+  .application-top-card img{width:64px;height:64px}
+  .application-top-card strong{font-size:23px}
+  .form-card{padding:20px;border-radius:23px}
+  .form-section-head{gap:12px}
+  .form-section-head h2{font-size:23px}
+  .form-grid.two,.form-grid.three,.option-grid{grid-template-columns:1fr}
+  .option-grid.compact{grid-template-columns:1fr 1fr}
+  .submit-row{display:grid}
+  .submit-row .btn{width:100%}
+  .terms-box{max-height:430px}
+}
+
+@media(max-width:430px){
+  .option-grid.compact{grid-template-columns:1fr}
+}
+
+
+
+/* =========================
+   V17 Application Form Logo + Mobile Polish
+   ========================= */
+
+.application-top-card{
+  grid-template-columns:112px 1fr !important;
+  gap:22px !important;
+  align-items:center !important;
+}
+
+.application-top-card img.application-form-logo{
+  width:112px !important;
+  height:112px !important;
+  border-radius:28px !important;
+  padding:12px !important;
+  background:#ffffff !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  box-shadow:0 18px 38px rgba(0,0,0,.18);
+}
+
+.application-top-card strong{
+  font-size:clamp(25px, 3vw, 34px) !important;
+  line-height:1.12 !important;
+}
+
+.application-top-card p{
+  font-size:17px !important;
+  line-height:1.55 !important;
+  max-width:900px;
+}
+
+/* Form mobile readability and spacing */
+@media(max-width:760px){
+  .centered-application-hero{
+    padding-top:54px !important;
+    padding-bottom:42px !important;
+  }
+
+  .centered-application-hero h1{
+    font-size:34px !important;
+    line-height:1.08 !important;
+  }
+
+  .centered-application-hero p{
+    font-size:15px !important;
+  }
+
+  .application-section{
+    padding:34px 0 64px !important;
+  }
+
+  .application-shell{
+    width:100% !important;
+  }
+
+  .application-top-card{
+    grid-template-columns:78px 1fr !important;
+    gap:14px !important;
+    padding:18px !important;
+    border-radius:24px !important;
+    margin-bottom:18px !important;
+  }
+
+  .application-top-card img.application-form-logo{
+    width:78px !important;
+    height:78px !important;
+    border-radius:20px !important;
+    padding:8px !important;
+  }
+
+  .application-top-card span{
+    font-size:10.5px !important;
+    letter-spacing:.06em !important;
+  }
+
+  .application-top-card strong{
+    font-size:20px !important;
+    line-height:1.17 !important;
+  }
+
+  .application-top-card p{
+    font-size:13.5px !important;
+    line-height:1.5 !important;
+  }
+
+  .form-card{
+    padding:18px !important;
+    border-radius:22px !important;
+  }
+
+  .form-section-head{
+    display:grid !important;
+    grid-template-columns:44px 1fr !important;
+    gap:12px !important;
+    margin-bottom:18px !important;
+    padding-bottom:18px !important;
+  }
+
+  .form-section-head > span{
+    width:42px !important;
+    height:42px !important;
+    border-radius:14px !important;
+  }
+
+  .form-section-head h2{
+    font-size:22px !important;
+    line-height:1.12 !important;
+  }
+
+  .form-section-head p{
+    font-size:14px !important;
+  }
+
+  .tws-application-form input[type="text"],
+  .tws-application-form input[type="email"],
+  .tws-application-form input[type="tel"],
+  .tws-application-form input[type="date"],
+  .tws-application-form select,
+  .tws-application-form textarea{
+    min-height:50px !important;
+    font-size:15px !important;
+  }
+
+  .option-grid label{
+    min-height:48px !important;
+    font-size:14.5px !important;
+  }
+
+  .terms-box{
+    max-height:360px !important;
+  }
+}
+
+@media(max-width:430px){
+  .application-top-card{
+    grid-template-columns:1fr !important;
+    text-align:left !important;
+  }
+
+  .application-top-card img.application-form-logo{
+    width:86px !important;
+    height:86px !important;
+  }
+
+  .centered-application-hero h1{
+    font-size:30px !important;
+  }
+}

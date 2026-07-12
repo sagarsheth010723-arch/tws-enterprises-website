@@ -85,3 +85,12 @@ V12 Final Mobile Tap Animation Build:
 - Reduced-motion accessibility respected.
 
 Generated: 2026-07-12 04:07
+
+
+V13 Menu Fix:
+- Cleaned script.js into a single menu controller.
+- Removed duplicate menu toggle conflict from earlier versions.
+- Added CSS safeguard for dropdown visibility.
+- Mobile accordion and tap animations retained.
+
+Generated: 2026-07-12 05:04
