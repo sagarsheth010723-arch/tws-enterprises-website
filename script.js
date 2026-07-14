@@ -219,3 +219,62 @@ document.head.appendChild(rippleStyle);
     sync();
   });
 })();
+
+
+// V21 Formspree AJAX submit flow
+// Submits in the background and redirects users to the TWS thank-you page.
+(() => {
+  const form = document.querySelector('form[data-formspree-form="true"]');
+  if (!form) return;
+
+  const statusBox = form.querySelector('[data-form-status]');
+  const submitButton = form.querySelector('button[type="submit"]');
+  const originalButtonText = submitButton ? submitButton.textContent : 'Submit Application';
+
+  const setStatus = (type, message) => {
+    if (!statusBox) return;
+    statusBox.className = `form-submit-status show ${type}`;
+    statusBox.textContent = message;
+  };
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const action = form.getAttribute('action');
+    const formData = new FormData(form);
+
+    form.classList.add('is-submitting');
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'Submitting...';
+    }
+    setStatus('loading', 'Submitting your application securely. Please wait...');
+
+    try {
+      const response = await fetch(action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (!response.ok) {
+        throw new Error('Submission failed');
+      }
+
+      setStatus('success', 'Application submitted successfully. Redirecting...');
+      window.location.href = 'application-thank-you.html';
+    } catch (error) {
+      form.classList.remove('is-submitting');
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+      }
+      setStatus('error', 'We could not submit the form right now. Please try again, or contact TWS on WhatsApp if the issue continues.');
+    }
+  });
+})();
