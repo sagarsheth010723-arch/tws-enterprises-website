@@ -96,10 +96,15 @@ V13 Menu Fix:
 Generated: 2026-07-12 05:04
 
 
-V21 Formspree Final:
-- Replaced FormSubmit with Formspree endpoint: https://formspree.io/f/maqrnevz
-- Form submits via JavaScript/AJAX in the background.
-- User redirects to application-thank-you.html after successful submission.
-- Users will not see FormSubmit/Formspree raw server pages.
-- Enable Formspree email notifications and autoresponse/copy to submitter in Formspree dashboard.
-Generated: 2026-07-14 14:40
+V22 SEO Content Expansion:
+- Upgraded 9 service pages with SEO-focused long-form content.
+- Added Market Insights hub.
+- Added 10 educational article pages targeting demat handling, portfolio management, PMS, risk management and TradingView searches.
+- Added FAQ schema to service/article pages.
+- Added Service schema to service pages.
+- Updated sitemap.xml with all pages.
+- Kept robots.txt.
+- Updated menu/footer with Market Insights link.
+- Switched form endpoint to Formspree: https://formspree.io/f/maqrnevz
+- Added AJAX submit flow to avoid raw provider error pages.
+Generated: 2026-07-14 18:20

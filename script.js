@@ -221,8 +221,8 @@ document.head.appendChild(rippleStyle);
 })();
 
 
-// V21 Formspree AJAX submit flow
-// Submits in the background and redirects users to the TWS thank-you page.
+
+// V22 Formspree AJAX submit flow
 (() => {
   const form = document.querySelector('form[data-formspree-form="true"]');
   if (!form) return;
@@ -253,6 +253,7 @@ document.head.appendChild(rippleStyle);
       submitButton.disabled = true;
       submitButton.textContent = 'Submitting...';
     }
+
     setStatus('loading', 'Submitting your application securely. Please wait...');
 
     try {

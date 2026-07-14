@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://twsenterprises.in/</loc>
-    <lastmod>2026-07-14</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.00</priority>
-  </url>
-  <url>
     <loc>https://twsenterprises.in/application-form.html</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
@@ -20,6 +14,24 @@
   </url>
   <url>
     <loc>https://twsenterprises.in/cancellation-policy.html</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+  <url>
+    <loc>https://twsenterprises.in/capital-allocation-in-trading.html</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+  <url>
+    <loc>https://twsenterprises.in/client-application-process-tws.html</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+  <url>
+    <loc>https://twsenterprises.in/common-mistakes-retail-traders-make.html</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
@@ -40,13 +52,19 @@
     <loc>https://twsenterprises.in/compounding-strategy.html</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.60</priority>
   </url>
   <url>
     <loc>https://twsenterprises.in/demat-handling-service.html</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://twsenterprises.in/demat-handling-vs-advisory-service.html</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
   </url>
   <url>
     <loc>https://twsenterprises.in/financial-market-research-guidance.html</loc>
@@ -67,6 +85,18 @@
     <priority>0.60</priority>
   </url>
   <url>
+    <loc>https://twsenterprises.in/how-to-choose-stock-market-service-provider.html</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+  <url>
+    <loc>https://twsenterprises.in/</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.00</priority>
+  </url>
+  <url>
     <loc>https://twsenterprises.in/investment-management-service.html</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
@@ -79,7 +109,25 @@
     <priority>0.60</priority>
   </url>
   <url>
+    <loc>https://twsenterprises.in/market-insights.html</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.82</priority>
+  </url>
+  <url>
     <loc>https://twsenterprises.in/partner-with-us.html</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+  <url>
+    <loc>https://twsenterprises.in/pms-service-meaning-for-retail-investors.html</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+  <url>
+    <loc>https://twsenterprises.in/portfolio-management-service-guide.html</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
@@ -88,7 +136,7 @@
     <loc>https://twsenterprises.in/portfolio-management-service.html</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.88</priority>
   </url>
   <url>
     <loc>https://twsenterprises.in/privacy-policy.html</loc>
@@ -104,6 +152,12 @@
   </url>
   <url>
     <loc>https://twsenterprises.in/risk-disclaimer.html</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+  <url>
+    <loc>https://twsenterprises.in/risk-management-in-options-trading.html</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.60</priority>
@@ -127,10 +181,16 @@
     <priority>0.60</priority>
   </url>
   <url>
+    <loc>https://twsenterprises.in/tradingview-indicators-for-indian-markets.html</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+  <url>
     <loc>https://twsenterprises.in/tradingview-tools.html</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <priority>0.82</priority>
   </url>
   <url>
     <loc>https://twsenterprises.in/tws-apex-smc.html</loc>
@@ -160,6 +220,12 @@
     <loc>https://twsenterprises.in/wealth-management.html</loc>
     <lastmod>2026-07-14</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.80</priority>
+    <priority>0.84</priority>
+  </url>
+  <url>
+    <loc>https://twsenterprises.in/what-is-demat-handling-service.html</loc>
+    <lastmod>2026-07-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
   </url>
 </urlset>
