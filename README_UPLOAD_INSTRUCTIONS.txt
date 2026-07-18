@@ -1,16 +1,27 @@
-TWS Enterprises Website - V26 Bugfix + Bull Premium Rebuild
-
-Fixes:
-- Service page broken image fixed by replacing SVG dependency with generated PNG asset.
-- Homepage hero visual rebuilt with actual premium bull dashboard visual.
-- Loader blank white circle issue fixed with dedicated loader-logo.png.
-- Loader sizing and no-scroll behavior improved.
-- Professional menu overlay polished.
-- Service hero layout balanced and image sizing fixed.
-- Contact Us page retained.
-- Videos remain removed to avoid play issues.
-- Formspree endpoint retained: https://formspree.io/f/maqrnevz
+TWS Enterprises V29 — Final Premium YouTube Website
 
 Upload:
-Extract patch ZIP and upload/replace all files/folders in GitHub repo root.
-Generated: 2026-07-18 14:55
+1. Extract the ZIP.
+2. Upload and replace every file/folder in the GitHub repository root.
+3. Commit the changes.
+4. Wait for GitHub Pages deployment and use Ctrl+F5 once.
+
+Final V29 highlights:
+- Complete premium visual system rebuilt.
+- Compact collapsed accordion menu.
+- Premium bull hero image.
+- Consistent buttons, cards, fonts, colors and spacing.
+- Falcon branding and subtle animations.
+- Premium loader shown once per browser session.
+- Local MP4 videos removed.
+- YouTube playlist integrated on live-performance.html.
+- Homepage uses a lightweight performance preview card only.
+- Contact Us, application form, service pages and TWS Connect retained.
+- Responsive desktop, tablet and mobile layouts.
+- Missing internal assets and links validated before delivery.
+
+Playlist:
+https://youtube.com/playlist?list=PLJY1iNvy9Eo4&si=B-rTM2lFMEIQqMv4
+
+Generated:
+2026-07-18 15:44

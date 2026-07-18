@@ -18,91 +18,115 @@
 <link rel="stylesheet" href="style.css">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://twsenterprises.in/#organization", "name": "TWS Enterprises Private Limited", "url": "https://twsenterprises.in", "logo": "https://twsenterprises.in/assets/tws-main-logo.png", "email": "hello@twsenterprises.in", "telephone": "+91-8828167181"}, {"@type": "WebSite", "@id": "https://twsenterprises.in/#website", "url": "https://twsenterprises.in", "name": "TWS Enterprises Private Limited", "publisher": {"@id": "https://twsenterprises.in/#organization"}}, {"@type": "WebPage", "@id": "https://twsenterprises.in/refund-policy.html#webpage", "url": "https://twsenterprises.in/refund-policy.html", "name": "Refund Policy | TWS Enterprises Private Limited", "description": "Refunds, cancellations or service support matters are reviewed based on the agreed service scope and written terms.", "isPartOf": {"@id": "https://twsenterprises.in/#website"}}]}</script>
 </head><body><div class="site-loader" id="siteLoader" aria-label="Loading website">
-  <div class="loader-card">
-    <div class="loader-orbit"><img src="assets/loader-logo.png" alt="TWS Enterprises logo"></div>
-    <p>Welcome to</p>
-    <h2>TWS Enterprises Pvt. Ltd.</h2>
-    <div class="loader-chart"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-    <div class="loader-progress"><i></i></div>
+  <div class="loader-inner">
+    <div class="loader-mark">
+      <img src="assets/loader-logo.png" alt="TWS Enterprises logo">
+      <span class="loader-ring"></span>
+    </div>
+    <div class="loader-copy">
+      <small>Welcome to</small>
+      <strong>TWS Enterprises Pvt. Ltd.</strong>
+    </div>
+    <div class="loader-line"><span></span></div>
   </div>
+</div>
 </div><header class="site-header">
   <a class="brand" href="index.html" aria-label="TWS Enterprises home">
     <img src="assets/tws-main-logo.png" alt="TWS Enterprises Private Limited">
   </a>
-  <button class="hamburger" id="menuToggle" aria-label="Open navigation menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
+  <div class="header-actions">
+    <a class="header-cta" href="application-form.html">Apply Now</a>
+    <button class="hamburger" id="menuToggle" aria-label="Open navigation menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </header>
-<nav class="mega-menu" id="menuDrawer" aria-hidden="true">
-  <div class="mega-backdrop" data-close-menu></div>
-  <div class="mega-panel">
-    <div class="mega-head">
-      <img src="assets/tws-main-logo.png" alt="TWS Enterprises Private Limited">
+<nav class="compact-menu" id="menuDrawer" aria-hidden="true">
+  <button class="menu-backdrop" data-close-menu aria-label="Close navigation"></button>
+  <aside class="menu-panel" role="dialog" aria-modal="true" aria-label="Website navigation">
+    <div class="menu-panel-head">
+      <a href="index.html"><img src="assets/tws-main-logo.png" alt="TWS Enterprises Private Limited"></a>
       <button class="menu-close" data-close-menu aria-label="Close navigation">×</button>
     </div>
-    <div class="mega-grid">
-      <section>
-        <span class="menu-kicker">Services</span>
-        <a href="portfolio-management-service.html">Portfolio Management Service</a>
-        <a href="wealth-management.html">Wealth Management</a>
-        <a href="compounding-strategy.html">Compounding Strategy</a>
-        <a href="investment-management-service.html">Investment Management Service</a>
-        <a href="demat-handling-service.html">Demat Handling Service</a>
-        <a href="risk-management.html">Risk Management</a>
-        <a href="financial-market-research-guidance.html">Financial Market Research & Guidance</a>
-        <a href="stock-market-education.html">Stock Market Education</a>
-      </section>
-      <section>
-        <span class="menu-kicker">Tools & App</span>
-        <a href="tradingview-tools.html">TradingView Tools</a>
-        <a href="tws-market-vitals.html">TWS Market Vitals</a>
-        <a href="tws-trend-intelligence.html">TWS Trend Intelligence</a>
-        <a href="tws-nifty50-power-meter.html">TWS Nifty50 Power Meter</a>
-        <a href="tws-apex-smc.html">TWS SMC Apex</a>
-        <a href="tws-gap-intelligence.html">TWS Gap Intelligence</a>
-        <a href="client-application-process-tws.html">Client Application Process</a>
-      </section>
-      <section>
-        <span class="menu-kicker">Company</span>
-        <a href="index.html#about">About TWS</a>
-        <a href="index.html#tws-connect">TWS Connect App</a>
-        <a href="market-insights.html">Market Insights</a>
-        <a href="application-form.html">Application Form</a>
-        <a href="contact-us.html">Contact Us</a>
-        <a href="help-center.html">Help Center</a>
-      </section>
-      <aside class="menu-contact-card">
-        <span class="menu-kicker">Connect</span>
-        <h3>Speak with TWS</h3>
-        <p>For service joining, application review, TradingView tools or account support.</p>
-        <a class="btn primary" href="https://wa.me/919833344392">WhatsApp TWS</a>
-        <a class="btn ghost" href="contact-us.html">Open Contact Page</a>
-        <div class="menu-mini">
-          <span>Call: 8828167181</span>
-          <span>Email: hello@twsenterprises.in</span>
+
+    <a class="menu-home-link" href="index.html">
+      <span>Home</span><b>↗</b>
+    </a>
+
+    <div class="menu-accordion">
+      <details>
+        <summary><span>Services</span><b>+</b></summary>
+        <div class="menu-links">
+          <a href="portfolio-management-service.html">Portfolio Management</a>
+          <a href="wealth-management.html">Wealth Management</a>
+          <a href="compounding-strategy.html">Compounding Strategy</a>
+          <a href="investment-management-service.html">Investment Management</a>
+          <a href="demat-handling-service.html">Demat Handling</a>
+          <a href="risk-management.html">Risk Management</a>
+          <a href="financial-market-research-guidance.html">Research & Guidance</a>
+          <a href="stock-market-education.html">Stock Market Education</a>
         </div>
-      </aside>
+      </details>
+
+      <details>
+        <summary><span>Tools & App</span><b>+</b></summary>
+        <div class="menu-links">
+          <a href="tradingview-tools.html">TradingView Tools</a>
+          <a href="tws-market-vitals.html">TWS Market Vitals</a>
+          <a href="tws-trend-intelligence.html">TWS Trend Intelligence</a>
+          <a href="tws-nifty50-power-meter.html">TWS Nifty50 Power Meter</a>
+          <a href="tws-apex-smc.html">TWS SMC Apex</a>
+          <a href="tws-gap-intelligence.html">TWS Gap Intelligence</a>
+          <a href="live-performance.html">Live Performance</a>
+        </div>
+      </details>
+
+      <details>
+        <summary><span>Company</span><b>+</b></summary>
+        <div class="menu-links">
+          <a href="index.html#about">About TWS</a>
+          <a href="index.html#tws-connect">TWS Connect App</a>
+          <a href="market-insights.html">Market Insights</a>
+          <a href="application-form.html">Application Form</a>
+          <a href="contact-us.html">Contact Us</a>
+          <a href="help-center.html">Help Center</a>
+        </div>
+      </details>
     </div>
-  </div>
-</nav><main><section class="service-hero"><div class="container"><div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> Refund Policy</div><span class="pill">TWS Information</span><h1>Refund Policy</h1><p>Refunds, cancellations or service support matters are reviewed based on the agreed service scope and written terms.</p></div></section><section class="article-section"><div class="container article-card"><h2>Refund Policy</h2><p>Refunds, cancellations or service support matters are reviewed based on the agreed service scope and written terms.</p><p>For clarification, contact TWS Enterprises Private Limited through the official contact page.</p><a class="btn primary" href="contact-us.html">Contact Us</a></div></section></main><footer class="site-footer">
+
+    <div class="menu-quick-actions">
+      <a class="btn btn-primary" href="https://wa.me/919833344392">WhatsApp TWS</a>
+      <a class="btn btn-secondary" href="contact-us.html">Contact Us</a>
+    </div>
+
+    <div class="menu-contact-line">
+      <span>8828167181</span>
+      <span>hello@twsenterprises.in</span>
+    </div>
+  </aside>
+</nav><main><section class="service-hero"><div class="container"><div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> Refund Policy</div><span class="pill">TWS Information</span><h1>Refund Policy</h1><p>Refunds, cancellations or service support matters are reviewed based on the agreed service scope and written terms.</p></div></section><section class="article-section"><div class="container article-card"><h2>Refund Policy</h2><p>Refunds, cancellations or service support matters are reviewed based on the agreed service scope and written terms.</p><p>For clarification, contact TWS Enterprises Private Limited through the official contact page.</p><a class="btn btn-primary" href="contact-us.html">Contact Us</a></div></section></main><footer class="site-footer">
   <div class="container footer-grid">
-    <div>
-      <img src="assets/tws-main-logo.png" alt="TWS Enterprises Private Limited" class="footer-logo">
-      <p>TWS Enterprises Private Limited helps clients approach trading, investment and wealth-related services with discipline, research awareness and professional communication.</p>
+    <div class="footer-brand">
+      <img src="assets/tws-main-logo.png" alt="TWS Enterprises Private Limited">
+      <p>Professional trading, investment, market education and client-support solutions built around clarity, discipline and transparent communication.</p>
+      <div class="footer-contact">
+        <a href="tel:+918828167181">8828167181</a>
+        <a href="mailto:hello@twsenterprises.in">hello@twsenterprises.in</a>
+      </div>
     </div>
     <div>
       <h4>Services</h4>
       <a href="portfolio-management-service.html">Portfolio Management</a>
       <a href="demat-handling-service.html">Demat Handling</a>
       <a href="wealth-management.html">Wealth Management</a>
-      <a href="tradingview-tools.html">TradingView Tools</a>
+      <a href="risk-management.html">Risk Management</a>
     </div>
     <div>
-      <h4>Company</h4>
+      <h4>Explore</h4>
+      <a href="tradingview-tools.html">TradingView Tools</a>
+      <a href="live-performance.html">Live Performance</a>
       <a href="application-form.html">Application Form</a>
       <a href="contact-us.html">Contact Us</a>
-      <a href="market-insights.html">Market Insights</a>
-      <a href="help-center.html">Help Center</a>
     </div>
     <div>
       <h4>Legal</h4>
@@ -117,4 +141,6 @@
     <span>CIN: U66190GJ2024PTC148594</span>
   </div>
 </footer>
-<a class="floating-whatsapp" href="https://wa.me/919833344392" aria-label="WhatsApp TWS">WA</a><script src="script.js"></script></body></html>
+<a class="floating-whatsapp" href="https://wa.me/919833344392" aria-label="WhatsApp TWS">
+  <span>WA</span>
+</a><script src="script.js"></script></body></html>
