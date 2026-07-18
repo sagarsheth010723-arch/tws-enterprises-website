@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#06170f"/><stop offset="0.55" stop-color="#09271a"/><stop offset="1" stop-color="#0d3c29"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#26d07c"/><stop offset="1" stop-color="#a7f3d0"/>
+    </linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff6b6b"/><stop offset="1" stop-color="#ffc2c2"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000" flood-opacity="0.28"/></filter>
+  </defs>
+  <rect width="1440" height="900" fill="url(#bg)"/>
+  <path d="M90 745 C250 600, 380 680, 520 505 S820 280, 1010 340 S1240 250, 1345 135" fill="none" stroke="#1b6b4b" stroke-width="3" opacity="0.35"/>
+  <path d="M90 790 C280 690, 410 730, 610 570 S940 500, 1345 300" fill="none" stroke="#35d18f" stroke-width="2" opacity="0.28"/>
+  <g opacity="0.12" stroke="#fff"><path d="M0 120H1440M0 240H1440M0 360H1440M0 480H1440M0 600H1440M0 720H1440"/><path d="M160 0V900M320 0V900M480 0V900M640 0V900M800 0V900M960 0V900M1120 0V900M1280 0V900"/></g>
+  <rect x="96" y="72" width="1248" height="756" rx="48" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.16)" filter="url(#shadow)"/>
+  <rect x="132" y="114" width="1176" height="86" rx="28" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.12)"/>
+  <circle cx="177" cy="157" r="12" fill="#26d07c"/><circle cx="217" cy="157" r="12" fill="#f4ca64"/><circle cx="257" cy="157" r="12" fill="#ff6b6b"/>
+  <text x="304" y="149" fill="#fff" font-family="Inter,Arial" font-size="24" font-weight="800">TWS Market Vitals</text>
+  <text x="304" y="178" fill="#b7dacb" font-family="Inter,Arial" font-size="15">Dual dashboard preview · Bullish Quality · Bearish Quality · Market Strength</text>
+  <g font-family="Inter,Arial" font-weight="800">
+    <rect x="1044" y="133" width="230" height="48" rx="24" fill="#ffffff" opacity="0.12"/>
+    <text x="1070" y="164" fill="#a7f3d0" font-size="17">Decision Support</text>
+  </g>
+  <g transform="translate(132 238)">
+    <rect width="548" height="250" rx="34" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.14)"/>
+    <text x="32" y="52" fill="#fff" font-family="Inter,Arial" font-size="24" font-weight="900">Bullish Quality</text>
+    <text x="430" y="66" fill="#a7f3d0" font-family="Inter,Arial" font-size="54" font-weight="900">72</text>
+    <rect x="32" y="94" width="484" height="22" rx="11" fill="rgba(255,255,255,0.14)"/>
+    <rect x="32" y="94" width="355" height="22" rx="11" fill="url(#green)"/>
+    <text x="32" y="156" fill="#b7dacb" font-family="Inter,Arial" font-size="16">Trend, momentum, participation and pressure alignment.</text>
+    <g fill="#a7f3d0" font-family="Inter,Arial" font-size="14" font-weight="700">
+      <text x="32" y="206">✓ Momentum Quality</text><text x="240" y="206">✓ Participation</text>
+      <text x="32" y="232">✓ Trend Strength</text><text x="240" y="232">✓ Market Context</text>
+    </g>
+  </g>
+  <g transform="translate(760 238)">
+    <rect width="548" height="250" rx="34" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.14)"/>
+    <text x="32" y="52" fill="#fff" font-family="Inter,Arial" font-size="24" font-weight="900">Bearish Quality</text>
+    <text x="430" y="66" fill="#ffb4b4" font-family="Inter,Arial" font-size="54" font-weight="900">41</text>
+    <rect x="32" y="94" width="484" height="22" rx="11" fill="rgba(255,255,255,0.14)"/>
+    <rect x="32" y="94" width="210" height="22" rx="11" fill="url(#red)"/>
+    <text x="32" y="156" fill="#b7dacb" font-family="Inter,Arial" font-size="16">Weak bearish confirmation with lower decision pressure.</text>
+    <g fill="#ffd0d0" font-family="Inter,Arial" font-size="14" font-weight="700">
+      <text x="32" y="206">• Seller Pressure</text><text x="240" y="206">• Volatility Check</text>
+      <text x="32" y="232">• Structure Review</text><text x="240" y="232">• Risk Awareness</text>
+    </g>
+  </g>
+  <g transform="translate(132 532)">
+    <rect width="1176" height="236" rx="34" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.14)"/>
+    <text x="32" y="52" fill="#fff" font-family="Inter,Arial" font-size="24" font-weight="900">Market Vitals Dashboard</text>
+    <text x="32" y="84" fill="#b7dacb" font-family="Inter,Arial" font-size="16">A clean analytical view for market strength, quality comparison and decision discipline.</text>
+    <g transform="translate(32 124)">
+      <rect width="252" height="72" rx="22" fill="rgba(255,255,255,0.10)"/><text x="22" y="30" fill="#b7dacb" font-size="13" font-family="Inter,Arial" font-weight="800">MARKET STRENGTH</text><text x="22" y="56" fill="#fff" font-size="28" font-family="Inter,Arial" font-weight="900">Strong</text>
+      <rect x="300" width="252" height="72" rx="22" fill="rgba(255,255,255,0.10)"/><text x="322" y="30" fill="#b7dacb" font-size="13" font-family="Inter,Arial" font-weight="800">QUALITY SPREAD</text><text x="322" y="56" fill="#a7f3d0" font-size="28" font-family="Inter,Arial" font-weight="900">+31</text>
+      <rect x="600" width="252" height="72" rx="22" fill="rgba(255,255,255,0.10)"/><text x="622" y="30" fill="#b7dacb" font-size="13" font-family="Inter,Arial" font-weight="800">SESSION CONTEXT</text><text x="622" y="56" fill="#fff" font-size="28" font-family="Inter,Arial" font-weight="900">Positive</text>
+      <rect x="900" width="244" height="72" rx="22" fill="rgba(255,255,255,0.10)"/><text x="922" y="30" fill="#b7dacb" font-size="13" font-family="Inter,Arial" font-weight="800">RISK NOTE</text><text x="922" y="56" fill="#fff" font-size="28" font-family="Inter,Arial" font-weight="900">Manage</text>
+    </g>
+  </g>
+</svg>
