@@ -1,18 +1,16 @@
-TWS Enterprises Website - V25 Mockup Style Premium Redesign
+TWS Enterprises Website - V26 Bugfix + Bull Premium Rebuild
 
-Upload all extracted files/folders to the root of GitHub repository.
-
-Included:
-- Complete actual website, not mockup image
-- Premium mockup-inspired homepage
-- Professional full-screen menu overlay
-- Contact Us page added
-- Premium loader: Welcome to TWS Enterprises Pvt. Ltd.
-- Redesigned service pages
-- TWS Connect app section
-- Static Live Performance preview (no video dependency)
-- TWS Market Vitals preview
+Fixes:
+- Service page broken image fixed by replacing SVG dependency with generated PNG asset.
+- Homepage hero visual rebuilt with actual premium bull dashboard visual.
+- Loader blank white circle issue fixed with dedicated loader-logo.png.
+- Loader sizing and no-scroll behavior improved.
+- Professional menu overlay polished.
+- Service hero layout balanced and image sizing fixed.
+- Contact Us page retained.
+- Videos remain removed to avoid play issues.
 - Formspree endpoint retained: https://formspree.io/f/maqrnevz
-- robots.txt and sitemap.xml updated
 
-Generated: 2026-07-18 14:47
+Upload:
+Extract patch ZIP and upload/replace all files/folders in GitHub repo root.
+Generated: 2026-07-18 14:55

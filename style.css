@@ -38,3 +38,207 @@
 
 @media(max-width:1060px){.mega-grid{grid-template-columns:1fr 1fr}.hero-card,.app-card,.service-hero-grid,.split-intro,.performance-grid,.contact-grid{grid-template-columns:1fr}.services-grid{grid-template-columns:repeat(2,1fr)}.process-grid,.highlights-strip,.service-process,.detail-grid.bottom,.tool-grid,.insights-grid{grid-template-columns:repeat(2,1fr)}.detail-grid{grid-template-columns:1fr}.phone-stage{min-height:440px}.hero-card{padding:36px}.service-hero{padding-top:124px}}
 @media(max-width:680px){.container{width:min(100% - 28px,1180px)}.site-header{top:12px;border-radius:20px}.brand img{width:100px}.mega-panel{inset:10px;width:auto;border-radius:26px;padding:16px}.mega-grid{grid-template-columns:1fr}.hero-shell{padding-top:96px}.hero-card{min-height:auto;border-radius:30px;padding:26px}.hero-copy h1,.service-hero h1{font-size:40px}.services-grid,.process-grid,.highlights-strip,.service-process,.detail-grid.bottom,.tool-grid,.insights-grid,.form-grid{grid-template-columns:1fr}.section-title{display:block}.phone-back{display:none}.phone-main{width:260px}.phone-stage{min-height:520px}.app-card{padding:24px;border-radius:28px}.performance-card h2{font-size:28px}.cta-card,.app-mini-card{display:block}.footer-grid{grid-template-columns:1fr}.footer-bottom{display:block}.compact-section,.services-section,.app-section,.performance-section,.process-section,.service-detail,.tool-section,.contact-section,.application-section,.article-section{padding:52px 0}.service-hero{padding:108px 0 48px}.tool-card img{height:auto}}
+
+
+/* =========================
+   V26 Bugfix + Bull Premium Polish
+   ========================= */
+
+/* prevent initial loader scroll-jump / blank logo look */
+.site-loader{
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+}
+.loader-card{
+  width:min(430px,calc(100vw - 42px));
+  min-height:390px;
+  padding:30px;
+}
+.loader-orbit{
+  width:132px;
+  height:132px;
+  overflow:hidden;
+}
+.loader-orbit img{
+  width:118px;
+  height:auto;
+  object-fit:contain;
+}
+
+/* better centered max-width for desktop screenshots */
+.site-header,
+.container{
+  max-width:1260px;
+}
+.site-header{
+  min-height:98px;
+}
+.brand img{
+  width:132px;
+}
+.hero-shell{
+  padding-top:118px;
+}
+.hero-card{
+  grid-template-columns: .92fr 1.08fr;
+  min-height:720px;
+  padding:56px 60px 46px;
+}
+.hero-copy h1{
+  max-width:630px;
+}
+.hero-visual{
+  align-self:center;
+}
+.hero-visual img{
+  width:100%;
+  min-height:430px;
+  object-fit:contain;
+  border-radius:36px;
+}
+
+/* make stats appear in one row on wide desktop */
+.trust-row{
+  max-width:560px;
+}
+.trust-row span{
+  white-space:nowrap;
+}
+
+/* image bug fixes */
+.service-visual img,
+.tool-hero-img img{
+  width:100%;
+  min-height:300px;
+  max-height:430px;
+  object-fit:contain;
+  padding:0;
+}
+.service-visual{
+  min-height:330px;
+  display:grid;
+  align-items:center;
+}
+.tool-hero-img{
+  min-height:330px;
+  display:grid;
+  align-items:center;
+}
+.tool-hero-img img[src$=".svg"],
+.service-visual img[src$=".png"]{
+  background:#fff;
+}
+
+/* loader logo should never be white/blank */
+.loader-card .loader-orbit{
+  background:linear-gradient(180deg,#fff,#eefaf4);
+}
+.loader-card .loader-orbit::after{
+  content:"";
+  position:absolute;
+  inset:12px;
+  border-radius:50%;
+  box-shadow:inset 0 0 0 1px rgba(0,107,63,.06);
+  pointer-events:none;
+}
+
+/* professional menu visual polish */
+.mega-panel{
+  max-width:980px;
+  border:1px solid rgba(255,255,255,.55);
+}
+.mega-grid section a{
+  border-radius:14px;
+  padding:12px 12px;
+  border-bottom:0;
+}
+.mega-grid section a:hover{
+  background:#eefaf3;
+}
+.menu-contact-card{
+  background:
+    radial-gradient(circle at 80% 12%, rgba(19,194,111,.18), transparent 30%),
+    linear-gradient(180deg,#07140e,#0b291b);
+  color:#fff;
+}
+.menu-contact-card p,
+.menu-contact-card .menu-mini{
+  color:#c8dfd2;
+}
+.menu-contact-card .btn.ghost{
+  background:rgba(255,255,255,.08);
+  color:#fff;
+  border-color:rgba(255,255,255,.18);
+}
+
+/* service page visual balancing */
+.service-hero{
+  min-height:720px;
+  display:grid;
+  align-items:center;
+}
+.service-hero-grid{
+  grid-template-columns:.92fr 1.08fr;
+}
+.service-hero p{
+  max-width:650px;
+}
+.highlights-strip{
+  margin-top:-22px;
+  position:relative;
+  z-index:2;
+}
+
+/* add visual fallback if asset still blocked by browser/cache */
+.service-visual::before,
+.hero-visual::before{
+  content:"";
+  position:absolute;
+}
+.service-visual,
+.hero-visual{
+  position:relative;
+}
+
+/* nice bull-like motion */
+@keyframes floatSoft{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+.hero-visual img,
+.service-visual img{
+  animation:floatSoft 5.5s ease-in-out infinite;
+}
+
+/* mobile cleanup */
+@media(max-width:1060px){
+  .hero-card,
+  .service-hero-grid{
+    grid-template-columns:1fr;
+  }
+  .hero-visual img{
+    min-height:auto;
+  }
+  .service-hero{
+    min-height:auto;
+  }
+}
+@media(max-width:680px){
+  .site-header{
+    min-height:76px;
+  }
+  .brand img{
+    width:105px;
+  }
+  .hero-card{
+    padding:24px;
+  }
+  .trust-row span{
+    white-space:normal;
+  }
+  .service-visual img,
+  .tool-hero-img img{
+    min-height:220px;
+  }
+}
