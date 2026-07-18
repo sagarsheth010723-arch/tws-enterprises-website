@@ -1,27 +1,16 @@
-TWS Enterprises V29 — Final Premium YouTube Website
+TWS Enterprises V31 - Creative Theme, About Pages, New Menu and Performance Carousel
 
-Upload:
-1. Extract the ZIP.
-2. Upload and replace every file/folder in the GitHub repository root.
-3. Commit the changes.
-4. Wait for GitHub Pages deployment and use Ctrl+F5 once.
+Upload the PATCH ZIP contents to the GitHub repository root and replace all existing files.
 
-Final V29 highlights:
-- Complete premium visual system rebuilt.
-- Compact collapsed accordion menu.
-- Premium bull hero image.
-- Consistent buttons, cards, fonts, colors and spacing.
-- Falcon branding and subtle animations.
-- Premium loader shown once per browser session.
-- Local MP4 videos removed.
-- YouTube playlist integrated on live-performance.html.
-- Homepage uses a lightweight performance preview card only.
-- Contact Us, application form, service pages and TWS Connect retained.
-- Responsive desktop, tablet and mobile layouts.
-- Missing internal assets and links validated before delivery.
+Highlights:
+- Montserrat body font and Poppins headings, only weights 400/500/600.
+- Menu contains About TWS, Services, TradingView Tools and TWS Connect.
+- Separate About Us, Company Profile, Vision, Strength, Mission and Motto pages.
+- Service cards redesigned and unique human-centric service visuals.
+- Homepage auto-scrolling performance thumbnails inspired by the supplied reference.
+- Menu contains a rotating latest-performance thumbnail.
+- Dedicated performance gallery with click-to-open YouTube modal.
+- TradingView tool pages updated from the supplied PDF.
+- Local MP4 files are not used.
 
-Playlist:
-https://youtube.com/playlist?list=PLJY1iNvy9Eo4&si=B-rTM2lFMEIQqMv4
-
-Generated:
-2026-07-18 15:44
+Generated: 2026-07-18T19:54

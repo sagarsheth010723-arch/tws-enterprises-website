@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 800 480">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f7fcf9"/><stop offset="1" stop-color="#dff3e7"/></linearGradient>
+  <radialGradient id="glow" cx="80%" cy="15%" r="70%"><stop stop-color="#21c67c" stop-opacity=".25"/><stop offset="1" stop-color="#21c67c" stop-opacity="0"/></radialGradient>
+  <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#0a8c55" stroke-opacity=".08"/></pattern>
+  <filter id="shadow"><feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#063b27" flood-opacity=".18"/></filter>
+</defs>
+<rect width="800" height="480" rx="34" fill="url(#bg)"/>
+<rect width="800" height="480" rx="34" fill="url(#grid)"/>
+<rect width="800" height="480" rx="34" fill="url(#glow)"/>
+<g filter="url(#shadow)"><g transform="translate(95 105)"><circle cx="230" cy="125" r="44" fill="#d7efe2"/><path d="M170 345c8-111 21-169 59-182 41 13 55 72 61 182" fill="#0b6e46"/><rect x="340" y="105" width="310" height="238" rx="28" fill="#fff" stroke="#a9d7bf" stroke-width="4"/><path d="M385 290l60-67 48 32 69-92 50 36" fill="none" stroke="#12b36b" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M582 160l34-3-8 33" fill="none" stroke="#12b36b" stroke-width="9" stroke-linecap="round"/><rect x="124" y="347" width="550" height="23" rx="12" fill="#0a3425"/></g></g>
+<g transform="translate(36 34)"><rect width="210" height="44" rx="22" fill="#fff" fill-opacity=".88" stroke="#b9dfc9"/><text x="22" y="28" font-family="Montserrat,Arial" font-size="13" fill="#07633d">Compounding Strategy</text></g>
+</svg>

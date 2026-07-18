@@ -1,140 +1,24 @@
-
 (() => {
-  const loader = document.getElementById('siteLoader');
-  const hasSeenLoader = sessionStorage.getItem('twsLoaderSeen') === '1';
-  const hideLoader = () => {
-    if (!loader) return;
-    loader.classList.add('is-hidden');
-    sessionStorage.setItem('twsLoaderSeen', '1');
-  };
-  if (hasSeenLoader) {
-    loader?.classList.add('is-hidden');
-  } else {
-    window.addEventListener('load', () => setTimeout(hideLoader, 850));
-    setTimeout(hideLoader, 2200);
-  }
-
-  const menu = document.getElementById('menuDrawer');
-  const toggle = document.getElementById('menuToggle');
-  const openMenu = () => {
-    menu?.classList.add('is-open');
-    toggle?.classList.add('is-active');
-    toggle?.setAttribute('aria-expanded', 'true');
-    menu?.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('no-scroll');
-  };
-  const closeMenu = () => {
-    menu?.classList.remove('is-open');
-    toggle?.classList.remove('is-active');
-    toggle?.setAttribute('aria-expanded', 'false');
-    menu?.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('no-scroll');
-  };
-  toggle?.addEventListener('click', () => menu?.classList.contains('is-open') ? closeMenu() : openMenu());
-  document.querySelectorAll('[data-close-menu]').forEach(el => el.addEventListener('click', closeMenu));
-  menu?.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
-
-  // Keep only one menu section expanded.
-  document.querySelectorAll('.menu-accordion details').forEach(detail => {
-    detail.addEventListener('toggle', () => {
-      if (!detail.open) return;
-      document.querySelectorAll('.menu-accordion details').forEach(other => {
-        if (other !== detail) other.open = false;
-      });
-    });
-  });
-
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  // Formspree AJAX submission.
-  document.querySelectorAll('form[data-formspree-form="true"]').forEach(form => {
-    const status = form.querySelector('[data-form-status]');
-    const button = form.querySelector('button[type="submit"]');
-    const original = button?.textContent || 'Submit';
-    const showStatus = (type, message) => {
-      if (!status) return;
-      status.className = `form-submit-status show ${type}`;
-      status.textContent = message;
-    };
-    form.addEventListener('submit', async event => {
-      event.preventDefault();
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-      }
-      const data = new FormData(form);
-      if (button) {
-        button.disabled = true;
-        button.textContent = 'Submitting...';
-      }
-      showStatus('loading', 'Submitting your details securely...');
-      try {
-        const response = await fetch(form.action, {
-          method: 'POST',
-          body: data,
-          headers: { Accept: 'application/json' }
-        });
-        if (!response.ok) throw new Error('Submission failed');
-        showStatus('success', 'Submitted successfully.');
-        if (form.classList.contains('tws-application-form')) {
-          window.location.href = 'application-thank-you.html';
-        } else {
-          form.reset();
-          if (button) {
-            button.disabled = false;
-            button.textContent = original;
-          }
-        }
-      } catch (error) {
-        showStatus('error', 'Submission failed. Please try again or contact TWS on WhatsApp.');
-        if (button) {
-          button.disabled = false;
-          button.textContent = original;
-        }
-      }
-    });
-  });
-
-  // Lazy-load YouTube playlist only when requested.
-  const youtubeModal = document.getElementById('youtubeModal');
-  const youtubePlayer = document.getElementById('youtubePlayer');
-  const openYouTube = () => {
-    if (!youtubeModal || !youtubePlayer) return;
-    if (!youtubePlayer.querySelector('iframe')) {
-      const iframe = document.createElement('iframe');
-      iframe.src = youtubePlayer.dataset.src || '';
-      iframe.title = 'TWS Live Performance YouTube playlist';
-      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-      iframe.allowFullscreen = true;
-      youtubePlayer.innerHTML = '';
-      youtubePlayer.appendChild(iframe);
-    }
-    youtubeModal.classList.add('is-open');
-    youtubeModal.setAttribute('aria-hidden', 'false');
-    document.body.classList.add('no-scroll');
-  };
-  const closeYouTube = () => {
-    if (!youtubeModal || !youtubePlayer) return;
-    youtubeModal.classList.remove('is-open');
-    youtubeModal.setAttribute('aria-hidden', 'true');
-    youtubePlayer.innerHTML = '<div class="youtube-loading">Loading playlist…</div>';
-    document.body.classList.remove('no-scroll');
-  };
-  document.querySelectorAll('[data-open-youtube]').forEach(el => el.addEventListener('click', openYouTube));
-  document.querySelectorAll('[data-close-youtube]').forEach(el => el.addEventListener('click', closeYouTube));
-
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') {
-      closeMenu();
-      closeYouTube();
-    }
-  });
+const videos=[{"id": "_3O1bCG4_q0", "url": "https://youtube.com/shorts/_3O1bCG4_q0?feature=share", "title": "TWS Performance 01"}, {"id": "3DquvjT58kc", "url": "https://youtube.com/shorts/3DquvjT58kc?feature=share", "title": "TWS Performance 02"}, {"id": "wFUYkq7-MdQ", "url": "https://youtube.com/shorts/wFUYkq7-MdQ?feature=share", "title": "TWS Performance 03"}, {"id": "SBuAzAa_Z6M", "url": "https://youtube.com/shorts/SBuAzAa_Z6M?feature=share", "title": "TWS Performance 04"}, {"id": "ZuwrrKm3-LY", "url": "https://youtube.com/shorts/ZuwrrKm3-LY?feature=share", "title": "TWS Performance 05"}, {"id": "tMp87orWS_Y", "url": "https://youtube.com/shorts/tMp87orWS_Y?feature=share", "title": "TWS Performance 06"}, {"id": "xiNVE_38C14", "url": "https://youtube.com/shorts/xiNVE_38C14?feature=share", "title": "TWS Performance 07"}, {"id": "Vsg5RdTX4vs", "url": "https://youtube.com/shorts/Vsg5RdTX4vs?feature=share", "title": "TWS Performance 08"}, {"id": "jXQJ1VbTvOE", "url": "https://youtube.com/shorts/jXQJ1VbTvOE?feature=share", "title": "TWS Performance 09"}, {"id": "e-3-nFWwQ1o", "url": "https://youtube.com/shorts/e-3-nFWwQ1o?feature=share", "title": "TWS Performance 10"}, {"id": "3bkStNJMKTc", "url": "https://youtube.com/shorts/3bkStNJMKTc?feature=share", "title": "TWS Performance 11"}, {"id": "elGGTKp5_uU", "url": "https://youtube.com/shorts/elGGTKp5_uU?feature=share", "title": "TWS Performance 12"}, {"id": "GAwVMUyD10w", "url": "https://youtube.com/shorts/GAwVMUyD10w?feature=share", "title": "TWS Performance 13"}, {"id": "4mLbbXU5UmQ", "url": "https://youtube.com/shorts/4mLbbXU5UmQ?feature=share", "title": "TWS Performance 14"}, {"id": "UpUEWD51NE4", "url": "https://youtube.com/shorts/UpUEWD51NE4?feature=share", "title": "TWS Performance 15"}, {"id": "-TKFGgGJSz4", "url": "https://youtube.com/shorts/-TKFGgGJSz4?feature=share", "title": "TWS Performance 16"}, {"id": "xEvFXnbOfeA", "url": "https://youtube.com/shorts/xEvFXnbOfeA?feature=share", "title": "TWS Performance 17"}, {"id": "ZU7BhIltcz4", "url": "https://youtube.com/shorts/ZU7BhIltcz4?feature=share", "title": "TWS Performance 18"}, {"id": "L1hbN6Sp_WY", "url": "https://youtube.com/shorts/L1hbN6Sp_WY?feature=share", "title": "TWS Performance 19"}, {"id": "C1MURAZ7eWc", "url": "https://youtube.com/shorts/C1MURAZ7eWc?feature=share", "title": "TWS Performance 20"}];
+const loader=document.getElementById('siteLoader');
+const hideLoader=()=>loader?.classList.add('hide');
+if(sessionStorage.getItem('twsLoaderSeen')==='1') hideLoader(); else {window.addEventListener('load',()=>setTimeout(()=>{hideLoader();sessionStorage.setItem('twsLoaderSeen','1')},800));setTimeout(hideLoader,2200)}
+const menu=document.getElementById('menuDrawer'),toggle=document.getElementById('menuToggle');
+const openMenu=()=>{menu?.classList.add('open');toggle?.classList.add('active');toggle?.setAttribute('aria-expanded','true');document.body.classList.add('no-scroll')};
+const closeMenu=()=>{menu?.classList.remove('open');toggle?.classList.remove('active');toggle?.setAttribute('aria-expanded','false');document.body.classList.remove('no-scroll')};
+toggle?.addEventListener('click',()=>menu?.classList.contains('open')?closeMenu():openMenu());document.querySelectorAll('[data-close-menu]').forEach(x=>x.addEventListener('click',closeMenu));
+document.querySelectorAll('.menu-main-options details').forEach(d=>d.addEventListener('toggle',()=>{if(d.open)document.querySelectorAll('.menu-main-options details').forEach(o=>{if(o!==d)o.open=false})}));
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target)}}),{threshold:.12});document.querySelectorAll('.reveal').forEach(e=>io.observe(e));
+// rotating menu thumbnail
+let mi=0;const menuCard=document.getElementById('menuPerformanceCard'),menuImg=document.getElementById('menuPerformanceImage'),menuTitle=document.getElementById('menuPerformanceTitle');
+if(menuCard&&videos.length) setInterval(()=>{mi=(mi+1)%Math.min(videos.length,6);const v=videos[mi];menuCard.href=v.url;menuImg.src=`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`;menuTitle.textContent=v.title},4000);
+// video modal
+const modal=document.getElementById('videoModal'),player=document.getElementById('videoModalPlayer'),modalTitle=document.getElementById('videoModalTitle');
+const openVideo=(id,title)=>{if(!modal||!player)return;modalTitle.textContent=title||'Performance Video';player.innerHTML=`<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="${title||'TWS Performance'}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;modal.classList.add('open');modal.setAttribute('aria-hidden','false');document.body.classList.add('no-scroll')};
+const closeVideo=()=>{if(!modal||!player)return;modal.classList.remove('open');modal.setAttribute('aria-hidden','true');player.innerHTML='';document.body.classList.remove('no-scroll')};
+document.querySelectorAll('[data-video-id]').forEach(btn=>btn.addEventListener('click',()=>openVideo(btn.dataset.videoId,btn.dataset.videoTitle)));document.querySelectorAll('[data-close-video]').forEach(x=>x.addEventListener('click',closeVideo));
+const loadMore=document.getElementById('loadMorePerformance'),gallery=document.getElementById('performanceGallery');loadMore?.addEventListener('click',()=>{gallery?.classList.add('show-all');loadMore.remove()});
+// Formspree
+ document.querySelectorAll('form[data-formspree-form="true"]').forEach(form=>{const status=form.querySelector('[data-form-status]'),button=form.querySelector('button[type="submit"]'),original=button?.textContent||'Submit';const set=(type,msg)=>{if(status){status.className=`form-submit-status show ${type}`;status.textContent=msg}};form.addEventListener('submit',async e=>{e.preventDefault();if(!form.checkValidity()){form.reportValidity();return};if(button){button.disabled=true;button.textContent='Submitting...'};set('loading','Submitting your details securely...');try{const r=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{Accept:'application/json'}});if(!r.ok)throw new Error();set('success','Submitted successfully.');if(form.classList.contains('tws-application-form'))location.href='application-thank-you.html';else{form.reset();if(button){button.disabled=false;button.textContent=original}}}catch{set('error','Submission failed. Please try again or contact TWS on WhatsApp.');if(button){button.disabled=false;button.textContent=original}}})});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeMenu();closeVideo()}});
 })();
