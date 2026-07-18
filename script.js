@@ -1,281 +1,75 @@
 
-// =========================
-// TWS Website V13 Final JS
-// Clean single-controller build
-// Fixes menu double-toggle issue
-// =========================
-
-// Sticky header
-const siteHeader = document.querySelector('.site-header');
-window.addEventListener('scroll', () => {
-  if (siteHeader) {
-    siteHeader.classList.toggle('scrolled', window.scrollY > 8);
-  }
-}, { passive: true });
-
-// Current year
-document.querySelectorAll('[data-year]').forEach(el => {
-  el.textContent = new Date().getFullYear();
-});
-
-// Reveal on scroll
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.12 });
-
-document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
-
-// Button ripple
-document.querySelectorAll('.btn').forEach(btn => {
-  btn.addEventListener('click', e => {
-    const rect = btn.getBoundingClientRect();
-    const ripple = document.createElement('span');
-    ripple.style.cssText = `
-      position:absolute;
-      border-radius:50%;
-      background:rgba(255,255,255,.45);
-      width:20px;
-      height:20px;
-      left:${e.clientX - rect.left - 10}px;
-      top:${e.clientY - rect.top - 10}px;
-      transform:scale(0);
-      animation:twsRipple .5s ease-out forwards;
-      pointer-events:none;
-    `;
-    btn.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 520);
-  });
-});
-
-const rippleStyle = document.createElement('style');
-rippleStyle.textContent = '@keyframes twsRipple{to{transform:scale(10);opacity:0}}';
-document.head.appendChild(rippleStyle);
-
-// Top-right dropdown + mobile accordion menu
 (() => {
-  const header = document.querySelector('.mobile-optimized-header, .top-right-menu-header');
-  const trigger = document.querySelector('[data-mega-trigger]');
-  const panel = document.querySelector('[data-mega-panel]');
-
-  if (!header || !trigger || !panel) return;
-
-  const isOpen = () => header.classList.contains('menu-open');
-
-  const openMenu = () => {
-    header.classList.add('menu-open');
-    trigger.setAttribute('aria-expanded', 'true');
-    if (window.innerWidth <= 700) {
-      document.body.classList.add('menu-lock');
-    }
-  };
-
-  const closeMenu = () => {
-    header.classList.remove('menu-open');
-    trigger.setAttribute('aria-expanded', 'false');
-    document.body.classList.remove('menu-lock');
-  };
-
-  trigger.addEventListener('click', (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (isOpen()) {
-      closeMenu();
-    } else {
-      openMenu();
-    }
+  const loader = document.getElementById('siteLoader');
+  window.addEventListener('load', () => {
+    setTimeout(() => loader && loader.classList.add('hide'), 1300);
   });
 
-  panel.addEventListener('click', (event) => {
-    if (event.target.closest('[data-accordion-button]')) return;
+  const menuToggle = document.getElementById('menuToggle');
+  const menuDrawer = document.getElementById('menuDrawer');
+  const closeEls = document.querySelectorAll('[data-close-menu], .menu-links a');
+  const openMenu = () => { document.body.classList.add('menu-open'); menuDrawer?.classList.add('open'); menuToggle?.classList.add('active'); menuToggle?.setAttribute('aria-expanded','true'); menuDrawer?.setAttribute('aria-hidden','false'); };
+  const closeMenu = () => { document.body.classList.remove('menu-open'); menuDrawer?.classList.remove('open'); menuToggle?.classList.remove('active'); menuToggle?.setAttribute('aria-expanded','false'); menuDrawer?.setAttribute('aria-hidden','true'); };
+  menuToggle?.addEventListener('click', () => menuDrawer?.classList.contains('open') ? closeMenu() : openMenu());
+  closeEls.forEach(el => el.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 
-    if (event.target.closest('a')) {
-      closeMenu();
-    }
-  });
-
-  document.querySelectorAll('[data-accordion-button]').forEach(button => {
-    button.addEventListener('click', (event) => {
-      if (window.innerWidth > 700) return;
-
-      event.preventDefault();
-      event.stopPropagation();
-
-      const section = button.closest('.mobile-accordion');
-      if (!section) return;
-
-      const willOpen = !section.classList.contains('active');
-
-      document.querySelectorAll('.mobile-accordion.active').forEach(openSection => {
-        if (openSection !== section) {
-          openSection.classList.remove('active');
-          const btn = openSection.querySelector('[data-accordion-button]');
-          if (btn) btn.setAttribute('aria-expanded', 'false');
-        }
-      });
-
-      section.classList.toggle('active', willOpen);
-      button.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
-    });
-  });
-
-  document.addEventListener('click', (event) => {
-    if (!header.contains(event.target)) {
-      closeMenu();
-    }
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      closeMenu();
-    }
-  });
-
-  window.addEventListener('resize', () => {
-    if (window.innerWidth > 700) {
-      document.body.classList.remove('menu-lock');
-    }
-  });
-})();
-
-// Mobile touch/tap animation polish
-(() => {
-  const selectors = [
-    '.service-card',
-    '.tool-card',
-    '.content-card',
-    '.process-card',
-    '.standard-card',
-    '.app-phone',
-    '.phone-card',
-    '.tablet-device',
-    '.tablet-float',
-    '.btn',
-    '.header-cta',
-    '.top-menu-button',
-    '.dropdown-section a',
-    '.dropdown-section-title',
-    '.float-wa'
-  ];
-
-  const elements = document.querySelectorAll(selectors.join(','));
-
-  elements.forEach((element) => {
-    element.classList.add('tap-target');
-
-    element.addEventListener('touchstart', () => {
-      element.classList.add('is-tapping');
-    }, { passive: true });
-
-    element.addEventListener('touchend', () => {
-      setTimeout(() => element.classList.remove('is-tapping'), 140);
-    }, { passive: true });
-
-    element.addEventListener('touchcancel', () => {
-      element.classList.remove('is-tapping');
-    }, { passive: true });
-  });
-})();
-
-
-
-// V15 Application Form conditional fields
-(() => {
-  document.querySelectorAll('[data-select-other]').forEach(select => {
-    const target = document.getElementById(select.dataset.selectOther);
-    if (!target) return;
-
-    const sync = () => {
-      const show = select.value === 'Other';
-      target.classList.toggle('show', show);
-      target.querySelectorAll('input, textarea, select').forEach(input => {
-        input.required = show;
-      });
+  // Conditional form fields
+  document.querySelectorAll('[data-reveal]').forEach(radio => {
+    const update = () => {
+      const target = document.getElementById(radio.dataset.reveal);
+      const checked = radio.checked;
+      if (target) target.classList.toggle('show', checked);
     };
-
-    select.addEventListener('change', sync);
-    sync();
+    document.querySelectorAll(`input[name="${radio.name}"]`).forEach(el => el.addEventListener('change', update));
+    update();
+  });
+  document.querySelectorAll('[data-select-reveal]').forEach(select => {
+    const target = document.getElementById(select.dataset.selectReveal);
+    const update = () => target && target.classList.toggle('show', select.value === 'Other');
+    select.addEventListener('change', update); update();
   });
 
-  document.querySelectorAll('[data-show-field]').forEach(radio => {
-    const group = document.querySelectorAll(`input[name="${radio.name}"]`);
-    const target = document.getElementById(radio.dataset.showField);
-    if (!target) return;
-
-    const sync = () => {
-      const show = radio.checked;
-      target.classList.toggle('show', show);
-      target.querySelectorAll('input, textarea, select').forEach(input => {
-        input.required = show;
-      });
-    };
-
-    group.forEach(item => item.addEventListener('change', sync));
-    sync();
-  });
-})();
-
-
-
-// V22 Formspree AJAX submit flow
-(() => {
+  // Formspree AJAX submit
   const form = document.querySelector('form[data-formspree-form="true"]');
-  if (!form) return;
-
-  const statusBox = form.querySelector('[data-form-status]');
-  const submitButton = form.querySelector('button[type="submit"]');
-  const originalButtonText = submitButton ? submitButton.textContent : 'Submit Application';
-
-  const setStatus = (type, message) => {
-    if (!statusBox) return;
-    statusBox.className = `form-submit-status show ${type}`;
-    statusBox.textContent = message;
-  };
-
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-
-    if (!form.checkValidity()) {
-      form.reportValidity();
-      return;
-    }
-
-    const action = form.getAttribute('action');
-    const formData = new FormData(form);
-
-    form.classList.add('is-submitting');
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.textContent = 'Submitting...';
-    }
-
-    setStatus('loading', 'Submitting your application securely. Please wait...');
-
-    try {
-      const response = await fetch(action, {
-        method: 'POST',
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-      });
-
-      if (!response.ok) {
-        throw new Error('Submission failed');
+  if (form) {
+    const status = form.querySelector('[data-form-status]');
+    const button = form.querySelector('button[type="submit"]');
+    const originalText = button ? button.textContent : 'Submit Application';
+    const setStatus = (type, message) => { if (!status) return; status.className = `form-status show ${type}`; status.textContent = message; };
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      const data = new FormData(form);
+      if (button) { button.disabled = true; button.textContent = 'Submitting...'; }
+      setStatus('loading', 'Submitting your application securely. Please wait...');
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
+        if (!res.ok) throw new Error('Submission failed');
+        setStatus('success', 'Application submitted successfully. Redirecting...');
+        window.location.href = 'application-thank-you.html';
+      } catch (err) {
+        if (button) { button.disabled = false; button.textContent = originalText; }
+        setStatus('error', 'We could not submit the form right now. Please try again, or contact TWS on WhatsApp if the issue continues.');
       }
+    });
+  }
 
-      setStatus('success', 'Application submitted successfully. Redirecting...');
-      window.location.href = 'application-thank-you.html';
-    } catch (error) {
-      form.classList.remove('is-submitting');
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.textContent = originalButtonText;
-      }
-      setStatus('error', 'We could not submit the form right now. Please try again, or contact TWS on WhatsApp if the issue continues.');
-    }
+  // Performance video cards
+  const modal = document.createElement('div');
+  modal.className = 'video-modal';
+  modal.innerHTML = '<div class="video-modal-inner"><button type="button" aria-label="Close video">×</button><video controls playsinline></video></div>';
+  document.body.appendChild(modal);
+  const modalVideo = modal.querySelector('video');
+  const modalClose = modal.querySelector('button');
+  const closeModal = () => { modal.classList.remove('open'); modalVideo.pause(); modalVideo.removeAttribute('src'); };
+  modalClose.addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+
+  document.querySelectorAll('[data-video-card]').forEach(card => {
+    const video = card.querySelector('video');
+    card.addEventListener('mouseenter', () => { video.muted = true; video.loop = true; video.play().catch(()=>{}); });
+    card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
+    card.addEventListener('click', () => { modalVideo.src = video.currentSrc || video.getAttribute('src'); modal.classList.add('open'); modalVideo.play().catch(()=>{}); });
   });
 })();
