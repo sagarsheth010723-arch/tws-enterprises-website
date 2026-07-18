@@ -1,16 +1,18 @@
+TWS Enterprises Website - V25 Mockup Style Premium Redesign
 
-V24 Premium Redesign
-- Complete new homepage UI/UX with cleaner, less crowded layout.
+Upload all extracted files/folders to the root of GitHub repository.
+
+Included:
+- Complete actual website, not mockup image
+- Premium mockup-inspired homepage
+- Professional full-screen menu overlay
+- Contact Us page added
 - Premium loader: Welcome to TWS Enterprises Pvt. Ltd.
-- Top-right menu is hamburger icon only; no Menu text.
-- Videos removed from Live Performance because browser playback was not reliable.
-- Added static premium Live Performance / TWS Market Vitals preview.
-- TWS Connect App section uses Google login screen image only.
-- Problematic first app screen is not used and removed from the new package.
-- Service pages redesigned with premium hero, background tool-grid style, highlights, suitability, process, risk and benefits.
-- Service content based on uploaded TWS Complete Services Profile document.
+- Redesigned service pages
+- TWS Connect app section
+- Static Live Performance preview (no video dependency)
+- TWS Market Vitals preview
 - Formspree endpoint retained: https://formspree.io/f/maqrnevz
-- Sitemap and robots updated.
-Generated: 2026-07-18 14:27
+- robots.txt and sitemap.xml updated
 
-Note: The actual TWS Market Vitals screenshot was not attached in the final user message. The package includes a premium placeholder preview file: assets/tws-market-vitals-preview.svg. Replace it with the real screenshot later if required.
+Generated: 2026-07-18 14:47

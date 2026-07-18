@@ -1,46 +1,137 @@
 <!DOCTYPE html><html lang="en"><head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TWS Gap Intelligence | TWS TradingView Tool</title>
-  <meta name="description" content="Analyzes Gap Up/Gap Down openings, continuation, reversal and opening-session context. A proprietary TradingView tool by TWS Enterprises Private Limited.">
-  <link rel="canonical" href="https://twsenterprises.in/tws-gap-intelligence.html">
-  <meta name="robots" content="index, follow, max-image-preview:large">
-  <meta property="og:type" content="website"><meta property="og:site_name" content="TWS Enterprises Private Limited">
-  <meta property="og:title" content="TWS Gap Intelligence | TWS TradingView Tool"><meta property="og:description" content="Analyzes Gap Up/Gap Down openings, continuation, reversal and opening-session context. A proprietary TradingView tool by TWS Enterprises Private Limited."><meta property="og:url" content="https://twsenterprises.in/tws-gap-intelligence.html">
-  <meta property="og:image" content="https://twsenterprises.in/assets/tws-main-logo.png"><meta name="twitter:card" content="summary_large_image">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://twsenterprises.in/#organization", "name": "TWS Enterprises Private Limited", "url": "https://twsenterprises.in", "logo": "https://twsenterprises.in/assets/tws-main-logo.png", "email": "hello@twsenterprises.in", "telephone": "+91-8828167181", "sameAs": ["https://www.facebook.com/officialtradewithsaagar", "https://www.instagram.com/tradeswithsaagar", "https://www.linkedin.com/in/tws-enterprises-private-limited-898297323/", "https://www.youtube.com/@tradeswithsaagar", "https://wa.me/919833344392"]}, {"@type": "WebSite", "@id": "https://twsenterprises.in/#website", "url": "https://twsenterprises.in", "name": "TWS Enterprises Private Limited", "publisher": {"@id": "https://twsenterprises.in/#organization"}}, {"@type": "WebPage", "@id": "https://twsenterprises.in/tws-gap-intelligence.html#webpage", "url": "https://twsenterprises.in/tws-gap-intelligence.html", "name": "TWS Gap Intelligence | TWS TradingView Tool", "description": "Analyzes Gap Up/Gap Down openings, continuation, reversal and opening-session context. A proprietary TradingView tool by TWS Enterprises Private Limited.", "isPartOf": {"@id": "https://twsenterprises.in/#website"}}]}</script>
-</head><body class=""><div class="site-loader" id="siteLoader" aria-hidden="true">
-  <div class="loader-orbit"><span></span><span></span><span></span></div>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TWS Gap Intelligence | TWS Enterprises Private Limited</title>
+<meta name="description" content="Analyzes Gap Up/Gap Down openings and their market impact.">
+<link rel="canonical" href="https://twsenterprises.in/tws-gap-intelligence.html">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TWS Enterprises Private Limited">
+<meta property="og:title" content="TWS Gap Intelligence | TWS Enterprises Private Limited">
+<meta property="og:description" content="Analyzes Gap Up/Gap Down openings and their market impact.">
+<meta property="og:url" content="https://twsenterprises.in/tws-gap-intelligence.html">
+<meta property="og:image" content="https://twsenterprises.in/assets/tws-main-logo.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://twsenterprises.in/#organization", "name": "TWS Enterprises Private Limited", "url": "https://twsenterprises.in", "logo": "https://twsenterprises.in/assets/tws-main-logo.png", "email": "hello@twsenterprises.in", "telephone": "+91-8828167181"}, {"@type": "WebSite", "@id": "https://twsenterprises.in/#website", "url": "https://twsenterprises.in", "name": "TWS Enterprises Private Limited", "publisher": {"@id": "https://twsenterprises.in/#organization"}}, {"@type": "WebPage", "@id": "https://twsenterprises.in/tws-gap-intelligence.html#webpage", "url": "https://twsenterprises.in/tws-gap-intelligence.html", "name": "TWS Gap Intelligence | TWS Enterprises Private Limited", "description": "Analyzes Gap Up/Gap Down openings and their market impact.", "isPartOf": {"@id": "https://twsenterprises.in/#website"}}]}</script>
+</head><body><div class="site-loader" id="siteLoader" aria-label="Loading website">
   <div class="loader-card">
-    <img src="assets/tws-falcon-logo.png" alt="TWS logo">
-    <p>Welcome to TWS Enterprises Pvt. Ltd.</p>
+    <div class="loader-orbit"><img src="assets/tws-main-logo.png" alt="TWS Enterprises logo"></div>
+    <p>Welcome to</p>
+    <h2>TWS Enterprises Pvt. Ltd.</h2>
+    <div class="loader-chart"><span></span><span></span><span></span><span></span><span></span><span></span></div>
     <div class="loader-progress"><i></i></div>
   </div>
-</div>
 </div><header class="site-header">
-  <a class="brand" href="index.html" aria-label="TWS Enterprises Home"><img src="assets/tws-main-logo.png" alt="TWS Enterprises Private Limited"></a>
-  <button class="hamburger" id="menuToggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span><span></span></button>
+  <a class="brand" href="index.html" aria-label="TWS Enterprises home">
+    <img src="assets/tws-main-logo.png" alt="TWS Enterprises Private Limited">
+  </a>
+  <button class="hamburger" id="menuToggle" aria-label="Open navigation menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </header>
-<nav class="menu-drawer" id="menuDrawer" aria-hidden="true">
-  <div class="menu-backdrop" data-close-menu></div>
-  <div class="menu-panel">
-    <div class="menu-panel-top"><img src="assets/tws-falcon-logo.png" alt="TWS"><button class="menu-close" data-close-menu aria-label="Close navigation">×</button></div>
-    <div class="menu-group"><small>Main</small><a href="index.html">Home</a><a href="index.html#services">Services</a><a href="index.html#app">TWS Connect App</a><a href="index.html#performance">Market Vitals Preview</a><a href="application-form.html">Application Form</a></div>
-    <div class="menu-group"><small>Services</small><a href="portfolio-management-service.html">Portfolio Management Service</a><a href="compounding-strategy.html">Compounding Strategy</a><a href="risk-management.html">Risk Management</a><a href="demat-handling-service.html">Demat Handling Service</a><a href="financial-market-research-guidance.html">Financial Market Research &amp; Guidance</a><a href="stock-market-education.html">Stock Market Education</a><a href="tradingview-tools.html">TradingView Tools</a><a href="wealth-management.html">Wealth Management</a><a href="investment-management-service.html">Investment Management Service</a></div>
-    <div class="menu-actions"><a class="btn btn-primary" href="https://drive.google.com/file/d/1o5BI2WC9GP1cphaOwWI8qV1zvvcRDX--/view?usp=sharing" target="_blank" rel="noopener">Download App</a><a class="btn btn-soft" href="https://wa.me/919833344392" target="_blank" rel="noopener">WhatsApp</a></div>
+<nav class="mega-menu" id="menuDrawer" aria-hidden="true">
+  <div class="mega-backdrop" data-close-menu></div>
+  <div class="mega-panel">
+    <div class="mega-head">
+      <img src="assets/tws-main-logo.png" alt="TWS Enterprises Private Limited">
+      <button class="menu-close" data-close-menu aria-label="Close navigation">×</button>
+    </div>
+    <div class="mega-grid">
+      <section>
+        <span class="menu-kicker">Services</span>
+        <a href="portfolio-management-service.html">Portfolio Management Service</a>
+        <a href="wealth-management.html">Wealth Management</a>
+        <a href="compounding-strategy.html">Compounding Strategy</a>
+        <a href="investment-management-service.html">Investment Management Service</a>
+        <a href="demat-handling-service.html">Demat Handling Service</a>
+        <a href="risk-management.html">Risk Management</a>
+        <a href="financial-market-research-guidance.html">Financial Market Research & Guidance</a>
+        <a href="stock-market-education.html">Stock Market Education</a>
+      </section>
+      <section>
+        <span class="menu-kicker">Tools & App</span>
+        <a href="tradingview-tools.html">TradingView Tools</a>
+        <a href="tws-market-vitals.html">TWS Market Vitals</a>
+        <a href="tws-trend-intelligence.html">TWS Trend Intelligence</a>
+        <a href="tws-nifty50-power-meter.html">TWS Nifty50 Power Meter</a>
+        <a href="tws-apex-smc.html">TWS SMC Apex</a>
+        <a href="tws-gap-intelligence.html">TWS Gap Intelligence</a>
+        <a href="client-application-process-tws.html">Client Application Process</a>
+      </section>
+      <section>
+        <span class="menu-kicker">Company</span>
+        <a href="index.html#about">About TWS</a>
+        <a href="index.html#tws-connect">TWS Connect App</a>
+        <a href="market-insights.html">Market Insights</a>
+        <a href="application-form.html">Application Form</a>
+        <a href="contact-us.html">Contact Us</a>
+        <a href="help-center.html">Help Center</a>
+      </section>
+      <aside class="menu-contact-card">
+        <span class="menu-kicker">Connect</span>
+        <h3>Speak with TWS</h3>
+        <p>For service joining, application review, TradingView tools or account support.</p>
+        <a class="btn primary" href="https://wa.me/919833344392">WhatsApp TWS</a>
+        <a class="btn ghost" href="contact-us.html">Open Contact Page</a>
+        <div class="menu-mini">
+          <span>Call: 8828167181</span>
+          <span>Email: hello@twsenterprises.in</span>
+        </div>
+      </aside>
+    </div>
   </div>
 </nav><main>
-<section class="service-hero tool-page-hero"><div class="tool-lines"></div><div class="container service-hero-grid"><div class="reveal"><span class="eyebrow">TradingView Tool</span><h1>TWS Gap Intelligence</h1><p>Analyzes Gap Up/Gap Down openings, continuation, reversal and opening-session context.</p><div class="hero-actions"><a class="btn btn-primary" href="https://wa.me/919833344392" target="_blank" rel="noopener">Request Access</a><a class="btn btn-soft" href="tradingview-tools.html">All Tools</a></div></div><div class="service-visual wide reveal"><img src="assets/tws-gap-intelligence.png" alt="TWS Gap Intelligence"></div></div></section>
-<section class="detail-section"><div class="container detail-grid"><div class="detail-main reveal"><h2>Built for decision support.</h2><p>Analyzes Gap Up/Gap Down openings, continuation, reversal and opening-session context.</p><p>Use this tool as a visual analytics layer along with risk management, market context and personal discipline.</p></div><aside class="detail-side reveal"><h3>Key Use Cases</h3><ul><li>Market context</li><li>Trend and structure analysis</li><li>Decision quality</li><li>Risk awareness</li></ul></aside></div></section>
-<section class="disclaimer-band"><div class="container"><p><strong>Disclaimer:</strong> TradingView tools are decision-support indicators. They do not guarantee profits or eliminate market risk.</p></div></section>
+<section class="service-hero">
+  <div class="container service-hero-grid">
+    <div class="reveal">
+      <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <a href="tradingview-tools.html">TradingView Tools</a> <span>›</span> TWS Gap Intelligence</div>
+      <span class="pill">TWS TradingView Tool</span>
+      <h1>TWS Gap Intelligence</h1>
+      <p>Analyzes Gap Up/Gap Down openings and their market impact.</p>
+      <div class="hero-actions"><a class="btn primary" href="https://wa.me/919833344392">Request Access</a><a class="btn ghost" href="tradingview-tools.html">All Tools</a></div>
+    </div>
+    <div class="tool-hero-img reveal"><img src="assets/tws-gap-intelligence.png" alt="TWS Gap Intelligence screenshot"></div>
+  </div>
+</section>
+<section class="service-detail"><div class="container detail-grid">
+  <article class="detail-card wide reveal"><span class="kicker">Key Uses</span><h2>Built for cleaner market reading.</h2><ul class="clean-list"><li>Gap classification</li><li>Continuation/Reversal analysis</li><li>Opening session planning</li><li>Intraday support</li></ul></article>
+  <aside class="detail-card reveal"><span class="kicker">Disclaimer</span><p>TradingView tools are decision-support indicators. They do not guarantee profits or eliminate market risk.</p></aside>
+</div></section>
 </main><footer class="site-footer">
   <div class="container footer-grid">
-    <div><img class="footer-logo" src="assets/tws-main-logo.png" alt="TWS Enterprises"><p>Structured financial market support with research, discipline, client communication and risk awareness.</p><div class="footer-badges"><span>CIN: U66190GJ2024PTC148594</span><span>12+ Years Experience</span><span>3500+ Clients</span></div></div>
-    <div><h3>Services</h3><div class="footer-links"><a href="portfolio-management-service.html">Portfolio Management Service</a><a href="compounding-strategy.html">Compounding Strategy</a><a href="risk-management.html">Risk Management</a><a href="demat-handling-service.html">Demat Handling Service</a><a href="financial-market-research-guidance.html">Financial Market Research &amp; Guidance</a><a href="stock-market-education.html">Stock Market Education</a><a href="tradingview-tools.html">TradingView Tools</a><a href="wealth-management.html">Wealth Management</a><a href="investment-management-service.html">Investment Management Service</a></div></div>
-    <div><h3>Contact</h3><p>Call: 8828167181<br>Email: hello@twsenterprises.in<br>WhatsApp: 9833344392</p><div class="footer-links single"><a href="privacy-policy.html">Privacy Policy</a><a href="terms-and-conditions.html">Terms & Conditions</a><a href="risk-disclaimer.html">Risk Disclaimer</a><a href="grievance-mechanism.html">Grievance Mechanism</a><a href="complaints-status.html">Complaints Status</a><a href="help-center.html">Help Center</a></div></div>
+    <div>
+      <img src="assets/tws-main-logo.png" alt="TWS Enterprises Private Limited" class="footer-logo">
+      <p>TWS Enterprises Private Limited helps clients approach trading, investment and wealth-related services with discipline, research awareness and professional communication.</p>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <a href="portfolio-management-service.html">Portfolio Management</a>
+      <a href="demat-handling-service.html">Demat Handling</a>
+      <a href="wealth-management.html">Wealth Management</a>
+      <a href="tradingview-tools.html">TradingView Tools</a>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <a href="application-form.html">Application Form</a>
+      <a href="contact-us.html">Contact Us</a>
+      <a href="market-insights.html">Market Insights</a>
+      <a href="help-center.html">Help Center</a>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <a href="privacy-policy.html">Privacy Policy</a>
+      <a href="terms-and-conditions.html">Terms & Conditions</a>
+      <a href="risk-disclaimer.html">Risk Disclaimer</a>
+      <a href="grievance-mechanism.html">Grievance Mechanism</a>
+    </div>
   </div>
-  <div class="footer-bottom">© 2026 TWS Enterprises Private Limited. Market-linked services involve risk. No guaranteed returns.</div>
-</footer><a class="float-wa" href="https://wa.me/919833344392" target="_blank" rel="noopener">WA</a><script src="script.js"></script></body></html>
+  <div class="footer-bottom">
+    <span>© 2026 TWS Enterprises Private Limited</span>
+    <span>CIN: U66190GJ2024PTC148594</span>
+  </div>
+</footer>
+<a class="floating-whatsapp" href="https://wa.me/919833344392" aria-label="WhatsApp TWS">WA</a><script src="script.js"></script></body></html>
