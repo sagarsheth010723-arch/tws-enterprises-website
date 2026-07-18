@@ -1,50 +1,140 @@
 
 (() => {
   const loader = document.getElementById('siteLoader');
-  window.addEventListener('load', () => setTimeout(() => loader && loader.classList.add('hide'), 1200));
+  const hasSeenLoader = sessionStorage.getItem('twsLoaderSeen') === '1';
+  const hideLoader = () => {
+    if (!loader) return;
+    loader.classList.add('is-hidden');
+    sessionStorage.setItem('twsLoaderSeen', '1');
+  };
+  if (hasSeenLoader) {
+    loader?.classList.add('is-hidden');
+  } else {
+    window.addEventListener('load', () => setTimeout(hideLoader, 850));
+    setTimeout(hideLoader, 2200);
+  }
 
+  const menu = document.getElementById('menuDrawer');
   const toggle = document.getElementById('menuToggle');
-  const drawer = document.getElementById('menuDrawer');
-  const closeMenu = () => {toggle?.classList.remove('active');drawer?.classList.remove('open');document.body.classList.remove('menu-open');toggle?.setAttribute('aria-expanded','false');drawer?.setAttribute('aria-hidden','true')};
-  const openMenu = () => {toggle?.classList.add('active');drawer?.classList.add('open');document.body.classList.add('menu-open');toggle?.setAttribute('aria-expanded','true');drawer?.setAttribute('aria-hidden','false')};
-  toggle?.addEventListener('click', () => drawer?.classList.contains('open') ? closeMenu() : openMenu());
-  document.querySelectorAll('[data-close-menu], .menu-links a, .menu-group a').forEach(el => el.addEventListener('click', closeMenu));
-  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeMenu(); });
+  const openMenu = () => {
+    menu?.classList.add('is-open');
+    toggle?.classList.add('is-active');
+    toggle?.setAttribute('aria-expanded', 'true');
+    menu?.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('no-scroll');
+  };
+  const closeMenu = () => {
+    menu?.classList.remove('is-open');
+    toggle?.classList.remove('is-active');
+    toggle?.setAttribute('aria-expanded', 'false');
+    menu?.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('no-scroll');
+  };
+  toggle?.addEventListener('click', () => menu?.classList.contains('is-open') ? closeMenu() : openMenu());
+  document.querySelectorAll('[data-close-menu]').forEach(el => el.addEventListener('click', closeMenu));
+  menu?.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 
-  const reveal = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver(entries => entries.forEach(entry => { if(entry.isIntersecting){ entry.target.classList.add('show'); io.unobserve(entry.target); } }), {threshold:.12});
-  reveal.forEach(el => io.observe(el));
+  // Keep only one menu section expanded.
+  document.querySelectorAll('.menu-accordion details').forEach(detail => {
+    detail.addEventListener('toggle', () => {
+      if (!detail.open) return;
+      document.querySelectorAll('.menu-accordion details').forEach(other => {
+        if (other !== detail) other.open = false;
+      });
+    });
+  });
 
-  // Conditional fields support for application form
-  const riskRadios = document.querySelectorAll('input[name="risk_tolerance"]');
-  const riskOther = document.querySelector('[name="risk_tolerance_other"], #riskOtherInput');
-  const brokerSelect = document.querySelector('[name="broker"], #brokerSelect');
-  const brokerOther = document.querySelector('[name="broker_other"], [name="other_broker_name"], #otherBrokerInput, #brokerOther input');
-  const toggleField = (field, show) => { if(!field) return; field.classList.toggle('show', show); const wrap = field.closest('label'); if(wrap) wrap.classList.toggle('show', show); if(show){field.required = true;} else {field.required = false; field.value = '';} };
-  riskRadios.forEach(r => r.addEventListener('change', () => toggleField(riskOther, r.value.toLowerCase()==='other' && r.checked)));
-  brokerSelect?.addEventListener('change', () => toggleField(brokerOther, brokerSelect.value.toLowerCase()==='other'));
-
-  // Formspree AJAX submit
-  const form = document.querySelector('form[data-formspree-form="true"]');
-  if(form){
-    const status = form.querySelector('[data-form-status], .form-status, .form-submit-status');
-    const button = form.querySelector('button[type="submit"], .form-submit');
-    const original = button ? button.textContent : 'Submit Application';
-    const setStatus = (type, msg) => { if(!status) return; status.className = (status.className.split(' ')[0] || 'form-status') + ` show ${type}`; status.textContent = msg; };
-    form.addEventListener('submit', async e => {
-      e.preventDefault();
-      if(!form.checkValidity()){ form.reportValidity(); return; }
-      if(button){ button.disabled = true; button.textContent = 'Submitting...'; }
-      setStatus('loading','Submitting your application securely. Please wait...');
-      try{
-        const response = await fetch(form.action, {method:'POST', body:new FormData(form), headers:{'Accept':'application/json'}});
-        if(!response.ok) throw new Error('Submission failed');
-        setStatus('success','Application submitted successfully. Redirecting...');
-        window.location.href = 'application-thank-you.html';
-      }catch(err){
-        if(button){ button.disabled = false; button.textContent = original; }
-        setStatus('error','We could not submit the form right now. Please try again, or contact TWS on WhatsApp if the issue continues.');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
       }
     });
-  }
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Formspree AJAX submission.
+  document.querySelectorAll('form[data-formspree-form="true"]').forEach(form => {
+    const status = form.querySelector('[data-form-status]');
+    const button = form.querySelector('button[type="submit"]');
+    const original = button?.textContent || 'Submit';
+    const showStatus = (type, message) => {
+      if (!status) return;
+      status.className = `form-submit-status show ${type}`;
+      status.textContent = message;
+    };
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      const data = new FormData(form);
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'Submitting...';
+      }
+      showStatus('loading', 'Submitting your details securely...');
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' }
+        });
+        if (!response.ok) throw new Error('Submission failed');
+        showStatus('success', 'Submitted successfully.');
+        if (form.classList.contains('tws-application-form')) {
+          window.location.href = 'application-thank-you.html';
+        } else {
+          form.reset();
+          if (button) {
+            button.disabled = false;
+            button.textContent = original;
+          }
+        }
+      } catch (error) {
+        showStatus('error', 'Submission failed. Please try again or contact TWS on WhatsApp.');
+        if (button) {
+          button.disabled = false;
+          button.textContent = original;
+        }
+      }
+    });
+  });
+
+  // Lazy-load YouTube playlist only when requested.
+  const youtubeModal = document.getElementById('youtubeModal');
+  const youtubePlayer = document.getElementById('youtubePlayer');
+  const openYouTube = () => {
+    if (!youtubeModal || !youtubePlayer) return;
+    if (!youtubePlayer.querySelector('iframe')) {
+      const iframe = document.createElement('iframe');
+      iframe.src = youtubePlayer.dataset.src || '';
+      iframe.title = 'TWS Live Performance YouTube playlist';
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      iframe.allowFullscreen = true;
+      youtubePlayer.innerHTML = '';
+      youtubePlayer.appendChild(iframe);
+    }
+    youtubeModal.classList.add('is-open');
+    youtubeModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('no-scroll');
+  };
+  const closeYouTube = () => {
+    if (!youtubeModal || !youtubePlayer) return;
+    youtubeModal.classList.remove('is-open');
+    youtubeModal.setAttribute('aria-hidden', 'true');
+    youtubePlayer.innerHTML = '<div class="youtube-loading">Loading playlist…</div>';
+    document.body.classList.remove('no-scroll');
+  };
+  document.querySelectorAll('[data-open-youtube]').forEach(el => el.addEventListener('click', openYouTube));
+  document.querySelectorAll('[data-close-youtube]').forEach(el => el.addEventListener('click', closeYouTube));
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+      closeMenu();
+      closeYouTube();
+    }
+  });
 })();
