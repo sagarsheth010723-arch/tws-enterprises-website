@@ -15,3 +15,28 @@
   document.querySelectorAll('form[data-formspree-form="true"]').forEach(form=>{const status=form.querySelector('[data-form-status]'); const button=form.querySelector('button[type="submit"]'); form.addEventListener('submit',async e=>{e.preventDefault();if(!form.checkValidity()){form.reportValidity();return}; const original=button?.textContent||'Submit'; if(button){button.disabled=true;button.textContent='Submitting...'}; if(status){status.className='form-submit-status show';status.textContent='Submitting your details securely...'}; try{const r=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{Accept:'application/json'}});if(!r.ok)throw new Error(); if(form.classList.contains('tws-application-form'))location.href='application-thank-you.html';else{form.reset();if(status)status.textContent='Submitted successfully.'}}catch(err){if(status)status.textContent='Submission failed. Please contact TWS on WhatsApp.'}finally{if(button){button.disabled=false;button.textContent=original}}})});
   document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
 })();
+
+/* V38 navigation polish */
+(() => {
+  const current=(location.pathname.split('/').pop()||'index.html').toLowerCase();
+  document.querySelectorAll('.desktop-nav a[href]').forEach(link=>{
+    const href=(link.getAttribute('href')||'').split('#')[0].toLowerCase();
+    if(href===current){
+      link.classList.add('current');
+      const group=link.closest('.nav-group');
+      if(group) group.classList.add('current');
+    }
+  });
+  document.querySelectorAll('.desktop-nav .nav-group').forEach(group=>{
+    const button=group.querySelector(':scope > button');
+    group.addEventListener('mouseenter',()=>button?.setAttribute('aria-expanded','true'));
+    group.addEventListener('mouseleave',()=>button?.setAttribute('aria-expanded','false'));
+    group.addEventListener('focusin',()=>button?.setAttribute('aria-expanded','true'));
+    group.addEventListener('focusout',e=>{if(!group.contains(e.relatedTarget))button?.setAttribute('aria-expanded','false')});
+  });
+  document.querySelectorAll('.mobile-menu details').forEach(detail=>{
+    const marker=detail.querySelector('summary span');
+    const sync=()=>{if(marker) marker.textContent=detail.open?'×':'+'};
+    detail.addEventListener('toggle',sync); sync();
+  });
+})();
