@@ -40,3 +40,89 @@
     detail.addEventListener('toggle',sync); sync();
   });
 })();
+
+
+/* V41 in-site YouTube modal */
+(() => {
+  const selectors = '.performance-card, .performance-gallery-card, .mobile-performance a';
+
+  const extractVideoId = (link) => {
+    const explicit = link.dataset.video;
+    if (explicit) return explicit;
+    try {
+      const url = new URL(link.href, window.location.href);
+      if (url.hostname.includes('youtu.be')) return url.pathname.split('/').filter(Boolean)[0] || '';
+      const parts = url.pathname.split('/').filter(Boolean);
+      const shortsIndex = parts.indexOf('shorts');
+      if (shortsIndex !== -1 && parts[shortsIndex + 1]) return parts[shortsIndex + 1];
+      const embedIndex = parts.indexOf('embed');
+      if (embedIndex !== -1 && parts[embedIndex + 1]) return parts[embedIndex + 1];
+      return url.searchParams.get('v') || '';
+    } catch (_) {
+      return '';
+    }
+  };
+
+  let modal;
+  let frame;
+  let closeButton;
+  let lastTrigger;
+
+  const ensureModal = () => {
+    if (modal) return;
+    modal = document.createElement('div');
+    modal.className = 'video-modal';
+    modal.setAttribute('aria-hidden', 'true');
+    modal.innerHTML = `
+      <div class="video-modal-dialog" role="dialog" aria-modal="true" aria-label="TWS performance video">
+        <button class="video-modal-close" type="button" aria-label="Close video">×</button>
+        <div class="video-modal-frame">
+          <iframe title="TWS performance video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+        </div>
+      </div>`;
+    document.body.appendChild(modal);
+    frame = modal.querySelector('iframe');
+    closeButton = modal.querySelector('.video-modal-close');
+    closeButton.addEventListener('click', closeModal);
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) closeModal();
+    });
+  };
+
+  const openModal = (videoId, trigger) => {
+    if (!videoId) return;
+    ensureModal();
+    lastTrigger = trigger;
+    frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(videoId)}?autoplay=1&rel=0&playsinline=1`;
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('video-modal-open');
+    window.setTimeout(() => closeButton.focus(), 50);
+  };
+
+  function closeModal() {
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('video-modal-open');
+    frame.src = '';
+    lastTrigger?.focus?.();
+  }
+
+  document.querySelectorAll(selectors).forEach((link) => {
+    const videoId = extractVideoId(link);
+    if (!videoId) return;
+    link.dataset.video = videoId;
+    link.removeAttribute('target');
+    link.removeAttribute('rel');
+    link.setAttribute('aria-haspopup', 'dialog');
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      openModal(videoId, link);
+    });
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && modal?.classList.contains('open')) closeModal();
+  });
+})();
