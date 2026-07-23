@@ -1,10 +1,10 @@
 export const firebaseConfig = {
-  apiKey: "AIzaSyB67RUoBf0V90tI8INMMFmo6QPqLdfnztU",
+  apiKey: "AIzaSyB67RUoBf0V90tT8INMMFmo6QPqldfnztU",
   authDomain: "tws-client-portal-47b1e.firebaseapp.com",
   projectId: "tws-client-portal-47b1e",
   storageBucket: "tws-client-portal-47b1e.firebasestorage.app",
   messagingSenderId: "609733718211",
-  appId: "1:609733718211:web:34aee5acc728ca71fdb276"
+  appId: "1:609733718211:web:ef340cbeb83169e8fdb276"
 };
 
 export const approvedAdminEmails = Object.freeze([
