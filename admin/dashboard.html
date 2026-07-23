@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Dashboard | TWS Connect Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./admin-style.css?v=1">
+</head>
+<body class="admin-dashboard-page">
+  <div class="auth-gate" id="authGate">
+    <div class="gate-spinner"></div>
+    <h1>Verifying access</h1>
+    <p>Please wait while your TWS administrator permissions are checked.</p>
+  </div>
+
+  <div class="admin-shell" id="adminShell" hidden>
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-brand">
+        <img src="../assets/tws-main-logo.png" alt="TWS Enterprises">
+        <span>TWS CONNECT<small>ADMIN PANEL</small></span>
+      </div>
+      <nav class="sidebar-nav" aria-label="Admin navigation">
+        <a class="active" href="./dashboard.html"><i>⌂</i><span>Dashboard</span></a>
+        <a href="#" data-coming-soon><i>◎</i><span>Clients</span></a>
+        <a href="#" data-coming-soon><i>◇</i><span>Services</span></a>
+        <a href="#" data-coming-soon><i>₹</i><span>Payments</span></a>
+        <a href="#" data-coming-soon><i>▤</i><span>Documents</span></a>
+        <a href="#" data-coming-soon><i>◉</i><span>Notifications</span></a>
+        <a href="#" data-coming-soon><i>?</i><span>Support</span></a>
+        <a href="#" data-coming-soon><i>⌁</i><span>Reports</span></a>
+        <div class="nav-divider"></div>
+        <a href="#" data-coming-soon><i>⚙</i><span>Settings</span></a>
+        <a href="#" data-coming-soon><i>↺</i><span>Activity Logs</span></a>
+      </nav>
+      <div class="sidebar-footer"><span>Secure Firebase access</span><small>TWS Connect only</small></div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+        <div><span class="admin-eyebrow">TWS CONNECT OPERATIONS</span><h1>Dashboard</h1></div>
+        <div class="admin-account">
+          <div class="admin-avatar" id="adminAvatar">TS</div>
+          <div><strong id="adminName">TWS Admin</strong><small id="adminEmail"></small></div>
+          <button id="logoutButton" type="button">Log out</button>
+        </div>
+      </header>
+
+      <section class="dashboard-content">
+        <div class="welcome-row">
+          <div><h2>Welcome to TWS Connect Admin</h2><p>Manage client operations and keep the mobile app data organised from one secure workspace.</p></div>
+          <span>Last checked: <strong id="lastUpdated">—</strong></span>
+        </div>
+
+        <div class="metric-grid">
+          <article><span class="metric-icon">◎</span><div><small>TOTAL CLIENTS</small><strong id="clientCount">…</strong><p>Registered TWS Connect users</p></div></article>
+          <article><span class="metric-icon">◇</span><div><small>ACTIVE SERVICES</small><strong>—</strong><p>Service module activates next</p></div></article>
+          <article><span class="metric-icon">₹</span><div><small>PAYMENTS</small><strong>—</strong><p>Payment module activates later</p></div></article>
+          <article><span class="metric-icon">?</span><div><small>OPEN SUPPORT</small><strong>—</strong><p>Support module activates later</p></div></article>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="dashboard-card quick-actions">
+            <div class="card-heading"><div><small>QUICK ACTIONS</small><h3>Client operations</h3></div></div>
+            <div class="action-grid">
+              <button data-coming-soon><span>＋</span><strong>Add client</strong><small>Create a TWS Connect profile</small></button>
+              <button data-coming-soon><span>◇</span><strong>Assign service</strong><small>Update client service access</small></button>
+              <button data-coming-soon><span>▤</span><strong>Upload document</strong><small>Share reports and records</small></button>
+              <button data-coming-soon><span>◉</span><strong>Send update</strong><small>Publish an official notification</small></button>
+            </div>
+          </section>
+
+          <section class="dashboard-card build-status">
+            <div class="card-heading"><div><small>IMPLEMENTATION STATUS</small><h3>Admin platform rollout</h3></div><span>Phase 1</span></div>
+            <ol>
+              <li class="done"><i>✓</i><div><strong>Secure Google login</strong><small>Approved accounts and Firestore verification</small></div></li>
+              <li class="done"><i>✓</i><div><strong>Admin dashboard shell</strong><small>Responsive navigation and protected session</small></div></li>
+              <li class="current"><i>3</i><div><strong>Client management</strong><small>Next module to be implemented</small></div></li>
+              <li><i>4</i><div><strong>Services and operations</strong><small>Planned after client management</small></div></li>
+            </ol>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="moduleNotice" class="module-dialog">
+    <button onclick="this.closest('dialog').close()" aria-label="Close">×</button>
+    <span>MODULE LOCKED</span><h2>Coming in the next build phase</h2><p>The secure admin foundation is ready. We will now implement each operational module one by one, beginning with Client Management.</p>
+    <button onclick="this.closest('dialog').close()">Understood</button>
+  </dialog>
+  <script type="module" src="./dashboard.js?v=1"></script>
+</body>
+</html>

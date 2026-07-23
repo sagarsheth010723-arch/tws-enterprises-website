@@ -1,0 +1,25 @@
+// MERGE these helpers and match blocks into the existing Firestore rules.
+// Do not replace unrelated Flutter app rules without reviewing them.
+
+function isSignedIn() {
+  return request.auth != null;
+}
+
+function isActiveSuperAdmin() {
+  return isSignedIn()
+    && exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+    && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.isActive == true
+    && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role == "superAdmin"
+    && get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.email == request.auth.token.email;
+}
+
+match /admins/{adminId} {
+  allow read: if isSignedIn() && request.auth.uid == adminId;
+  allow write: if false;
+}
+
+// Add `|| isActiveSuperAdmin()` to the existing read permission for users.
+// Example only:
+match /users/{userId} {
+  allow read: if isSignedIn() && (request.auth.uid == userId || isActiveSuperAdmin());
+}
