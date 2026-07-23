@@ -1,11 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import {
   getAuth,
-  GoogleAuthProvider,
   onAuthStateChanged,
   setPersistence,
   browserLocalPersistence,
-  signInWithPopup,
+  signInWithEmailAndPassword,
   signOut
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import {
@@ -18,16 +17,21 @@ import { firebaseConfig, approvedAdminEmails } from "./firebase-config.js";
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({ prompt: "select_account" });
 
 const normalizedApprovedEmails = new Set(
   approvedAdminEmails.map((email) => email.trim().toLowerCase())
 );
 
-export async function loginWithGoogle() {
+export async function loginWithEmail(email, password) {
+  const normalizedEmail = String(email || "").trim().toLowerCase();
+  if (!normalizedApprovedEmails.has(normalizedEmail)) {
+    const error = new Error("This email is not approved for admin access.");
+    error.code = "admin/email-not-approved";
+    throw error;
+  }
+
   await setPersistence(auth, browserLocalPersistence);
-  return signInWithPopup(auth, provider);
+  return signInWithEmailAndPassword(auth, normalizedEmail, password);
 }
 
 export async function logoutAdmin() {
@@ -42,7 +46,7 @@ export async function verifyAdmin(user) {
 
   const normalizedEmail = user.email.trim().toLowerCase();
   if (!normalizedApprovedEmails.has(normalizedEmail)) {
-    return { allowed: false, reason: "This Google account is not approved for admin access." };
+    return { allowed: false, reason: "This email is not approved for admin access." };
   }
 
   const adminRef = doc(db, "admins", user.uid);

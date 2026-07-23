@@ -1,12 +1,16 @@
 import {
   auth,
-  loginWithGoogle,
+  loginWithEmail,
   logoutAdmin,
   observeAuth,
   verifyAdmin
 } from "./admin-auth.js";
 
-const loginButton = document.getElementById("googleLoginButton");
+const loginForm = document.getElementById("adminLoginForm");
+const emailInput = document.getElementById("adminEmailInput");
+const passwordInput = document.getElementById("adminPasswordInput");
+const loginButton = document.getElementById("emailLoginButton");
+const togglePassword = document.getElementById("togglePassword");
 const statusBox = document.getElementById("loginStatus");
 const loginPanel = document.getElementById("loginPanel");
 
@@ -18,34 +22,60 @@ function setStatus(message, type = "info") {
 
 function setLoading(isLoading) {
   loginButton.disabled = isLoading;
-  loginButton.classList.toggle("loading", isLoading);
+  emailInput.disabled = isLoading;
+  passwordInput.disabled = isLoading;
   loginButton.querySelector("span").textContent = isLoading
-    ? "Verifying admin access..."
-    : "Continue with Google";
+    ? "Verifying access..."
+    : "Sign in securely";
 }
 
-loginButton.addEventListener("click", async () => {
+function friendlyError(error) {
+  switch (error?.code) {
+    case "admin/email-not-approved":
+      return "This email is not approved for TWS admin access.";
+    case "auth/invalid-email":
+      return "Enter a valid email address.";
+    case "auth/missing-password":
+      return "Enter your password.";
+    case "auth/invalid-credential":
+    case "auth/wrong-password":
+    case "auth/user-not-found":
+      return "Incorrect email or password.";
+    case "auth/too-many-requests":
+      return "Too many failed attempts. Please wait a few minutes and try again.";
+    case "auth/user-disabled":
+      return "This Firebase account has been disabled.";
+    default:
+      return `Login failed${error?.code ? ` (${error.code})` : ""}. Please try again.`;
+  }
+}
+
+togglePassword.addEventListener("click", () => {
+  const show = passwordInput.type === "password";
+  passwordInput.type = show ? "text" : "password";
+  togglePassword.textContent = show ? "Hide" : "Show";
+  togglePassword.setAttribute("aria-label", show ? "Hide password" : "Show password");
+});
+
+loginForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
   setLoading(true);
   setStatus("");
 
   try {
-    const credential = await loginWithGoogle();
+    const credential = await loginWithEmail(emailInput.value, passwordInput.value);
     const result = await verifyAdmin(credential.user);
 
     if (!result.allowed) {
-      await logoutAdmin();
+      await auth.signOut();
+      setStatus(result.reason, "error");
       return;
     }
 
     window.location.replace("./dashboard.html");
   } catch (error) {
-    console.error("Admin sign-in failed:", error);
-    const message = error?.code === "auth/popup-closed-by-user"
-      ? "Google sign-in was cancelled. Please try again."
-      : error?.code === "auth/unauthorized-domain"
-        ? "This website domain is not yet authorized in Firebase Authentication."
-        : "Login failed. Please verify your account and try again.";
-    setStatus(message, "error");
+    console.error("Admin email sign-in failed:", error);
+    setStatus(friendlyError(error), "error");
   } finally {
     setLoading(false);
   }
@@ -67,11 +97,11 @@ observeAuth(async (user) => {
       return;
     }
 
-    await auth.signOut();
-    setStatus(result.reason, "error");
+    await logoutAdmin();
   } catch (error) {
     console.error("Admin verification failed:", error);
-    setStatus("Admin verification failed. Check Firestore permissions and try again.", "error");
+    await auth.signOut();
+    setStatus("Admin verification failed. Please sign in again.", "error");
   } finally {
     setLoading(false);
     loginPanel.classList.add("ready");

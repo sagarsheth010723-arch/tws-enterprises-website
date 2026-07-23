@@ -1,21 +1,18 @@
 # TWS Connect Admin Panel — Firebase setup
 
-## 1. Authorized domains
-Firebase Console → Authentication → Settings → Authorized domains.
-Confirm these domains are present:
-- localhost
-- twsenterprises.in
-- www.twsenterprises.in
+## Authentication method
+The admin panel uses Firebase Email/Password authentication.
+Only these approved accounts are accepted:
+- enterprisestws@gmail.com
+- director@twsenterprises.in
 
-## 2. Firestore rules
-The admin panel reads `admins/{uid}` and, beginning with the dashboard, reads the `users` collection.
-Merge the rules in `firestore-rules-snippet.txt` into the project's existing rules. Do not delete unrelated rules used by the Flutter app.
+Both users must exist in Firebase Authentication with Email/Password credentials.
 
-## 3. Approved administrators
+## Firestore administrator records
 - enterprisestws@gmail.com — uFmxKuujaUhnsKHVLzIFVBC3PaS2
 - director@twsenterprises.in — o8koeHBCfVan0hBJtjj4guHTZfa2
 
-Both Firestore documents must use:
+Both `admins/{uid}` documents must contain:
 - role: superAdmin
 - isActive: true
 - email: exact matching email
