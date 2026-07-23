@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Clients | TWS Connect Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./admin-style.css?v=46">
+</head>
+<body class="admin-dashboard-page">
+  <div class="auth-gate" id="authGate">
+    <div class="gate-spinner"></div>
+    <h1>Verifying access</h1>
+    <p>Please wait while your TWS administrator permissions are checked.</p>
+  </div>
+
+  <div class="admin-shell" id="adminShell" hidden>
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-brand">
+        <img src="../assets/tws-main-logo.png" alt="TWS Enterprises">
+        <span>TWS CONNECT<small>ADMIN PANEL</small></span>
+      </div>
+      <nav class="sidebar-nav" aria-label="Admin navigation">
+        <a href="./dashboard.html"><i>⌂</i><span>Dashboard</span></a>
+        <a class="active" href="./clients.html"><i>◎</i><span>Clients</span></a>
+        <a href="#" data-coming-soon><i>◇</i><span>Services</span></a>
+        <a href="#" data-coming-soon><i>₹</i><span>Payments</span></a>
+        <a href="#" data-coming-soon><i>▤</i><span>Documents</span></a>
+        <a href="#" data-coming-soon><i>◉</i><span>Notifications</span></a>
+        <a href="#" data-coming-soon><i>?</i><span>Support</span></a>
+        <a href="#" data-coming-soon><i>⌁</i><span>Reports</span></a>
+        <div class="nav-divider"></div>
+        <a href="#" data-coming-soon><i>⚙</i><span>Settings</span></a>
+        <a href="#" data-coming-soon><i>↺</i><span>Activity Logs</span></a>
+      </nav>
+      <div class="sidebar-footer"><span>Secure Firebase access</span><small>TWS Connect only</small></div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+        <div><span class="admin-eyebrow">TWS CONNECT OPERATIONS</span><h1>Clients</h1></div>
+        <div class="admin-account">
+          <div class="admin-avatar" id="adminAvatar">TS</div>
+          <div><strong id="adminName">TWS Admin</strong><small id="adminEmail"></small></div>
+          <button id="logoutButton" type="button">Log out</button>
+        </div>
+      </header>
+
+      <section class="dashboard-content clients-content">
+        <div class="page-title-row">
+          <div>
+            <span class="admin-eyebrow">CLIENT MANAGEMENT</span>
+            <h2>All TWS Connect clients</h2>
+            <p>App registrations appear automatically. You can also add a client manually or import records from Excel.</p>
+          </div>
+          <div class="page-actions">
+            <button class="secondary-action" id="downloadTemplateButton" type="button">Download Excel template</button>
+            <button class="secondary-action" id="openImportButton" type="button">Upload Excel</button>
+            <button class="primary-action" id="openAddClientButton" type="button">＋ Add client</button>
+          </div>
+        </div>
+
+        <div class="client-metric-grid">
+          <article><small>TOTAL CLIENTS</small><strong id="totalClientsMetric">0</strong><span>All records in Firebase</span></article>
+          <article><small>APP REGISTERED</small><strong id="appClientsMetric">0</strong><span>Authentication-linked clients</span></article>
+          <article><small>EXCEL IMPORTED</small><strong id="excelClientsMetric">0</strong><span>Admin-imported records</span></article>
+          <article><small>PENDING REVIEW</small><strong id="pendingClientsMetric">0</strong><span>Awaiting admin action</span></article>
+        </div>
+
+        <section class="dashboard-card client-table-card">
+          <div class="client-toolbar">
+            <label class="client-search">
+              <span>⌕</span>
+              <input id="clientSearchInput" type="search" placeholder="Search name, email, mobile, client ID or UID">
+            </label>
+            <select id="statusFilter" aria-label="Filter by status">
+              <option value="all">All statuses</option>
+              <option value="pending">Pending</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="suspended">Suspended</option>
+            </select>
+            <select id="sourceFilter" aria-label="Filter by source">
+              <option value="all">All sources</option>
+              <option value="app_registration">App registered</option>
+              <option value="excel_import">Excel imported</option>
+              <option value="manual_admin">Manual entry</option>
+            </select>
+            <span class="result-count" id="resultCount">0 clients</span>
+          </div>
+
+          <div class="table-state" id="clientsLoading">
+            <div class="gate-spinner"></div>
+            <p>Loading clients from Firebase…</p>
+          </div>
+
+          <div class="table-state error-state" id="clientsError" hidden>
+            <strong>Clients could not be loaded.</strong>
+            <p id="clientsErrorText">Check the Firebase connection and Firestore permissions.</p>
+          </div>
+
+          <div class="table-state" id="clientsEmpty" hidden>
+            <strong>No clients found</strong>
+            <p>New app registrations and imported Excel records will appear here.</p>
+          </div>
+
+          <div class="client-table-wrap" id="clientTableWrap" hidden>
+            <table class="client-table">
+              <thead>
+                <tr>
+                  <th>Client</th>
+                  <th>Contact</th>
+                  <th>Source</th>
+                  <th>Status</th>
+                  <th>Registered</th>
+                  <th class="align-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="clientTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="pagination-row" id="paginationRow" hidden>
+            <span id="paginationInfo">Showing 0–0 of 0</span>
+            <div>
+              <button id="previousPageButton" type="button">Previous</button>
+              <button id="nextPageButton" type="button">Next</button>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="admin-modal wide-modal" id="addClientDialog">
+    <form method="dialog" class="modal-shell" id="addClientForm">
+      <div class="modal-header">
+        <div><span>MANUAL ENTRY</span><h2>Add a client</h2><p>Create a Firestore client record. This does not create a Firebase Authentication login.</p></div>
+        <button class="modal-close" value="cancel" aria-label="Close">×</button>
+      </div>
+      <div class="form-grid">
+        <label><span>First name *</span><input name="firstName" required></label>
+        <label><span>Last name</span><input name="lastName"></label>
+        <label><span>Email *</span><input name="email" type="email" required></label>
+        <label><span>Mobile *</span><input name="mobile" inputmode="numeric" maxlength="10" required></label>
+        <label><span>City</span><input name="city"></label>
+        <label><span>Pincode</span><input name="pincode" inputmode="numeric" maxlength="6"></label>
+        <label><span>Annual income</span><input name="annualIncome"></label>
+        <label><span>Risk tolerance</span>
+          <select name="riskTolerance"><option value="">Select</option><option>Low</option><option>Medium</option><option>High</option></select>
+        </label>
+        <label><span>Broker</span><input name="broker"></label>
+        <label><span>Investment amount</span><input name="investmentAmount" inputmode="decimal"></label>
+        <label class="span-2"><span>Residential address</span><textarea name="address" rows="3"></textarea></label>
+        <label class="span-2"><span>Internal notes</span><textarea name="internalNotes" rows="3"></textarea></label>
+      </div>
+      <div class="modal-status" id="addClientStatus" hidden></div>
+      <div class="modal-actions">
+        <button class="secondary-action" value="cancel">Cancel</button>
+        <button class="primary-action" id="saveClientButton" type="submit" value="default">Save client</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="admin-modal import-modal" id="importDialog">
+    <div class="modal-shell">
+      <div class="modal-header">
+        <div><span>EXCEL IMPORT</span><h2>Upload client data</h2><p>Upload `.xlsx`, `.xls` or `.csv`, review the rows, then confirm the Firebase import.</p></div>
+        <button class="modal-close" id="closeImportButton" type="button" aria-label="Close">×</button>
+      </div>
+
+      <div class="upload-dropzone" id="uploadDropzone">
+        <input id="excelFileInput" type="file" accept=".xlsx,.xls,.csv" hidden>
+        <div class="upload-icon">⇧</div>
+        <strong>Choose an Excel file</strong>
+        <p>Maximum recommended batch: 5,000 rows</p>
+        <button class="secondary-action" id="chooseExcelButton" type="button">Browse file</button>
+      </div>
+
+      <div class="import-summary" id="importSummary" hidden>
+        <article><small>TOTAL ROWS</small><strong id="importTotalRows">0</strong></article>
+        <article><small>VALID</small><strong id="importValidRows">0</strong></article>
+        <article><small>DUPLICATES</small><strong id="importDuplicateRows">0</strong></article>
+        <article><small>INVALID</small><strong id="importInvalidRows">0</strong></article>
+      </div>
+
+      <div class="import-options" id="importOptions" hidden>
+        <label><input id="skipDuplicatesCheckbox" type="checkbox" checked> Skip duplicate email/mobile records</label>
+        <button class="text-action" id="downloadErrorReportButton" type="button" hidden>Download error report</button>
+      </div>
+
+      <div class="import-preview-wrap" id="importPreviewWrap" hidden>
+        <table class="import-preview-table">
+          <thead><tr><th>Row</th><th>Name</th><th>Email</th><th>Mobile</th><th>Status</th><th>Issue</th></tr></thead>
+          <tbody id="importPreviewBody"></tbody>
+        </table>
+      </div>
+
+      <div class="modal-status" id="importStatus" hidden></div>
+      <div class="modal-actions">
+        <button class="secondary-action" id="resetImportButton" type="button">Reset</button>
+        <button class="primary-action" id="confirmImportButton" type="button" disabled>Confirm Firebase import</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="admin-modal wide-modal" id="clientDetailsDialog">
+    <div class="modal-shell">
+      <div class="modal-header">
+        <div><span>CLIENT PROFILE</span><h2 id="detailClientName">Client</h2><p id="detailClientSubtitle">Firebase record</p></div>
+        <button class="modal-close" id="closeDetailsButton" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="detail-grid" id="clientDetailGrid"></div>
+      <div class="modal-actions">
+        <select id="detailStatusSelect" aria-label="Client account status">
+          <option value="pending">Pending</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="suspended">Suspended</option>
+        </select>
+        <button class="primary-action" id="saveStatusButton" type="button">Update status</button>
+      </div>
+      <div class="modal-status" id="detailStatusMessage" hidden></div>
+    </div>
+  </dialog>
+
+  <dialog id="moduleNotice" class="module-dialog">
+    <button onclick="this.closest('dialog').close()" aria-label="Close">×</button>
+    <span>MODULE LOCKED</span><h2>Coming in a later build phase</h2><p>Client Management is active. The remaining operational modules will be implemented one by one.</p>
+    <button onclick="this.closest('dialog').close()">Understood</button>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script type="module" src="./clients.js?v=46"></script>
+</body>
+</html>
