@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Client Profile | TWS Connect Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./admin-style.css?v=47">
+</head>
+<body class="admin-dashboard-page">
+  <div class="auth-gate" id="authGate">
+    <div class="gate-spinner"></div>
+    <h1>Verifying access</h1>
+    <p>Please wait while your TWS administrator permissions are checked.</p>
+  </div>
+
+  <div class="admin-shell" id="adminShell" hidden>
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-brand">
+        <img src="../assets/tws-main-logo.png" alt="TWS Enterprises">
+        <span>TWS CONNECT<small>ADMIN PANEL</small></span>
+      </div>
+      <nav class="sidebar-nav" aria-label="Admin navigation">
+        <a href="./dashboard.html"><i>⌂</i><span>Dashboard</span></a>
+        <a class="active" href="./clients.html"><i>◎</i><span>Clients</span></a>
+        <a href="#" data-coming-soon><i>◇</i><span>Services</span></a>
+        <a href="#" data-coming-soon><i>₹</i><span>Payments</span></a>
+        <a href="#" data-coming-soon><i>▤</i><span>Documents</span></a>
+        <a href="#" data-coming-soon><i>◉</i><span>Notifications</span></a>
+        <a href="#" data-coming-soon><i>?</i><span>Support</span></a>
+        <a href="#" data-coming-soon><i>⌁</i><span>Reports</span></a>
+        <div class="nav-divider"></div>
+        <a href="#" data-coming-soon><i>⚙</i><span>Settings</span></a>
+        <a href="#" data-coming-soon><i>↺</i><span>Activity Logs</span></a>
+      </nav>
+      <div class="sidebar-footer"><span>Secure Firebase access</span><small>TWS Connect only</small></div>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-topbar">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+        <div><span class="admin-eyebrow">TWS CONNECT OPERATIONS</span><h1>Client Profile</h1></div>
+        <div class="admin-account">
+          <div class="admin-avatar" id="adminAvatar">TS</div>
+          <div><strong id="adminName">TWS Admin</strong><small id="adminEmail"></small></div>
+          <button id="logoutButton" type="button">Log out</button>
+        </div>
+      </header>
+
+      <section class="dashboard-content">
+        <div class="profile-back-row">
+          <a href="./clients.html">← Back to clients</a>
+          <span id="profileRecordId">—</span>
+        </div>
+
+        <div class="profile-state" id="profileLoading">
+          <div class="gate-spinner"></div>
+          <p>Loading client profile…</p>
+        </div>
+
+        <div class="profile-state error-state" id="profileError" hidden>
+          <strong>Client profile could not be loaded.</strong>
+          <p id="profileErrorText">Check the record ID and Firebase permissions.</p>
+        </div>
+
+        <div id="profileContent" hidden>
+          <section class="client-hero-card">
+            <div class="client-hero-main">
+              <span class="profile-avatar" id="profileAvatar">CL</span>
+              <div>
+                <div class="profile-title-line">
+                  <h2 id="profileName">Client</h2>
+                  <span class="status-badge pending" id="profileStatusBadge">pending</span>
+                </div>
+                <p id="profileContact">—</p>
+                <div class="profile-meta">
+                  <span id="profileSource">App registration</span>
+                  <span id="profileCreated">Registered —</span>
+                  <span id="profileAuth">Firebase record</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="approval-actions">
+              <button class="secondary-action" id="editProfileButton" type="button">Edit profile</button>
+              <button class="danger-action" id="rejectClientButton" type="button">Reject</button>
+              <button class="warning-action" id="suspendClientButton" type="button">Suspend</button>
+              <button class="primary-action" id="approveClientButton" type="button">Approve client</button>
+            </div>
+          </section>
+
+          <div class="profile-tabs" role="tablist">
+            <button class="active" data-tab="overview" type="button">Overview</button>
+            <button data-tab="services" type="button">Services</button>
+            <button data-tab="payments" type="button">Payments</button>
+            <button data-tab="documents" type="button">Documents</button>
+            <button data-tab="notes" type="button">Internal Notes</button>
+            <button data-tab="activity" type="button">Activity</button>
+          </div>
+
+          <section class="profile-tab-panel active" id="tab-overview">
+            <div class="profile-layout">
+              <div class="profile-main-column">
+                <section class="dashboard-card profile-section">
+                  <div class="card-heading"><div><small>PERSONAL DETAILS</small><h3>Client information</h3></div></div>
+                  <div class="detail-grid profile-detail-grid" id="personalDetailsGrid"></div>
+                </section>
+
+                <section class="dashboard-card profile-section">
+                  <div class="card-heading"><div><small>INVESTMENT PROFILE</small><h3>Financial preferences</h3></div></div>
+                  <div class="detail-grid profile-detail-grid" id="investmentDetailsGrid"></div>
+                </section>
+
+                <section class="dashboard-card profile-section">
+                  <div class="card-heading"><div><small>TRADING DETAILS</small><h3>Broker and account data</h3></div></div>
+                  <div class="detail-grid profile-detail-grid" id="tradingDetailsGrid"></div>
+                </section>
+              </div>
+
+              <aside class="profile-side-column">
+                <section class="dashboard-card profile-section">
+                  <div class="card-heading"><div><small>ACCOUNT CONTROL</small><h3>Client status</h3></div></div>
+                  <label class="profile-field">
+                    <span>Account status</span>
+                    <select id="accountStatusSelect">
+                      <option value="pending">Pending review</option>
+                      <option value="active">Active</option>
+                      <option value="rejected">Rejected</option>
+                      <option value="inactive">Inactive</option>
+                      <option value="suspended">Suspended</option>
+                    </select>
+                  </label>
+                  <label class="profile-field">
+                    <span>Approval note</span>
+                    <textarea id="statusReasonInput" rows="4" placeholder="Optional reason or internal remark"></textarea>
+                  </label>
+                  <button class="primary-action full-width" id="saveAccountStatusButton" type="button">Save status</button>
+                  <div class="modal-status" id="accountStatusMessage" hidden></div>
+                </section>
+
+                <section class="dashboard-card profile-section">
+                  <div class="card-heading"><div><small>FOLLOW-UP</small><h3>Review checklist</h3></div></div>
+                  <label class="check-row"><input type="checkbox" id="identityVerified"> Identity verified</label>
+                  <label class="check-row"><input type="checkbox" id="contactVerified"> Contact verified</label>
+                  <label class="check-row"><input type="checkbox" id="riskProfileReviewed"> Risk profile reviewed</label>
+                  <label class="check-row"><input type="checkbox" id="documentsRequested"> Documents requested</label>
+                  <button class="secondary-action full-width" id="saveChecklistButton" type="button">Save checklist</button>
+                  <div class="modal-status" id="checklistMessage" hidden></div>
+                </section>
+              </aside>
+            </div>
+          </section>
+
+          <section class="profile-tab-panel" id="tab-services">
+            <div class="empty-module-card">
+              <span>◇</span><h3>Services assignment is next</h3>
+              <p>The client profile foundation is ready. Service assignment, validity and renewal controls will be added in the next module.</p>
+            </div>
+          </section>
+
+          <section class="profile-tab-panel" id="tab-payments">
+            <div class="empty-module-card">
+              <span>₹</span><h3>Payment records coming later</h3>
+              <p>Payments remain intentionally deferred until the non-payment modules are completed.</p>
+            </div>
+          </section>
+
+          <section class="profile-tab-panel" id="tab-documents">
+            <div class="empty-module-card">
+              <span>▤</span><h3>Document management is planned</h3>
+              <p>Upload, review and client-visible document workflows will be implemented in a dedicated phase.</p>
+            </div>
+          </section>
+
+          <section class="profile-tab-panel" id="tab-notes">
+            <div class="profile-layout notes-layout">
+              <section class="dashboard-card profile-section">
+                <div class="card-heading"><div><small>PRIVATE ADMIN NOTES</small><h3>Add internal note</h3></div></div>
+                <label class="profile-field">
+                  <span>Note</span>
+                  <textarea id="newNoteInput" rows="6" placeholder="Add a private note. This will not be visible in the client app."></textarea>
+                </label>
+                <button class="primary-action" id="addNoteButton" type="button">Add note</button>
+                <div class="modal-status" id="noteStatusMessage" hidden></div>
+              </section>
+
+              <section class="dashboard-card profile-section">
+                <div class="card-heading"><div><small>NOTE HISTORY</small><h3>Internal timeline</h3></div></div>
+                <div class="timeline-list" id="notesTimeline">
+                  <div class="timeline-empty">No internal notes yet.</div>
+                </div>
+              </section>
+            </div>
+          </section>
+
+          <section class="profile-tab-panel" id="tab-activity">
+            <section class="dashboard-card profile-section">
+              <div class="card-heading"><div><small>AUDIT HISTORY</small><h3>Client activity log</h3></div></div>
+              <div class="timeline-list" id="activityTimeline">
+                <div class="timeline-empty">No activity recorded yet.</div>
+              </div>
+            </section>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="admin-modal wide-modal" id="editProfileDialog">
+    <form method="dialog" class="modal-shell" id="editProfileForm">
+      <div class="modal-header">
+        <div><span>EDIT PROFILE</span><h2>Update client information</h2><p>Changes are written directly to the client’s Firestore record.</p></div>
+        <button class="modal-close" value="cancel" aria-label="Close">×</button>
+      </div>
+      <div class="form-grid">
+        <label><span>First name *</span><input name="firstName" required></label>
+        <label><span>Last name</span><input name="lastName"></label>
+        <label><span>Email *</span><input name="email" type="email" required></label>
+        <label><span>Mobile *</span><input name="mobile" maxlength="10" required></label>
+        <label><span>Date of birth</span><input name="dob"></label>
+        <label><span>City</span><input name="city"></label>
+        <label><span>Pincode</span><input name="pincode" maxlength="6"></label>
+        <label><span>Annual income</span><input name="annualIncome"></label>
+        <label><span>Risk tolerance</span><select name="riskTolerance"><option value="">Select</option><option>Low</option><option>Medium</option><option>High</option></select></label>
+        <label><span>Broker</span><input name="broker"></label>
+        <label><span>Trading broker</span><input name="tradingBroker"></label>
+        <label><span>Investment amount</span><input name="investmentAmount"></label>
+        <label class="span-2"><span>Address</span><textarea name="address" rows="3"></textarea></label>
+      </div>
+      <div class="modal-status" id="editProfileMessage" hidden></div>
+      <div class="modal-actions">
+        <button class="secondary-action" value="cancel">Cancel</button>
+        <button class="primary-action" id="saveProfileButton" type="submit" value="default">Save changes</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="moduleNotice" class="module-dialog">
+    <button onclick="this.closest('dialog').close()" aria-label="Close">×</button>
+    <span>MODULE LOCKED</span><h2>Coming in a later build phase</h2><p>The client profile and approval workflow are active. Remaining modules will be implemented one by one.</p>
+    <button onclick="this.closest('dialog').close()">Understood</button>
+  </dialog>
+
+  <script type="module" src="./client-profile.js?v=47"></script>
+</body>
+</html>

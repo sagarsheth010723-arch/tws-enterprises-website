@@ -217,7 +217,7 @@ function renderClients() {
       <td><span class="source-badge ${escapeHtml(client.source)}">${escapeHtml(sourceLabel(client.source))}</span></td>
       <td><span class="status-badge ${statusClass(client.status)}">${escapeHtml(client.status || "pending")}</span></td>
       <td><strong class="table-main">${escapeHtml(formatDate(client.registeredAt))}</strong><small>${client.raw?.authStatus === "active" ? "Login active" : client.source === "excel_import" ? "No app login" : "Firebase record"}</small></td>
-      <td class="align-right"><button class="row-action" data-client-id="${escapeHtml(client.id)}">View</button></td>
+      <td class="align-right"><a class="row-action" href="./client-profile.html?id=${encodeURIComponent(client.id)}">View profile</a></td>
     </tr>
   `).join("");
 
@@ -579,13 +579,6 @@ previousPageButton.addEventListener("click", () => {
 nextPageButton.addEventListener("click", () => {
   const totalPages = Math.ceil(filteredClients.length / PAGE_SIZE);
   if (currentPage < totalPages) { currentPage += 1; renderClients(); }
-});
-
-tableBody.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-client-id]");
-  if (!button) return;
-  const client = allClients.find((item) => item.id === button.dataset.clientId);
-  if (client) showClientDetails(client);
 });
 
 document.getElementById("openAddClientButton").addEventListener("click", () => {

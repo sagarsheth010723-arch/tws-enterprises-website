@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./admin-style.css?v=46">
+  <link rel="stylesheet" href="./admin-style.css?v=47">
 </head>
 <body class="admin-dashboard-page">
   <div class="auth-gate" id="authGate">
@@ -58,7 +58,7 @@
 
         <div class="metric-grid">
           <article><span class="metric-icon">◎</span><div><small>TOTAL CLIENTS</small><strong id="clientCount">…</strong><p>Registered TWS Connect users</p></div></article>
-          <article><span class="metric-icon">◇</span><div><small>ACTIVE SERVICES</small><strong>—</strong><p>Service module activates next</p></div></article>
+          <article><span class="metric-icon">!</span><div><small>PENDING CLIENTS</small><strong id="pendingClientCount">…</strong><p>Awaiting approval or review</p></div></article>
           <article><span class="metric-icon">₹</span><div><small>PAYMENTS</small><strong>—</strong><p>Payment module activates later</p></div></article>
           <article><span class="metric-icon">?</span><div><small>OPEN SUPPORT</small><strong>—</strong><p>Support module activates later</p></div></article>
         </div>
@@ -84,6 +84,13 @@
             </ol>
           </section>
         </div>
+
+        <section class="dashboard-card recent-clients-card">
+          <div class="card-heading"><div><small>NEW REGISTRATIONS</small><h3>Recently registered clients</h3></div><a class="text-action" href="./clients.html">View all clients</a></div>
+          <div class="recent-client-list" id="recentClientList">
+            <div class="timeline-empty">Loading recent registrations…</div>
+          </div>
+        </section>
       </section>
     </main>
   </div>
@@ -93,6 +100,6 @@
     <span>MODULE LOCKED</span><h2>Coming in the next build phase</h2><p>The secure admin foundation is ready. We will now implement each operational module one by one, beginning with Client Management.</p>
     <button onclick="this.closest('dialog').close()">Understood</button>
   </dialog>
-  <script type="module" src="./dashboard.js?v=46"></script>
+  <script type="module" src="./dashboard.js?v=47"></script>
 </body>
 </html>
