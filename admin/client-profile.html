@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./admin-style.css?v=48">
+  <link rel="stylesheet" href="./admin-style.css?v=49">
 </head>
 <body class="admin-dashboard-page">
   <div class="auth-gate" id="authGate">
@@ -155,10 +155,22 @@
           </section>
 
           <section class="profile-tab-panel" id="tab-services">
-            <div class="empty-module-card">
-              <span>◇</span><h3>Services assignment is next</h3>
-              <p>The client profile foundation is ready. Service assignment, validity and renewal controls will be added in the next module.</p>
+            <div class="services-summary-grid">
+              <article><small>ASSIGNED SERVICES</small><strong id="assignedServiceCount">0</strong><p>Total client service records</p></article>
+              <article><small>ACTIVE SERVICES</small><strong id="activeServiceCount">0</strong><p>Currently active</p></article>
+              <article><small>EXPIRING SOON</small><strong id="expiringServiceCount">0</strong><p>Within the next 30 days</p></article>
             </div>
+
+            <section class="dashboard-card profile-section">
+              <div class="card-heading services-heading">
+                <div><small>CLIENT SERVICES</small><h3>Assigned services</h3></div>
+                <button class="primary-action" id="assignServiceButton" type="button">+ Assign service</button>
+              </div>
+
+              <div class="service-list" id="serviceList">
+                <div class="timeline-empty">Loading assigned services…</div>
+              </div>
+            </section>
           </section>
 
           <section class="profile-tab-panel" id="tab-payments">
@@ -238,12 +250,100 @@
     </form>
   </dialog>
 
+
+  <dialog class="admin-modal wide-modal" id="serviceDialog">
+    <form method="dialog" class="modal-shell" id="serviceForm">
+      <div class="modal-header">
+        <div>
+          <span id="serviceDialogEyebrow">ASSIGN SERVICE</span>
+          <h2 id="serviceDialogTitle">Assign client service</h2>
+          <p>Only the three approved TWS services are available.</p>
+        </div>
+        <button class="modal-close" value="cancel" aria-label="Close">×</button>
+      </div>
+
+      <input type="hidden" name="serviceRecordId">
+
+      <div class="form-grid">
+        <label class="span-2">
+          <span>Service *</span>
+          <select name="serviceName" required>
+            <option value="">Select service</option>
+            <option value="Portfolio Management Service">Portfolio Management Service</option>
+            <option value="Wealth Management">Wealth Management</option>
+            <option value="Compounding Strategy">Compounding Strategy</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Start date *</span>
+          <input name="startDate" type="date" required>
+        </label>
+
+        <label>
+          <span>Expiry date *</span>
+          <input name="expiryDate" type="date" required>
+        </label>
+
+        <label>
+          <span>Investment amount</span>
+          <input name="investmentAmount" inputmode="decimal" placeholder="Example: 5000000">
+        </label>
+
+        <label>
+          <span>Service fee</span>
+          <input name="serviceFee" inputmode="decimal" placeholder="Example: 25000">
+        </label>
+
+        <label>
+          <span>Assigned advisor</span>
+          <input name="assignedAdvisor" placeholder="Advisor or relationship manager">
+        </label>
+
+        <label>
+          <span>Status *</span>
+          <select name="serviceStatus" required>
+            <option value="pending">Pending</option>
+            <option value="active">Active</option>
+            <option value="paused">Paused</option>
+            <option value="expired">Expired</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Renewal status</span>
+          <select name="renewalStatus">
+            <option value="not_due">Not due</option>
+            <option value="due_soon">Due soon</option>
+            <option value="renewal_pending">Renewal pending</option>
+            <option value="renewed">Renewed</option>
+            <option value="not_renewing">Not renewing</option>
+          </select>
+        </label>
+
+        <label class="span-2">
+          <span>Internal remarks</span>
+          <textarea name="internalRemarks" rows="4" placeholder="Private service remarks"></textarea>
+        </label>
+      </div>
+
+      <div class="modal-status" id="serviceFormMessage" hidden></div>
+
+      <div class="modal-actions">
+        <button class="secondary-action" value="cancel">Cancel</button>
+        <button class="primary-action" id="saveServiceButton" type="submit" value="default">Save service</button>
+      </div>
+    </form>
+  </dialog>
+
+
   <dialog id="moduleNotice" class="module-dialog">
     <button onclick="this.closest('dialog').close()" aria-label="Close">×</button>
     <span>MODULE LOCKED</span><h2>Coming in a later build phase</h2><p>The client profile and approval workflow are active. Remaining modules will be implemented one by one.</p>
     <button onclick="this.closest('dialog').close()">Understood</button>
   </dialog>
 
-  <script type="module" src="./client-profile.js?v=47"></script>
+  <script type="module" src="./client-profile.js?v=49"></script>
 </body>
 </html>

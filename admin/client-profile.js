@@ -25,6 +25,8 @@ let clientData = null;
 let unsubscribeClient = null;
 let unsubscribeNotes = null;
 let unsubscribeActivity = null;
+let unsubscribeServices = null;
+let serviceRecords = new Map();
 
 function text(value) {
   return String(value ?? "").trim();
@@ -302,6 +304,7 @@ function subscribeClient() {
 
   subscribeNotes();
   subscribeActivity();
+  subscribeServices();
 }
 
 observeAuth(async (user) => {
@@ -496,8 +499,325 @@ document.querySelectorAll("[data-coming-soon]").forEach((button) => {
   });
 });
 
+
+const ALLOWED_SERVICES = new Set([
+  "Portfolio Management Service",
+  "Wealth Management",
+  "Compounding Strategy"
+]);
+
+function parseAmount(value) {
+  const cleaned = String(value ?? "").replace(/[₹,\s]/g, "");
+  if (!cleaned) return null;
+  const amount = Number(cleaned);
+  return Number.isFinite(amount) && amount >= 0 ? amount : NaN;
+}
+
+function formatCurrency(value) {
+  const amount = Number(value);
+  if (!Number.isFinite(amount)) return "—";
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0
+  }).format(amount);
+}
+
+function serviceStatusClass(status) {
+  return ["pending", "active", "paused", "expired", "cancelled"].includes(status)
+    ? status
+    : "pending";
+}
+
+function renewalLabel(status) {
+  return {
+    not_due: "Not due",
+    due_soon: "Due soon",
+    renewal_pending: "Renewal pending",
+    renewed: "Renewed",
+    not_renewing: "Not renewing"
+  }[status] || "Not due";
+}
+
+function serviceDateToTimestamp(dateString) {
+  if (!dateString) return null;
+  const date = new Date(`${dateString}T00:00:00`);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function daysUntil(dateString) {
+  const expiry = serviceDateToTimestamp(dateString);
+  if (!expiry) return null;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return Math.ceil((expiry.getTime() - today.getTime()) / 86400000);
+}
+
+function renderServiceMetrics(records) {
+  const active = records.filter((item) => item.serviceStatus === "active").length;
+  const expiring = records.filter((item) => {
+    if (item.serviceStatus !== "active") return false;
+    const remaining = daysUntil(item.expiryDate);
+    return remaining !== null && remaining >= 0 && remaining <= 30;
+  }).length;
+
+  document.getElementById("assignedServiceCount").textContent = String(records.length);
+  document.getElementById("activeServiceCount").textContent = String(active);
+  document.getElementById("expiringServiceCount").textContent = String(expiring);
+}
+
+function renderServices(records) {
+  const container = document.getElementById("serviceList");
+  renderServiceMetrics(records);
+
+  if (!records.length) {
+    container.innerHTML = `
+      <div class="empty-service-state">
+        <span>◇</span>
+        <h3>No service assigned</h3>
+        <p>Assign Portfolio Management Service, Wealth Management or Compounding Strategy to this client.</p>
+        <button class="primary-action" type="button" data-open-service>Assign first service</button>
+      </div>
+    `;
+    container.querySelector("[data-open-service]")?.addEventListener("click", openNewServiceDialog);
+    return;
+  }
+
+  container.innerHTML = records.map((service) => {
+    const remaining = daysUntil(service.expiryDate);
+    let expiryText = service.expiryDate ? `Expires ${escapeHtml(service.expiryDate)}` : "No expiry date";
+    if (remaining !== null && remaining >= 0 && remaining <= 30) {
+      expiryText += ` · ${remaining} day${remaining === 1 ? "" : "s"} remaining`;
+    } else if (remaining !== null && remaining < 0) {
+      expiryText += " · Expired";
+    }
+
+    return `
+      <article class="service-record-card">
+        <div class="service-record-head">
+          <div>
+            <span class="service-icon">◇</span>
+            <div>
+              <h3>${escapeHtml(service.serviceName)}</h3>
+              <p>${escapeHtml(service.assignedAdvisor || "No advisor assigned")}</p>
+            </div>
+          </div>
+          <span class="service-status ${serviceStatusClass(service.serviceStatus)}">${escapeHtml(service.serviceStatus || "pending")}</span>
+        </div>
+
+        <div class="service-record-grid">
+          <div><small>START DATE</small><strong>${escapeHtml(service.startDate || "—")}</strong></div>
+          <div><small>EXPIRY</small><strong>${expiryText}</strong></div>
+          <div><small>INVESTMENT</small><strong>${escapeHtml(formatCurrency(service.investmentAmount))}</strong></div>
+          <div><small>SERVICE FEE</small><strong>${escapeHtml(formatCurrency(service.serviceFee))}</strong></div>
+          <div><small>RENEWAL</small><strong>${escapeHtml(renewalLabel(service.renewalStatus))}</strong></div>
+        </div>
+
+        ${service.internalRemarks ? `<p class="service-remarks">${escapeHtml(service.internalRemarks)}</p>` : ""}
+
+        <div class="service-record-actions">
+          <button class="secondary-action" type="button" data-edit-service="${escapeHtml(service.id)}">Edit</button>
+          ${service.serviceStatus === "active"
+            ? `<button class="warning-action" type="button" data-service-status="${escapeHtml(service.id)}" data-next-status="paused">Pause</button>`
+            : service.serviceStatus === "paused"
+              ? `<button class="primary-action" type="button" data-service-status="${escapeHtml(service.id)}" data-next-status="active">Reactivate</button>`
+              : ""}
+          ${service.serviceStatus !== "cancelled"
+            ? `<button class="danger-action" type="button" data-service-status="${escapeHtml(service.id)}" data-next-status="cancelled">Cancel service</button>`
+            : ""}
+        </div>
+      </article>
+    `;
+  }).join("");
+
+  container.querySelectorAll("[data-edit-service]").forEach((button) => {
+    button.addEventListener("click", () => openEditServiceDialog(button.dataset.editService));
+  });
+
+  container.querySelectorAll("[data-service-status]").forEach((button) => {
+    button.addEventListener("click", () => changeServiceStatus(
+      button.dataset.serviceStatus,
+      button.dataset.nextStatus
+    ));
+  });
+}
+
+function subscribeServices() {
+  const servicesQuery = query(
+    collection(db, "users", clientId, "services"),
+    orderBy("createdAt", "desc")
+  );
+
+  unsubscribeServices = onSnapshot(servicesQuery, (snapshot) => {
+    const records = snapshot.docs
+      .map((item) => ({ id: item.id, ...item.data() }))
+      .filter((item) => ALLOWED_SERVICES.has(item.serviceName));
+
+    serviceRecords = new Map(records.map((item) => [item.id, item]));
+    renderServices(records);
+  }, (error) => {
+    console.warn("Services listener failed:", error);
+    document.getElementById("serviceList").innerHTML =
+      '<div class="timeline-empty">Assigned services could not be loaded.</div>';
+  });
+}
+
+function resetServiceForm() {
+  const form = document.getElementById("serviceForm");
+  form.reset();
+  form.elements.serviceRecordId.value = "";
+  form.elements.serviceStatus.value = "active";
+  form.elements.renewalStatus.value = "not_due";
+  const today = new Date();
+  form.elements.startDate.value = today.toISOString().slice(0, 10);
+  setMessage(document.getElementById("serviceFormMessage"), "");
+}
+
+function openNewServiceDialog() {
+  resetServiceForm();
+  document.getElementById("serviceDialogEyebrow").textContent = "ASSIGN SERVICE";
+  document.getElementById("serviceDialogTitle").textContent = "Assign client service";
+  document.getElementById("saveServiceButton").textContent = "Save service";
+  document.getElementById("serviceDialog").showModal();
+}
+
+function openEditServiceDialog(recordId) {
+  const service = serviceRecords.get(recordId);
+  if (!service) return;
+
+  resetServiceForm();
+  const form = document.getElementById("serviceForm");
+  form.elements.serviceRecordId.value = recordId;
+  form.elements.serviceName.value = service.serviceName || "";
+  form.elements.startDate.value = service.startDate || "";
+  form.elements.expiryDate.value = service.expiryDate || "";
+  form.elements.investmentAmount.value = service.investmentAmount ?? "";
+  form.elements.serviceFee.value = service.serviceFee ?? "";
+  form.elements.assignedAdvisor.value = service.assignedAdvisor || "";
+  form.elements.serviceStatus.value = service.serviceStatus || "pending";
+  form.elements.renewalStatus.value = service.renewalStatus || "not_due";
+  form.elements.internalRemarks.value = service.internalRemarks || "";
+
+  document.getElementById("serviceDialogEyebrow").textContent = "EDIT SERVICE";
+  document.getElementById("serviceDialogTitle").textContent = service.serviceName;
+  document.getElementById("saveServiceButton").textContent = "Update service";
+  document.getElementById("serviceDialog").showModal();
+}
+
+async function changeServiceStatus(recordId, nextStatus) {
+  const service = serviceRecords.get(recordId);
+  if (!service) return;
+
+  if (nextStatus === "cancelled") {
+    const confirmed = confirm(`Cancel ${service.serviceName} for this client?`);
+    if (!confirmed) return;
+  }
+
+  try {
+    await updateDoc(doc(db, "users", clientId, "services", recordId), {
+      serviceStatus: nextStatus,
+      statusUpdatedAt: serverTimestamp(),
+      statusUpdatedBy: currentAdmin?.email || "",
+      updatedAt: serverTimestamp()
+    });
+
+    await logActivity(
+      "service_status_changed",
+      `${service.serviceName} status changed from ${service.serviceStatus || "pending"} to ${nextStatus}.`,
+      { serviceId: recordId, serviceName: service.serviceName, nextStatus }
+    );
+  } catch (error) {
+    alert(error.message || "Service status could not be updated.");
+  }
+}
+
+document.getElementById("assignServiceButton").addEventListener("click", openNewServiceDialog);
+
+document.getElementById("serviceForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const formData = new FormData(form);
+  const recordId = text(formData.get("serviceRecordId"));
+  const serviceName = text(formData.get("serviceName"));
+  const startDate = text(formData.get("startDate"));
+  const expiryDate = text(formData.get("expiryDate"));
+  const investmentAmount = parseAmount(formData.get("investmentAmount"));
+  const serviceFee = parseAmount(formData.get("serviceFee"));
+  const message = document.getElementById("serviceFormMessage");
+  const saveButton = document.getElementById("saveServiceButton");
+
+  if (!ALLOWED_SERVICES.has(serviceName)) {
+    setMessage(message, "Select one of the three approved services.", "error");
+    return;
+  }
+
+  if (!startDate || !expiryDate) {
+    setMessage(message, "Start date and expiry date are required.", "error");
+    return;
+  }
+
+  if (new Date(`${expiryDate}T00:00:00`) < new Date(`${startDate}T00:00:00`)) {
+    setMessage(message, "Expiry date cannot be earlier than start date.", "error");
+    return;
+  }
+
+  if (Number.isNaN(investmentAmount) || Number.isNaN(serviceFee)) {
+    setMessage(message, "Investment amount and service fee must contain valid numbers.", "error");
+    return;
+  }
+
+  const payload = {
+    serviceName,
+    startDate,
+    expiryDate,
+    investmentAmount,
+    serviceFee,
+    assignedAdvisor: text(formData.get("assignedAdvisor")),
+    serviceStatus: text(formData.get("serviceStatus")) || "pending",
+    renewalStatus: text(formData.get("renewalStatus")) || "not_due",
+    internalRemarks: text(formData.get("internalRemarks")),
+    updatedAt: serverTimestamp(),
+    updatedBy: currentAdmin?.email || ""
+  };
+
+  saveButton.disabled = true;
+  setMessage(message, recordId ? "Updating service…" : "Assigning service…", "info");
+
+  try {
+    if (recordId) {
+      await updateDoc(doc(db, "users", clientId, "services", recordId), payload);
+      await logActivity(
+        "service_assignment_updated",
+        `${serviceName} assignment was updated.`,
+        { serviceId: recordId, serviceName }
+      );
+    } else {
+      const created = await addDoc(collection(db, "users", clientId, "services"), {
+        ...payload,
+        createdAt: serverTimestamp(),
+        createdBy: currentAdmin?.email || ""
+      });
+      await logActivity(
+        "service_assigned",
+        `${serviceName} was assigned to the client.`,
+        { serviceId: created.id, serviceName }
+      );
+    }
+
+    setMessage(message, recordId ? "Service updated successfully." : "Service assigned successfully.", "success");
+    setTimeout(() => document.getElementById("serviceDialog").close(), 650);
+  } catch (error) {
+    setMessage(message, error.message || "Service could not be saved.", "error");
+  } finally {
+    saveButton.disabled = false;
+  }
+});
+
+
 window.addEventListener("beforeunload", () => {
   unsubscribeClient?.();
   unsubscribeNotes?.();
   unsubscribeActivity?.();
+  unsubscribeServices?.();
 });
