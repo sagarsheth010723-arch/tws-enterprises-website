@@ -625,19 +625,44 @@ uploadDropzone.addEventListener("dragleave", () => uploadDropzone.classList.remo
 uploadDropzone.addEventListener("drop", async (event) => {
   event.preventDefault();
   uploadDropzone.classList.remove("dragging");
+  const selectedFile = event.dataTransfer?.files?.[0];
+  if (!selectedFile) return;
+
   try {
     resetImport();
-    await parseExcelFile(event.dataTransfer.files[0]);
+
+    if (typeof XLSX === "undefined") {
+      throw new Error("Excel reader library did not load. Refresh the page and try again.");
+    }
+
+    await parseExcelFile(selectedFile);
   } catch (error) {
-    setModalStatus(importStatus, error.message, "error");
+    console.error("Dropped Excel file parsing failed:", error);
+    setModalStatus(importStatus, error.message || "Excel file could not be read.", "error");
   }
 });
 excelFileInput.addEventListener("change", async () => {
+  const selectedFile = excelFileInput.files?.[0];
+  if (!selectedFile) return;
+
   try {
-    resetImport();
-    await parseExcelFile(excelFileInput.files[0]);
+    importRows = [];
+    importSummary.hidden = true;
+    importOptions.hidden = true;
+    importPreviewWrap.hidden = true;
+    importPreviewBody.innerHTML = "";
+    confirmImportButton.disabled = true;
+    downloadErrorReportButton.hidden = true;
+    setModalStatus(importStatus, "Reading Excel file…", "info");
+
+    if (typeof XLSX === "undefined") {
+      throw new Error("Excel reader library did not load. Refresh the page and try again.");
+    }
+
+    await parseExcelFile(selectedFile);
   } catch (error) {
-    setModalStatus(importStatus, error.message, "error");
+    console.error("Excel file parsing failed:", error);
+    setModalStatus(importStatus, error.message || "Excel file could not be read.", "error");
   }
 });
 document.getElementById("resetImportButton").addEventListener("click", resetImport);
