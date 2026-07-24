@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./admin-style.css?v=49">
+  <link rel="stylesheet" href="./admin-style.css?v=50">
 </head>
 <body class="admin-dashboard-page">
   <div class="auth-gate" id="authGate">
@@ -181,10 +181,22 @@
           </section>
 
           <section class="profile-tab-panel" id="tab-documents">
-            <div class="empty-module-card">
-              <span>▤</span><h3>Document management is planned</h3>
-              <p>Upload, review and client-visible document workflows will be implemented in a dedicated phase.</p>
+            <div class="services-summary-grid">
+              <article><small>TOTAL DOCUMENTS</small><strong id="totalDocumentCount">0</strong><p>All document records</p></article>
+              <article><small>VERIFIED</small><strong id="verifiedDocumentCount">0</strong><p>Approved by admin</p></article>
+              <article><small>ACTION REQUIRED</small><strong id="actionDocumentCount">0</strong><p>Requested or rejected</p></article>
             </div>
+
+            <section class="dashboard-card profile-section">
+              <div class="card-heading services-heading">
+                <div><small>CLIENT DOCUMENTS</small><h3>Document registry</h3></div>
+                <button class="primary-action" id="addDocumentButton" type="button">+ Add document</button>
+              </div>
+              <p class="module-support-note">Store secure document links and verification status. Binary file upload remains deferred until Firebase Storage is enabled.</p>
+              <div class="document-list" id="documentList">
+                <div class="timeline-empty">Loading document records…</div>
+              </div>
+            </section>
           </section>
 
           <section class="profile-tab-panel" id="tab-notes">
@@ -246,6 +258,87 @@
       <div class="modal-actions">
         <button class="secondary-action" value="cancel">Cancel</button>
         <button class="primary-action" id="saveProfileButton" type="submit" value="default">Save changes</button>
+      </div>
+    </form>
+  </dialog>
+
+
+  
+  <dialog class="admin-modal wide-modal" id="documentDialog">
+    <form method="dialog" class="modal-shell" id="documentForm">
+      <div class="modal-header">
+        <div>
+          <span id="documentDialogEyebrow">ADD DOCUMENT</span>
+          <h2 id="documentDialogTitle">Add document record</h2>
+          <p>Record a secure document link and its review status.</p>
+        </div>
+        <button class="modal-close" value="cancel" aria-label="Close">×</button>
+      </div>
+
+      <input type="hidden" name="documentRecordId">
+
+      <div class="form-grid">
+        <label>
+          <span>Document type *</span>
+          <select name="documentType" required>
+            <option value="">Select type</option>
+            <option>PAN Card</option>
+            <option>Aadhaar Card</option>
+            <option>Bank Proof</option>
+            <option>Demat / Broker Proof</option>
+            <option>Signed Agreement</option>
+            <option>Risk Profile</option>
+            <option>Income Proof</option>
+            <option>Other</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Status *</span>
+          <select name="documentStatus" required>
+            <option value="requested">Requested</option>
+            <option value="received">Received</option>
+            <option value="verified">Verified</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        </label>
+
+        <label class="span-2">
+          <span>Document title *</span>
+          <input name="documentTitle" required placeholder="Example: PAN Card – Client Copy">
+        </label>
+
+        <label class="span-2">
+          <span>Secure document URL</span>
+          <input name="documentUrl" type="url" placeholder="https://drive.google.com/...">
+        </label>
+
+        <label>
+          <span>Issue date</span>
+          <input name="issueDate" type="date">
+        </label>
+
+        <label>
+          <span>Expiry date</span>
+          <input name="documentExpiryDate" type="date">
+        </label>
+
+        <label class="check-row span-2">
+          <input name="clientVisible" type="checkbox">
+          <span>Visible to client in TWS Connect</span>
+        </label>
+
+        <label class="span-2">
+          <span>Admin notes</span>
+          <textarea name="documentNotes" rows="4" placeholder="Verification notes or rejection reason"></textarea>
+        </label>
+      </div>
+
+      <div class="modal-status" id="documentFormMessage" hidden></div>
+
+      <div class="modal-actions">
+        <button class="secondary-action" value="cancel">Cancel</button>
+        <button class="primary-action" id="saveDocumentButton" type="submit" value="default">Save document</button>
       </div>
     </form>
   </dialog>
@@ -344,6 +437,6 @@
     <button onclick="this.closest('dialog').close()">Understood</button>
   </dialog>
 
-  <script type="module" src="./client-profile.js?v=49"></script>
+  <script type="module" src="./client-profile.js?v=50"></script>
 </body>
 </html>

@@ -7,7 +7,9 @@ import {
   orderBy,
   query,
   serverTimestamp,
-  updateDoc
+  updateDoc,
+  setDoc,
+  deleteDoc
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 import { db, logoutAdmin, observeAuth, verifyAdmin } from "./admin-auth.js";
 
@@ -27,6 +29,8 @@ let unsubscribeNotes = null;
 let unsubscribeActivity = null;
 let unsubscribeServices = null;
 let serviceRecords = new Map();
+let unsubscribeDocuments = null;
+let documentRecords = new Map();
 
 function text(value) {
   return String(value ?? "").trim();
@@ -305,6 +309,7 @@ function subscribeClient() {
   subscribeNotes();
   subscribeActivity();
   subscribeServices();
+  subscribeDocuments();
 }
 
 observeAuth(async (user) => {
@@ -642,6 +647,56 @@ function renderServices(records) {
   });
 }
 
+
+function isoDateFromClientRegistration(data) {
+  const value = firstValue(data, ["registrationDate", "createdAt", "registeredAt", "importedAt"]);
+  const date = dateValue(value);
+  return date ? date.toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10);
+}
+
+function clientSelectedService(data) {
+  const candidate = text(firstValue(data, [
+    "serviceInterest",
+    "service_interest",
+    "serviceName",
+    "selectedService"
+  ]));
+  return ALLOWED_SERVICES.has(candidate) ? candidate : "";
+}
+
+async function ensureDefaultServiceAssignment(records) {
+  if (records.length || !clientData) return;
+
+  const serviceName = clientSelectedService(clientData);
+  if (!serviceName) return;
+
+  const registrationDate = isoDateFromClientRegistration(clientData);
+  const autoId = `default_${serviceName.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`;
+
+  await setDoc(doc(db, "users", clientId, "services", autoId), {
+    serviceName,
+    startDate: registrationDate,
+    expiryDate: "",
+    investmentAmount: firstValue(clientData, ["investmentAmount"], null),
+    serviceFee: null,
+    assignedAdvisor: "",
+    serviceStatus: "pending",
+    renewalStatus: "not_due",
+    internalRemarks: "Automatically assigned from client registration data.",
+    assignmentSource: firstValue(clientData, ["source"], "app_registration"),
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+    createdBy: currentAdmin?.email || "",
+    updatedBy: currentAdmin?.email || ""
+  }, { merge: true });
+
+  await logActivity(
+    "service_auto_assigned",
+    `${serviceName} was automatically assigned using the client registration date.`,
+    { serviceName, startDate: registrationDate }
+  );
+}
+
 function subscribeServices() {
   const servicesQuery = query(
     collection(db, "users", clientId, "services"),
@@ -655,6 +710,9 @@ function subscribeServices() {
 
     serviceRecords = new Map(records.map((item) => [item.id, item]));
     renderServices(records);
+    ensureDefaultServiceAssignment(records).catch((error) => {
+      console.warn("Automatic service assignment failed:", error);
+    });
   }, (error) => {
     console.warn("Services listener failed:", error);
     document.getElementById("serviceList").innerHTML =
@@ -668,8 +726,9 @@ function resetServiceForm() {
   form.elements.serviceRecordId.value = "";
   form.elements.serviceStatus.value = "active";
   form.elements.renewalStatus.value = "not_due";
-  const today = new Date();
-  form.elements.startDate.value = today.toISOString().slice(0, 10);
+  form.elements.startDate.value = clientData
+    ? isoDateFromClientRegistration(clientData)
+    : new Date().toISOString().slice(0, 10);
   setMessage(document.getElementById("serviceFormMessage"), "");
 }
 
@@ -815,9 +874,211 @@ document.getElementById("serviceForm").addEventListener("submit", async (event) 
 });
 
 
+
+function documentStatusClass(status) {
+  return ["requested", "received", "verified", "rejected"].includes(status)
+    ? status
+    : "requested";
+}
+
+function renderDocumentMetrics(records) {
+  document.getElementById("totalDocumentCount").textContent = String(records.length);
+  document.getElementById("verifiedDocumentCount").textContent =
+    String(records.filter((item) => item.documentStatus === "verified").length);
+  document.getElementById("actionDocumentCount").textContent =
+    String(records.filter((item) => ["requested", "rejected"].includes(item.documentStatus)).length);
+}
+
+function renderDocuments(records) {
+  const container = document.getElementById("documentList");
+  renderDocumentMetrics(records);
+
+  if (!records.length) {
+    container.innerHTML = `
+      <div class="empty-service-state">
+        <span>▤</span>
+        <h3>No documents recorded</h3>
+        <p>Add requested, received or verified client documents with secure links.</p>
+        <button class="primary-action" type="button" data-add-document>Add first document</button>
+      </div>
+    `;
+    container.querySelector("[data-add-document]")?.addEventListener("click", openNewDocumentDialog);
+    return;
+  }
+
+  container.innerHTML = records.map((item) => `
+    <article class="document-record-card">
+      <div class="document-record-main">
+        <span class="service-icon">▤</span>
+        <div>
+          <h3>${escapeHtml(item.documentTitle || item.documentType || "Document")}</h3>
+          <p>${escapeHtml(item.documentType || "Other")} · ${item.clientVisible ? "Client visible" : "Admin only"}</p>
+        </div>
+      </div>
+      <span class="document-status ${documentStatusClass(item.documentStatus)}">${escapeHtml(item.documentStatus || "requested")}</span>
+      <div class="document-record-meta">
+        <span><small>ISSUE DATE</small>${escapeHtml(item.issueDate || "—")}</span>
+        <span><small>EXPIRY DATE</small>${escapeHtml(item.documentExpiryDate || "—")}</span>
+        <span><small>UPDATED</small>${escapeHtml(formatDate(item.updatedAt || item.createdAt, true))}</span>
+      </div>
+      ${item.documentNotes ? `<p class="service-remarks">${escapeHtml(item.documentNotes)}</p>` : ""}
+      <div class="service-record-actions">
+        ${item.documentUrl ? `<a class="secondary-action" href="${escapeHtml(item.documentUrl)}" target="_blank" rel="noopener">Open link</a>` : ""}
+        <button class="secondary-action" type="button" data-edit-document="${escapeHtml(item.id)}">Edit</button>
+        <button class="danger-action" type="button" data-delete-document="${escapeHtml(item.id)}">Delete</button>
+      </div>
+    </article>
+  `).join("");
+
+  container.querySelectorAll("[data-edit-document]").forEach((button) => {
+    button.addEventListener("click", () => openEditDocumentDialog(button.dataset.editDocument));
+  });
+  container.querySelectorAll("[data-delete-document]").forEach((button) => {
+    button.addEventListener("click", () => removeDocumentRecord(button.dataset.deleteDocument));
+  });
+}
+
+function subscribeDocuments() {
+  const documentsQuery = query(
+    collection(db, "users", clientId, "documents"),
+    orderBy("createdAt", "desc")
+  );
+
+  unsubscribeDocuments = onSnapshot(documentsQuery, (snapshot) => {
+    const records = snapshot.docs.map((item) => ({ id: item.id, ...item.data() }));
+    documentRecords = new Map(records.map((item) => [item.id, item]));
+    renderDocuments(records);
+  }, (error) => {
+    console.warn("Documents listener failed:", error);
+    document.getElementById("documentList").innerHTML =
+      '<div class="timeline-empty">Document records could not be loaded.</div>';
+  });
+}
+
+function resetDocumentForm() {
+  const form = document.getElementById("documentForm");
+  form.reset();
+  form.elements.documentRecordId.value = "";
+  form.elements.documentStatus.value = "requested";
+  setMessage(document.getElementById("documentFormMessage"), "");
+}
+
+function openNewDocumentDialog() {
+  resetDocumentForm();
+  document.getElementById("documentDialogEyebrow").textContent = "ADD DOCUMENT";
+  document.getElementById("documentDialogTitle").textContent = "Add document record";
+  document.getElementById("saveDocumentButton").textContent = "Save document";
+  document.getElementById("documentDialog").showModal();
+}
+
+function openEditDocumentDialog(recordId) {
+  const item = documentRecords.get(recordId);
+  if (!item) return;
+
+  resetDocumentForm();
+  const form = document.getElementById("documentForm");
+  form.elements.documentRecordId.value = recordId;
+  form.elements.documentType.value = item.documentType || "";
+  form.elements.documentStatus.value = item.documentStatus || "requested";
+  form.elements.documentTitle.value = item.documentTitle || "";
+  form.elements.documentUrl.value = item.documentUrl || "";
+  form.elements.issueDate.value = item.issueDate || "";
+  form.elements.documentExpiryDate.value = item.documentExpiryDate || "";
+  form.elements.clientVisible.checked = item.clientVisible === true;
+  form.elements.documentNotes.value = item.documentNotes || "";
+
+  document.getElementById("documentDialogEyebrow").textContent = "EDIT DOCUMENT";
+  document.getElementById("documentDialogTitle").textContent = item.documentTitle || "Edit document";
+  document.getElementById("saveDocumentButton").textContent = "Update document";
+  document.getElementById("documentDialog").showModal();
+}
+
+async function removeDocumentRecord(recordId) {
+  const item = documentRecords.get(recordId);
+  if (!item) return;
+  if (!confirm(`Delete ${item.documentTitle || item.documentType || "this document record"}?`)) return;
+
+  try {
+    await deleteDoc(doc(db, "users", clientId, "documents", recordId));
+    await logActivity(
+      "document_deleted",
+      `${item.documentTitle || item.documentType || "Document"} was deleted.`,
+      { documentId: recordId }
+    );
+  } catch (error) {
+    alert(error.message || "Document could not be deleted.");
+  }
+}
+
+document.getElementById("addDocumentButton").addEventListener("click", openNewDocumentDialog);
+
+document.getElementById("documentForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const formData = new FormData(form);
+  const recordId = text(formData.get("documentRecordId"));
+  const documentTitle = text(formData.get("documentTitle"));
+  const documentType = text(formData.get("documentType"));
+  const message = document.getElementById("documentFormMessage");
+  const saveButton = document.getElementById("saveDocumentButton");
+
+  if (!documentTitle || !documentType) {
+    setMessage(message, "Document type and title are required.", "error");
+    return;
+  }
+
+  const payload = {
+    documentTitle,
+    documentType,
+    documentStatus: text(formData.get("documentStatus")) || "requested",
+    documentUrl: text(formData.get("documentUrl")),
+    issueDate: text(formData.get("issueDate")),
+    documentExpiryDate: text(formData.get("documentExpiryDate")),
+    clientVisible: form.elements.clientVisible.checked,
+    documentNotes: text(formData.get("documentNotes")),
+    updatedAt: serverTimestamp(),
+    updatedBy: currentAdmin?.email || ""
+  };
+
+  saveButton.disabled = true;
+  setMessage(message, recordId ? "Updating document…" : "Saving document…", "info");
+
+  try {
+    if (recordId) {
+      await updateDoc(doc(db, "users", clientId, "documents", recordId), payload);
+      await logActivity(
+        "document_updated",
+        `${documentTitle} was updated.`,
+        { documentId: recordId, documentType }
+      );
+    } else {
+      const created = await addDoc(collection(db, "users", clientId, "documents"), {
+        ...payload,
+        createdAt: serverTimestamp(),
+        createdBy: currentAdmin?.email || ""
+      });
+      await logActivity(
+        "document_added",
+        `${documentTitle} was added.`,
+        { documentId: created.id, documentType }
+      );
+    }
+
+    setMessage(message, recordId ? "Document updated successfully." : "Document saved successfully.", "success");
+    setTimeout(() => document.getElementById("documentDialog").close(), 650);
+  } catch (error) {
+    setMessage(message, error.message || "Document could not be saved.", "error");
+  } finally {
+    saveButton.disabled = false;
+  }
+});
+
+
 window.addEventListener("beforeunload", () => {
   unsubscribeClient?.();
   unsubscribeNotes?.();
   unsubscribeActivity?.();
   unsubscribeServices?.();
+  unsubscribeDocuments?.();
 });

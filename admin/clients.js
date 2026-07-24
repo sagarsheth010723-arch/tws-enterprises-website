@@ -15,6 +15,53 @@ import { db, logoutAdmin, observeAuth, verifyAdmin } from "./admin-auth.js";
 const PAGE_SIZE = 20;
 const MAX_PREVIEW_ROWS = 100;
 
+const ALLOWED_SERVICES = new Set([
+  "Portfolio Management Service",
+  "Wealth Management",
+  "Compounding Strategy"
+]);
+
+function todayIsoDate() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function normalizeIsoDate(value) {
+  const raw = normalizeText(value);
+  if (!raw) return "";
+
+  const direct = new Date(raw);
+  if (!Number.isNaN(direct.getTime())) return direct.toISOString().slice(0, 10);
+
+  const parts = raw.split(/[\/\-.]/).map((part) => part.trim());
+  if (parts.length === 3) {
+    const [day, month, year] = parts;
+    const parsed = new Date(`${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}T00:00:00`);
+    if (!Number.isNaN(parsed.getTime())) return parsed.toISOString().slice(0, 10);
+  }
+
+  return "";
+}
+
+function serviceRecordPayload(serviceName, startDate, investmentAmount, source) {
+  return {
+    serviceName,
+    startDate,
+    expiryDate: "",
+    investmentAmount: normalizeText(investmentAmount),
+    serviceFee: null,
+    assignedAdvisor: "",
+    serviceStatus: "pending",
+    renewalStatus: "not_due",
+    internalRemarks: `Automatically assigned from ${source}.`,
+    assignmentSource: source,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+    createdBy: currentAdmin?.email || "",
+    updatedBy: currentAdmin?.email || ""
+  };
+}
+
+
 const gate = document.getElementById("authGate");
 const shell = document.getElementById("adminShell");
 const adminName = document.getElementById("adminName");
@@ -261,16 +308,25 @@ async function saveManualClient(formData) {
   const lastName = normalizeText(formData.get("lastName"));
   const email = normalizeEmail(formData.get("email"));
   const mobile = normalizeMobile(formData.get("mobile"));
+  const serviceName = normalizeText(formData.get("serviceName"));
+  const registrationDate = todayIsoDate();
 
   if (!firstName || !email || mobile.length !== 10) {
     throw new Error("Enter first name, a valid email and a 10-digit mobile number.");
+  }
+  if (!ALLOWED_SERVICES.has(serviceName)) {
+    throw new Error("Select one of the three approved services.");
   }
 
   const duplicate = allClients.find((client) => client.email === email || client.mobile === mobile);
   if (duplicate) throw new Error("A client with this email or mobile number already exists.");
 
   const documentId = generateDocumentId("manual");
-  await setDoc(doc(db, "users", documentId), {
+  const serviceId = generateDocumentId("service");
+  const investmentAmount = normalizeText(formData.get("investmentAmount"));
+  const batch = writeBatch(db);
+
+  batch.set(doc(db, "users", documentId), {
     firstName,
     lastName,
     fullName: `${firstName} ${lastName}`.trim(),
@@ -281,9 +337,11 @@ async function saveManualClient(formData) {
     annualIncome: normalizeText(formData.get("annualIncome")),
     riskTolerance: normalizeText(formData.get("riskTolerance")),
     broker: normalizeText(formData.get("broker")),
-    investmentAmount: normalizeText(formData.get("investmentAmount")),
+    investmentAmount,
     address: normalizeText(formData.get("address")),
     internalNotes: normalizeText(formData.get("internalNotes")),
+    serviceInterest: serviceName,
+    registrationDate,
     accountStatus: "pending",
     source: "manual_admin",
     authStatus: "not_created",
@@ -291,6 +349,13 @@ async function saveManualClient(formData) {
     importedBy: currentAdmin?.email || "",
     importedByUid: currentAdmin?.uid || ""
   });
+
+  batch.set(
+    doc(db, "users", documentId, "services", serviceId),
+    serviceRecordPayload(serviceName, registrationDate, investmentAmount, "manual client creation")
+  );
+
+  await batch.commit();
 }
 
 function templateRows() {
@@ -309,6 +374,8 @@ function templateRows() {
     "Trading Preferences": "Equity Cash, Index Options",
     "Login ID": "",
     "Investment Amount": "500000",
+    "Service Name": "Portfolio Management Service",
+    "Registration Date": "24/07/2026",
     "Account Status": "pending",
     "Internal Notes": ""
   }];
@@ -339,12 +406,15 @@ function canonicalRow(raw, rowNumber) {
   const email = normalizeEmail(value("email", "emailaddress"));
   const mobile = normalizeMobile(value("mobile", "mobilenumber", "phone", "phonenumber", "contactnumber"));
   const status = normalizeText(value("accountstatus", "status") || "pending").toLowerCase();
+  const serviceName = normalizeText(value("servicename", "service", "serviceinterest"));
+  const registrationDate = normalizeIsoDate(value("registrationdate", "registeredat", "startdate")) || todayIsoDate();
   const issues = [];
 
   if (!firstName) issues.push("First Name required");
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) issues.push("Invalid email");
   if (mobile.length !== 10) issues.push("Mobile must be 10 digits");
   if (!["pending", "active", "inactive", "suspended"].includes(status)) issues.push("Invalid account status");
+  if (!ALLOWED_SERVICES.has(serviceName)) issues.push("Invalid or missing Service Name");
 
   const duplicate = allClients.find((client) => client.email === email || client.mobile === mobile);
 
@@ -365,6 +435,8 @@ function canonicalRow(raw, rowNumber) {
     tradingPreferences: normalizeText(value("tradingpreferences", "segments")),
     loginId: normalizeText(value("loginid")),
     investmentAmount: normalizeText(value("investmentamount")),
+    serviceName,
+    registrationDate,
     accountStatus: status,
     internalNotes: normalizeText(value("internalnotes", "notes")),
     duplicate: Boolean(duplicate),
@@ -391,6 +463,7 @@ function updateImportSummary() {
       <td>${escapeHtml(row.fullName || "—")}</td>
       <td>${escapeHtml(row.email || "—")}</td>
       <td>${escapeHtml(row.mobile || "—")}</td>
+      <td>${escapeHtml(row.serviceName || "—")}</td>
       <td><span class="import-row-state ${state.toLowerCase()}">${state}</span></td>
       <td>${escapeHtml(issue)}</td>
     </tr>`;
@@ -443,6 +516,7 @@ async function importValidRows() {
 
     chunk.forEach((row) => {
       const documentId = generateDocumentId("excel");
+      const serviceId = generateDocumentId("service");
       batch.set(doc(db, "users", documentId), {
         firstName: row.firstName,
         lastName: row.lastName,
@@ -459,6 +533,8 @@ async function importValidRows() {
         tradingPreferences: row.tradingPreferences,
         loginId: row.loginId,
         investmentAmount: row.investmentAmount,
+        serviceInterest: row.serviceName,
+        registrationDate: row.registrationDate,
         accountStatus: row.accountStatus,
         internalNotes: row.internalNotes,
         source: "excel_import",
@@ -469,6 +545,16 @@ async function importValidRows() {
         importedByUid: currentAdmin?.uid || "",
         importBatchId: batchId
       });
+
+      batch.set(
+        doc(db, "users", documentId, "services", serviceId),
+        serviceRecordPayload(
+          row.serviceName,
+          row.registrationDate,
+          row.investmentAmount,
+          "Excel import"
+        )
+      );
     });
 
     await batch.commit();

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./admin-style.css?v=49">
+  <link rel="stylesheet" href="./admin-style.css?v=50">
 </head>
 <body class="admin-dashboard-page">
   <div class="auth-gate" id="authGate">
@@ -159,7 +159,17 @@
         <label class="span-2"><span>Internal notes</span><textarea name="internalNotes" rows="3"></textarea></label>
       </div>
       <div class="modal-status" id="addClientStatus" hidden></div>
-      <div class="modal-actions">
+      
+        <label class="span-2">
+          <span>Service *</span>
+          <select name="serviceName" required>
+            <option value="">Select service</option>
+            <option>Portfolio Management Service</option>
+            <option>Wealth Management</option>
+            <option>Compounding Strategy</option>
+          </select>
+        </label>
+<div class="modal-actions">
         <button class="secondary-action" value="cancel">Cancel</button>
         <button class="primary-action" id="saveClientButton" type="submit" value="default">Save client</button>
       </div>
@@ -235,6 +245,6 @@
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script type="module" src="./clients.js?v=49"></script>
+  <script type="module" src="./clients.js?v=50"></script>
 </body>
 </html>
