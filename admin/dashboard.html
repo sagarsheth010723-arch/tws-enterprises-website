@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./admin-style.css?v=51">
+  <link rel="stylesheet" href="./admin-style.css?v=54">
 </head>
 <body class="admin-dashboard-page">
   <div class="auth-gate" id="authGate">
@@ -60,10 +60,10 @@
           <article><span class="metric-icon">◎</span><div><small>TOTAL CLIENTS</small><strong id="clientCount">…</strong><p>All registered client records</p></div></article>
           <article><span class="metric-icon">✓</span><div><small>ACTIVE CLIENTS</small><strong id="activeClientCount">…</strong><p>Clients with active status</p></div></article>
           <article><span class="metric-icon">!</span><div><small>PENDING CLIENTS</small><strong id="pendingClientCount">…</strong><p>Awaiting approval or review</p></div></article>
-          <article><span class="metric-icon">₹</span><div><small>TOTAL INVESTMENT</small><strong id="totalInvestment">…</strong><p>Includes active, inactive and exited clients</p></div></article>
-          <article><span class="metric-icon">↗</span><div><small>TODAY'S COMMISSION</small><strong id="todayCommission">…</strong><p>Combined across all clients</p></div></article>
-          <article><span class="metric-icon">₹</span><div><small>TOTAL COMMISSION RECEIVED</small><strong id="totalCommissionReceived">…</strong><p>Lifetime total paid by all clients</p></div></article>
-          <article><span class="metric-icon">⌛</span><div><small>PENDING PAYMENT AMOUNT</small><strong id="pendingPaymentAmount">…</strong><p>Combined unpaid amount</p></div></article>
+          <article class="financial-metric-card"><span class="metric-icon">₹</span><div class="metric-card-content"><small>TOTAL INVESTMENT</small><strong id="totalInvestment">…</strong><p>Includes active, inactive and exited clients</p></div><button class="metric-visibility-toggle" type="button" data-financial-visibility="totalInvestment" aria-label="Hide total investment" title="Hide total investment"></button></article>
+          <article class="financial-metric-card"><span class="metric-icon">↗</span><div class="metric-card-content"><small>TODAY'S COMMISSION</small><strong id="todayCommission">…</strong><p>Current India date only; resets automatically</p></div><button class="metric-visibility-toggle" type="button" data-financial-visibility="todayCommission" aria-label="Hide today's commission" title="Hide today's commission"></button></article>
+          <article class="financial-metric-card"><span class="metric-icon">₹</span><div class="metric-card-content"><small>TOTAL COMMISSION RECEIVED</small><strong id="totalCommissionReceived">…</strong><p>Lifetime total paid by all clients</p></div><button class="metric-visibility-toggle" type="button" data-financial-visibility="totalCommissionReceived" aria-label="Hide total commission received" title="Hide total commission received"></button></article>
+          <article class="financial-metric-card"><span class="metric-icon">⌛</span><div class="metric-card-content"><small>PENDING PAYMENT AMOUNT</small><strong id="pendingPaymentAmount">…</strong><p>Combined unpaid amount</p></div><button class="metric-visibility-toggle" type="button" data-financial-visibility="pendingPaymentAmount" aria-label="Hide pending payment amount" title="Hide pending payment amount"></button></article>
         </div>
 
         <div class="dashboard-grid">
@@ -104,6 +104,6 @@
     <span>MODULE LOCKED</span><h2>Coming in the next build phase</h2><p>The secure admin foundation is ready. We will now implement each operational module one by one, beginning with Client Management.</p>
     <button onclick="this.closest('dialog').close()">Understood</button>
   </dialog>
-  <script type="module" src="./dashboard.js?v=51"></script>
+  <script type="module" src="./dashboard.js?v=54"></script>
 </body>
 </html>

@@ -41,3 +41,6 @@
 @media(max-width:1050px){.dashboard-metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.app-data-preview{grid-template-columns:1fr 1fr}}
 @media(max-width:780px){.app-data-actions{align-items:stretch;flex-direction:column}.app-data-actions .primary-action{width:100%}.app-data-preview{grid-template-columns:1fr}}
 @media(max-width:470px){.dashboard-metric-grid{grid-template-columns:1fr}}
+
+/* V54 dashboard financial privacy */
+.financial-metric-card{position:relative;padding-right:58px!important}.metric-card-content{min-width:0}.metric-visibility-toggle{position:absolute;top:13px;right:13px;width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--line);border-radius:9px;background:#f8fbf9;color:#63756b;cursor:pointer;transition:background .18s,border-color .18s,color .18s,transform .18s}.metric-visibility-toggle:hover{background:var(--mint);border-color:#a9cdbb;color:var(--green);transform:translateY(-1px)}.metric-visibility-toggle:focus-visible{outline:3px solid rgba(28,137,83,.16);outline-offset:2px}.metric-visibility-toggle svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.metric-value-masked{letter-spacing:.12em;font-size:21px!important}.financial-metric-card .metric-card-content p{padding-right:2px}

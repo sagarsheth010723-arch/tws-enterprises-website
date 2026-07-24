@@ -564,6 +564,37 @@ function currentDateTimeLabel() {
   }).format(new Date());
 }
 
+const INDIA_OFFSET_MS = 330 * 60 * 1000;
+
+function indiaDateKey(value = new Date()) {
+  const date = dateValue(value) || new Date();
+  return new Date(date.getTime() + INDIA_OFFSET_MS).toISOString().slice(0, 10);
+}
+
+function commissionDateKey(record) {
+  const explicitDate = record?.todayCommissionDate;
+  if (typeof explicitDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(explicitDate.trim())) {
+    return explicitDate.trim();
+  }
+  if (explicitDate) {
+    const parsed = dateValue(explicitDate);
+    if (parsed) return indiaDateKey(parsed);
+  }
+  const fallbackTimestamp = record?.todayCommissionUpdatedAt || record?.updatedAt;
+  return fallbackTimestamp ? indiaDateKey(fallbackTimestamp) : "";
+}
+
+function currentTodayCommission() {
+  const todayKey = indiaDateKey();
+  if (commissionDateKey(dashboardData) === todayKey) {
+    return firstValue(dashboardData, ["todayCommission"], 0);
+  }
+  if (commissionDateKey(paymentData) === todayKey) {
+    return firstValue(paymentData, ["todayCommission"], 0);
+  }
+  return 0;
+}
+
 function setFormValue(form, name, value) {
   if (!form?.elements?.[name]) return;
   form.elements[name].value = value ?? "";
@@ -591,7 +622,7 @@ function renderAppDataForm() {
 
   setFormValue(form, "investmentAmount", firstValue(dashboardData, ["investmentAmount"], firstValue(clientData, ["investmentAmount"], 0)));
   setFormValue(form, "todayPL", firstValue(dashboardData, ["todayPL"], 0));
-  setFormValue(form, "todayCommission", firstValue(dashboardData, ["todayCommission"], firstValue(paymentData, ["todayCommission"], 0)));
+  setFormValue(form, "todayCommission", currentTodayCommission());
   setFormValue(form, "totalProfit", firstValue(dashboardData, ["totalProfit"], 0));
   setFormValue(form, "totalPaid", firstValue(paymentData, ["totalPaid"], 0));
   setFormValue(form, "totalPending", firstValue(paymentData, ["totalPending"], 0));
@@ -1021,6 +1052,7 @@ document.getElementById("appDataForm")?.addEventListener("submit", async (event)
   const lastUpdated = text(formData.get("lastUpdated")) || currentDateTimeLabel();
   const remarks = text(formData.get("remarks"));
   const userName = currentFullName(clientData);
+  const todayCommissionDate = indiaDateKey();
 
   saveButton.disabled = true;
   setMessage(message, "Saving client app data…", "info");
@@ -1035,6 +1067,8 @@ document.getElementById("appDataForm")?.addEventListener("submit", async (event)
       investmentAmount,
       todayPL,
       todayCommission,
+      todayCommissionDate,
+      todayCommissionUpdatedAt: serverTimestamp(),
       totalProfit,
       paymentStatus,
       lastUpdated,
@@ -1045,6 +1079,8 @@ document.getElementById("appDataForm")?.addEventListener("submit", async (event)
 
     batch.set(doc(db, "payments", clientId), {
       todayCommission,
+      todayCommissionDate,
+      todayCommissionUpdatedAt: serverTimestamp(),
       paymentStatus,
       totalPaid,
       totalPending,
@@ -1073,6 +1109,7 @@ document.getElementById("appDataForm")?.addEventListener("submit", async (event)
       investmentAmount,
       todayPL,
       todayCommission,
+      todayCommissionDate,
       totalProfit,
       totalPaid,
       totalPending,
@@ -1241,6 +1278,7 @@ document.getElementById("documentForm").addEventListener("submit", async (event)
     return;
   }
 
+  const clientVisible = form.elements.clientVisible.checked;
   const payload = {
     documentTitle,
     documentType,
@@ -1248,7 +1286,7 @@ document.getElementById("documentForm").addEventListener("submit", async (event)
     documentUrl: text(formData.get("documentUrl")),
     issueDate: text(formData.get("issueDate")),
     documentExpiryDate: text(formData.get("documentExpiryDate")),
-    clientVisible: form.elements.clientVisible.checked,
+    clientVisible,
     documentNotes: text(formData.get("documentNotes")),
     updatedAt: serverTimestamp(),
     updatedBy: currentAdmin?.email || ""
@@ -1258,27 +1296,54 @@ document.getElementById("documentForm").addEventListener("submit", async (event)
   setMessage(message, recordId ? "Updating document…" : "Saving document…", "info");
 
   try {
+    const batch = writeBatch(db);
+    const documentRef = recordId
+      ? doc(db, "users", clientId, "documents", recordId)
+      : doc(collection(db, "users", clientId, "documents"));
+
     if (recordId) {
-      await updateDoc(doc(db, "users", clientId, "documents", recordId), payload);
-      await logActivity(
-        "document_updated",
-        `${documentTitle} was updated.`,
-        { documentId: recordId, documentType }
-      );
+      batch.update(documentRef, payload);
     } else {
-      const created = await addDoc(collection(db, "users", clientId, "documents"), {
+      batch.set(documentRef, {
         ...payload,
         createdAt: serverTimestamp(),
         createdBy: currentAdmin?.email || ""
       });
-      await logActivity(
-        "document_added",
-        `${documentTitle} was added.`,
-        { documentId: created.id, documentType }
-      );
     }
 
-    setMessage(message, recordId ? "Document updated successfully." : "Document saved successfully.", "success");
+    if (clientVisible) {
+      const notificationRef = doc(collection(db, "notifications", clientId, "items"));
+      batch.set(notificationRef, {
+        targetUserId: clientId,
+        title: recordId ? "Statement Updated" : "New Statement Available",
+        message: `${documentTitle} is now available in the Statements section of TWS Connect.`,
+        type: recordId ? "document_updated" : "document_added",
+        documentId: documentRef.id,
+        isRead: false,
+        createdAt: serverTimestamp()
+      });
+    }
+
+    await batch.commit();
+
+    await logActivity(
+      recordId ? "document_updated" : "document_added",
+      recordId ? `${documentTitle} was updated.` : `${documentTitle} was added.`,
+      { documentId: documentRef.id, documentType, clientVisible }
+    );
+
+    setMessage(
+      message,
+      clientVisible
+        ? recordId
+          ? "Document updated and client notification created."
+          : "Document saved and client notification created."
+        : recordId
+        ? "Document updated successfully."
+        : "Document saved successfully.",
+      "success"
+    );
+
     setTimeout(() => document.getElementById("documentDialog").close(), 650);
   } catch (error) {
     setMessage(message, error.message || "Document could not be saved.", "error");

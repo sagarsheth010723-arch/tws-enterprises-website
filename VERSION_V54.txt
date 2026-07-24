@@ -1,0 +1,20 @@
+TWS Enterprises Website / TWS Connect Admin V54
+
+Build focus:
+- Date-wise Today's Commission on the Admin Dashboard
+- Automatic zero display on a new India date when no commission is saved
+- Cumulative Total Commission Received and Pending Payment Amount
+- Individual privacy eye controls for four financial dashboard cards
+- Hidden financial values displayed as *****
+- Browser-persistent visibility preferences using localStorage
+
+Firestore fields used (merge-safe):
+- dashboard/{uid}.todayCommissionDate
+- dashboard/{uid}.todayCommissionUpdatedAt
+- payments/{uid}.todayCommissionDate
+- payments/{uid}.todayCommissionUpdatedAt
+
+Deployment:
+- Upload/deploy this complete website exactly like V51.
+- Root index.html is the public website.
+- Admin login is under admin/index.html.

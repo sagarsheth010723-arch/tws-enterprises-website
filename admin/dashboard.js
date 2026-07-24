@@ -28,6 +28,25 @@ const metricElements = {
   pendingPaymentAmount: document.getElementById("pendingPaymentAmount")
 };
 
+const INDIA_OFFSET_MS = 330 * 60 * 1000;
+const FINANCIAL_VISIBILITY_STORAGE_KEY = "twsAdminDashboardFinancialVisibilityV1";
+const financialMetricLabels = {
+  totalInvestment: "total investment",
+  todayCommission: "today's commission",
+  totalCommissionReceived: "total commission received",
+  pendingPaymentAmount: "pending payment amount"
+};
+
+let financialMetricValues = {
+  totalInvestment: 0,
+  todayCommission: 0,
+  totalCommissionReceived: 0,
+  pendingPaymentAmount: 0
+};
+let financialMetricHidden = loadFinancialVisibility();
+let activeIndiaDateKey = indiaDateKey();
+let dateRolloverTimer = null;
+
 let users = new Map();
 let dashboardRecords = new Map();
 let paymentRecords = new Map();
@@ -75,6 +94,102 @@ function formatCurrency(value) {
   }).format(value || 0);
 }
 
+function indiaDateKey(value = new Date()) {
+  const date = dateValue(value) || new Date();
+  return new Date(date.getTime() + INDIA_OFFSET_MS).toISOString().slice(0, 10);
+}
+
+function commissionDateKey(record) {
+  const explicitDate = record?.todayCommissionDate;
+  if (typeof explicitDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(explicitDate.trim())) {
+    return explicitDate.trim();
+  }
+  if (explicitDate) {
+    const parsed = dateValue(explicitDate);
+    if (parsed) return indiaDateKey(parsed);
+  }
+  const fallbackTimestamp = record?.todayCommissionUpdatedAt || record?.updatedAt;
+  return fallbackTimestamp ? indiaDateKey(fallbackTimestamp) : "";
+}
+
+function loadFinancialVisibility() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(FINANCIAL_VISIBILITY_STORAGE_KEY) || "{}");
+    return Object.fromEntries(Object.keys(financialMetricLabels).map((key) => [key, saved?.[key] === true]));
+  } catch {
+    return Object.fromEntries(Object.keys(financialMetricLabels).map((key) => [key, false]));
+  }
+}
+
+function saveFinancialVisibility() {
+  try {
+    localStorage.setItem(FINANCIAL_VISIBILITY_STORAGE_KEY, JSON.stringify(financialMetricHidden));
+  } catch (error) {
+    console.warn("Dashboard visibility preference could not be saved:", error);
+  }
+}
+
+function visibilityIcon(isHidden) {
+  return isHidden
+    ? `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18"></path><path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"></path><path d="M9.9 4.2A10.9 10.9 0 0 1 12 4c5.5 0 9 5 9 5a16.6 16.6 0 0 1-2.1 2.6"></path><path d="M6.6 6.6C4.4 8 3 10 3 10s3.5 5 9 5c1 0 2-.2 2.9-.5"></path></svg>`
+    : `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-5 9.5-5 9.5 5 9.5 5-3.5 5-9.5 5-9.5-5-9.5-5z"></path><circle cx="12" cy="12" r="2.5"></circle></svg>`;
+}
+
+function renderFinancialMetric(key) {
+  const element = metricElements[key];
+  if (!element) return;
+  const isHidden = financialMetricHidden[key] === true;
+  element.textContent = isHidden ? "*****" : formatCurrency(financialMetricValues[key]);
+  element.classList.toggle("metric-value-masked", isHidden);
+
+  const button = document.querySelector(`[data-financial-visibility="${key}"]`);
+  if (!button) return;
+  const action = isHidden ? "Show" : "Hide";
+  const label = financialMetricLabels[key];
+  button.innerHTML = visibilityIcon(isHidden);
+  button.setAttribute("aria-label", `${action} ${label}`);
+  button.setAttribute("title", `${action} ${label}`);
+  button.setAttribute("aria-pressed", String(isHidden));
+}
+
+function initializeFinancialVisibilityControls() {
+  document.querySelectorAll("[data-financial-visibility]").forEach((button) => {
+    const key = button.dataset.financialVisibility;
+    if (!financialMetricLabels[key]) return;
+    renderFinancialMetric(key);
+    button.addEventListener("click", () => {
+      financialMetricHidden[key] = !financialMetricHidden[key];
+      saveFinancialVisibility();
+      renderFinancialMetric(key);
+    });
+  });
+}
+
+function scheduleIndiaDateRollover() {
+  window.clearTimeout(dateRolloverTimer);
+  const indiaNow = new Date(Date.now() + INDIA_OFFSET_MS);
+  const nextMidnightUtc = Date.UTC(
+    indiaNow.getUTCFullYear(),
+    indiaNow.getUTCMonth(),
+    indiaNow.getUTCDate() + 1
+  ) - INDIA_OFFSET_MS;
+  const delay = Math.max(1000, nextMidnightUtc - Date.now() + 1000);
+  dateRolloverTimer = window.setTimeout(() => {
+    activeIndiaDateKey = indiaDateKey();
+    renderMetrics();
+    scheduleIndiaDateRollover();
+  }, delay);
+}
+
+function refreshForIndiaDateChange() {
+  const nextDateKey = indiaDateKey();
+  if (nextDateKey !== activeIndiaDateKey) {
+    activeIndiaDateKey = nextDateKey;
+    renderMetrics();
+    scheduleIndiaDateRollover();
+  }
+}
+
 function normalizedStatus(userId, userData) {
   const dashboardStatus = dashboardRecords.get(userId)?.accountStatus;
   return String(userData?.accountStatus || userData?.profileStatus || userData?.status || dashboardStatus || "pending")
@@ -106,6 +221,7 @@ function renderMetrics() {
   }, 0);
 
   const todayCommission = [...dashboardRecords.values()]
+    .filter((record) => commissionDateKey(record) === activeIndiaDateKey)
     .reduce((sum, record) => sum + amount(record?.todayCommission), 0);
   const totalCommissionReceived = [...paymentRecords.values()]
     .reduce((sum, record) => sum + amount(record?.totalPaid), 0);
@@ -115,10 +231,14 @@ function renderMetrics() {
   metricElements.totalClients.textContent = totalClients.toLocaleString("en-IN");
   metricElements.activeClients.textContent = activeClients.toLocaleString("en-IN");
   metricElements.pendingClients.textContent = pendingClients.toLocaleString("en-IN");
-  metricElements.totalInvestment.textContent = formatCurrency(totalInvestment);
-  metricElements.todayCommission.textContent = formatCurrency(todayCommission);
-  metricElements.totalCommissionReceived.textContent = formatCurrency(totalCommissionReceived);
-  metricElements.pendingPaymentAmount.textContent = formatCurrency(pendingPaymentAmount);
+
+  financialMetricValues = {
+    totalInvestment,
+    todayCommission,
+    totalCommissionReceived,
+    pendingPaymentAmount
+  };
+  Object.keys(financialMetricValues).forEach(renderFinancialMetric);
   updateTimestamp();
 }
 
@@ -211,6 +331,13 @@ observeAuth(async (user) => {
   }
 });
 
+initializeFinancialVisibilityControls();
+scheduleIndiaDateRollover();
+window.addEventListener("focus", refreshForIndiaDateChange);
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) refreshForIndiaDateChange();
+});
+
 logoutButton.addEventListener("click", logoutAdmin);
 menuButton.addEventListener("click", () => sidebar.classList.toggle("open"));
 
@@ -222,6 +349,7 @@ document.querySelectorAll("[data-coming-soon]").forEach((button) => {
 });
 
 window.addEventListener("beforeunload", () => {
+  window.clearTimeout(dateRolloverTimer);
   unsubscribeUsers?.();
   unsubscribeDashboard?.();
   unsubscribePayments?.();
