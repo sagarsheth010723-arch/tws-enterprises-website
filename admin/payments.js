@@ -31,6 +31,17 @@ const search = document.getElementById("paymentSearch");
 const statusFilter = document.getElementById("paymentStatusFilter");
 const dialog = document.getElementById("paymentDialog");
 const form = document.getElementById("paymentForm");
+const pageTitle = document.getElementById("paymentPageTitle");
+const pageSubtitle = document.getElementById("paymentPageSubtitle");
+const viewBanner = document.getElementById("paymentViewBanner");
+const viewTitle = document.getElementById("paymentViewTitle");
+const viewDescription = document.getElementById("paymentViewDescription");
+const clearViewButton = document.getElementById("clearPaymentView");
+
+const VIEW_VALUES = new Set(["today", "pending"]);
+let activeView = VIEW_VALUES.has(new URLSearchParams(window.location.search).get("view"))
+  ? new URLSearchParams(window.location.search).get("view")
+  : "";
 
 function indiaDateKey(value = new Date()) {
   const date = value?.toDate ? value.toDate() : value instanceof Date ? value : new Date(value || Date.now());
@@ -60,6 +71,68 @@ function todayAmount(row) {
   return recordDateKey(source) === indiaDateKey() ? amount(source.todayCommission) : 0;
 }
 
+function rowMatchesActiveView(row) {
+  if (activeView === "today") return todayAmount(row) > 0;
+  if (activeView === "pending") return amount(row.payment.totalPending) > 0;
+  return true;
+}
+
+function activeViewAmount(row) {
+  if (activeView === "today") return todayAmount(row);
+  if (activeView === "pending") return amount(row.payment.totalPending);
+  return 0;
+}
+
+function applyViewPresentation() {
+  document.querySelectorAll("[data-payment-view]").forEach((card) => {
+    card.classList.toggle("active", card.dataset.paymentView === activeView);
+  });
+
+  if (!activeView) {
+    pageTitle.textContent = "Payments";
+    pageSubtitle.textContent = "Update the same commission and payment values shown in the client app.";
+    viewBanner.hidden = true;
+    return;
+  }
+
+  const isToday = activeView === "today";
+  pageTitle.textContent = isToday ? "Today's Commission Clients" : "Pending Commission Clients";
+  pageSubtitle.textContent = isToday
+    ? "Clients whose commission was entered for the current India date."
+    : "Clients whose pending payment amount is above zero.";
+  viewTitle.textContent = isToday ? "Today's commission" : "Pending commission";
+  viewDescription.textContent = isToday
+    ? "Only clients with a commission amount above ₹0 for today are shown. Use Update to edit any client."
+    : "Only clients with an outstanding amount above ₹0 are shown. Use Update to edit any client.";
+  viewBanner.hidden = false;
+}
+
+function setActiveView(nextView, { updateUrl = true } = {}) {
+  activeView = VIEW_VALUES.has(nextView) ? nextView : "";
+  if (updateUrl) {
+    const url = new URL(window.location.href);
+    if (activeView) url.searchParams.set("view", activeView);
+    else url.searchParams.delete("view");
+    window.history.replaceState({}, "", url);
+  }
+  applyViewPresentation();
+  renderTable();
+}
+
+function initializeViewControls() {
+  document.querySelectorAll("[data-payment-view]").forEach((card) => {
+    const activate = () => setActiveView(card.dataset.paymentView);
+    card.addEventListener("click", activate);
+    card.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      activate();
+    });
+  });
+  clearViewButton.addEventListener("click", () => setActiveView(""));
+  applyViewPresentation();
+}
+
 function renderMetrics() {
   const rows = mergedRows();
   document.getElementById("paymentTodayCommission").textContent = formatCurrency(rows.reduce((sum, row) => sum + todayAmount(row), 0));
@@ -74,11 +147,24 @@ function renderTable() {
   const rows = mergedRows().filter((row) => {
     const haystack = `${getClientName(row.client)} ${row.client.email || ""} ${row.client.mobile || ""}`.toLowerCase();
     const status = String(row.payment.paymentStatus || row.dashboard.paymentStatus || "Not Available");
-    return (!term || haystack.includes(term)) && (!filterStatus || status === filterStatus);
-  }).sort((a, b) => getClientName(a.client).localeCompare(getClientName(b.client)));
+    return rowMatchesActiveView(row)
+      && (!term || haystack.includes(term))
+      && (!filterStatus || status === filterStatus);
+  }).sort((a, b) => {
+    if (activeView) {
+      const amountDifference = activeViewAmount(b) - activeViewAmount(a);
+      if (amountDifference !== 0) return amountDifference;
+    }
+    return getClientName(a.client).localeCompare(getClientName(b.client));
+  });
 
   if (!rows.length) {
-    body.innerHTML = '<tr><td colspan="7" class="table-empty">No matching payment records found.</td></tr>';
+    const emptyMessage = activeView === "today"
+      ? "No client has today's commission above ₹0."
+      : activeView === "pending"
+        ? "No client currently has pending commission."
+        : "No matching payment records found.";
+    body.innerHTML = `<tr><td colspan="7" class="table-empty">${escapeHtml(emptyMessage)}</td></tr>`;
     return;
   }
   body.innerHTML = rows.map((row) => {
@@ -102,6 +188,13 @@ function renderTable() {
 function renderAll() {
   renderMetrics();
   renderTable();
+  if (activeView && !viewBanner.hidden) {
+    const matchingCount = mergedRows().filter(rowMatchesActiveView).length;
+    const baseText = activeView === "today"
+      ? "Only clients with a commission amount above ₹0 for today are shown."
+      : "Only clients with an outstanding amount above ₹0 are shown.";
+    viewDescription.textContent = `${matchingCount.toLocaleString("en-IN")} client${matchingCount === 1 ? "" : "s"} found. ${baseText} Use Update to edit any client.`;
+  }
 }
 
 function openDialog(clientId) {
@@ -195,6 +288,7 @@ form.addEventListener("submit", async (event) => {
 search.addEventListener("input", renderTable);
 statusFilter.addEventListener("change", renderTable);
 document.getElementById("paymentRefresh").addEventListener("click", renderAll);
+initializeViewControls();
 
 unsubscribeUsers = onSnapshot(collection(db, "users"), (snapshot) => {
   clients = new Map(snapshot.docs.map((item) => [item.id, item.data()]));

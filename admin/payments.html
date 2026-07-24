@@ -8,20 +8,24 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./admin-style.css?v=55">
+  <link rel="stylesheet" href="./admin-style.css?v=57">
 </head>
 <body class="admin-dashboard-page">
   <div id="adminPage"></div>
   <template id="pageContent">
     <div class="module-header-row">
-      <div><h2>Payments</h2><p>Update the same commission and payment values shown in the client app.</p></div>
+      <div><h2 id="paymentPageTitle">Payments</h2><p id="paymentPageSubtitle">Update the same commission and payment values shown in the client app.</p></div>
       <a class="primary-action row-action" href="./clients.html">Open clients</a>
     </div>
     <div class="module-metric-grid">
-      <article><small>TODAY'S COMMISSION</small><strong id="paymentTodayCommission">₹0</strong><p>Current India date only</p></article>
+      <article class="module-filter-card" data-payment-view="today" role="button" tabindex="0"><small>TODAY'S COMMISSION</small><strong id="paymentTodayCommission">₹0</strong><p>Click to view today's clients</p></article>
       <article><small>TOTAL RECEIVED</small><strong id="paymentTotalReceived">₹0</strong><p>All clients combined</p></article>
-      <article><small>PENDING AMOUNT</small><strong id="paymentPendingAmount">₹0</strong><p>Outstanding across clients</p></article>
+      <article class="module-filter-card" data-payment-view="pending" role="button" tabindex="0"><small>PENDING AMOUNT</small><strong id="paymentPendingAmount">₹0</strong><p>Click to view clients with dues</p></article>
       <article><small>CLIENTS WITH DUES</small><strong id="paymentDueClients">0</strong><p>Pending amount above zero</p></article>
+    </div>
+    <div class="module-view-filter" id="paymentViewBanner" hidden>
+      <div><small>ACTIVE VIEW</small><strong id="paymentViewTitle">Filtered clients</strong><p id="paymentViewDescription">Only matching clients are shown below.</p></div>
+      <button class="secondary-action" id="clearPaymentView" type="button">Show all clients</button>
     </div>
     <section class="dashboard-card module-data-card">
       <div class="module-toolbar">
@@ -52,6 +56,6 @@
       </form>
     </dialog>
   </template>
-  <script type="module" src="./payments.js?v=55"></script>
+  <script type="module" src="./payments.js?v=57"></script>
 </body>
 </html>

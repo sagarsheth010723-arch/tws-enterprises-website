@@ -171,6 +171,29 @@ function initializeFinancialVisibilityControls() {
   });
 }
 
+
+function initializePaymentMetricDrilldowns() {
+  document.querySelectorAll("[data-payment-view]").forEach((card) => {
+    const openView = () => {
+      const view = card.dataset.paymentView;
+      if (!["today", "pending"].includes(view)) return;
+      window.location.href = `./payments.html?view=${encodeURIComponent(view)}`;
+    };
+
+    card.addEventListener("click", (event) => {
+      if (event.target.closest("[data-financial-visibility]")) return;
+      openView();
+    });
+
+    card.addEventListener("keydown", (event) => {
+      if (event.target.closest("[data-financial-visibility]")) return;
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      openView();
+    });
+  });
+}
+
 function scheduleIndiaDateRollover() {
   window.clearTimeout(dateRolloverTimer);
   const indiaNow = new Date(Date.now() + INDIA_OFFSET_MS);
@@ -341,6 +364,7 @@ observeAuth(async (user) => {
 });
 
 initializeFinancialVisibilityControls();
+initializePaymentMetricDrilldowns();
 scheduleIndiaDateRollover();
 window.addEventListener("focus", refreshForIndiaDateChange);
 document.addEventListener("visibilitychange", () => {
