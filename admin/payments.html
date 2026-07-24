@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Payments | TWS Connect Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./admin-style.css?v=55">
+</head>
+<body class="admin-dashboard-page">
+  <div id="adminPage"></div>
+  <template id="pageContent">
+    <div class="module-header-row">
+      <div><h2>Payments</h2><p>Update the same commission and payment values shown in the client app.</p></div>
+      <a class="primary-action row-action" href="./clients.html">Open clients</a>
+    </div>
+    <div class="module-metric-grid">
+      <article><small>TODAY'S COMMISSION</small><strong id="paymentTodayCommission">₹0</strong><p>Current India date only</p></article>
+      <article><small>TOTAL RECEIVED</small><strong id="paymentTotalReceived">₹0</strong><p>All clients combined</p></article>
+      <article><small>PENDING AMOUNT</small><strong id="paymentPendingAmount">₹0</strong><p>Outstanding across clients</p></article>
+      <article><small>CLIENTS WITH DUES</small><strong id="paymentDueClients">0</strong><p>Pending amount above zero</p></article>
+    </div>
+    <section class="dashboard-card module-data-card">
+      <div class="module-toolbar">
+        <label class="module-search"><span>Search</span><input id="paymentSearch" placeholder="Client name, email or mobile"></label>
+        <label><span>Status</span><select id="paymentStatusFilter"><option value="">All statuses</option><option value="Paid">Paid</option><option value="Pending">Pending</option><option value="Partially Paid">Partially Paid</option><option value="Overdue">Overdue</option><option value="Not Available">Not Available</option></select></label>
+        <button class="secondary-action" id="paymentRefresh" type="button">Refresh view</button>
+      </div>
+      <div class="module-table-wrap">
+        <table class="module-table">
+          <thead><tr><th>Client</th><th>Today's commission</th><th>Total received</th><th>Pending</th><th>Status</th><th>Last updated</th><th></th></tr></thead>
+          <tbody id="paymentTableBody"><tr><td colspan="7" class="table-empty">Loading payment records…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+    <dialog class="admin-modal wide-modal" id="paymentDialog">
+      <form method="dialog" class="modal-shell" id="paymentForm">
+        <div class="modal-header"><div><span>UPDATE PAYMENT DATA</span><h2 id="paymentDialogTitle">Client payment details</h2><p>Saving updates Firestore, the client app and creates a notification.</p></div><button class="modal-close" value="cancel" aria-label="Close">×</button></div>
+        <input type="hidden" name="clientId">
+        <div class="form-grid">
+          <label><span>Today's commission</span><input name="todayCommission" inputmode="decimal"></label>
+          <label><span>Total commission received</span><input name="totalPaid" inputmode="decimal"></label>
+          <label><span>Pending payment amount</span><input name="totalPending" inputmode="decimal"></label>
+          <label><span>Payment status</span><select name="paymentStatus"><option>Not Available</option><option>Pending</option><option>Paid</option><option>Partially Paid</option><option>Overdue</option></select></label>
+          <label class="span-2"><span>Last updated label</span><input name="lastUpdated" placeholder="Automatically uses current date and time if blank"></label>
+        </div>
+        <div class="modal-status" id="paymentFormMessage" hidden></div>
+        <div class="modal-actions"><button class="secondary-action" value="cancel">Cancel</button><button class="primary-action" id="savePaymentButton" type="submit" value="default">Save &amp; notify client</button></div>
+      </form>
+    </dialog>
+  </template>
+  <script type="module" src="./payments.js?v=55"></script>
+</body>
+</html>

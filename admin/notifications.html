@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Notifications | TWS Connect Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./admin-style.css?v=55">
+</head>
+<body class="admin-dashboard-page">
+  <div id="adminPage"></div>
+  <template id="pageContent">
+    <div class="module-header-row">
+      <div><h2>Notifications</h2><p>Send and review live in-app notifications for TWS Connect clients.</p></div>
+      <button class="primary-action" id="composeNotificationButton" type="button">+ Send notification</button>
+    </div>
+    <div class="module-metric-grid">
+      <article><small>TOTAL NOTIFICATIONS</small><strong id="notificationTotal">0</strong><p>All client messages</p></article>
+      <article><small>UNREAD</small><strong id="notificationUnread">0</strong><p>Not yet opened</p></article>
+      <article><small>SENT TODAY</small><strong id="notificationToday">0</strong><p>Current India date</p></article>
+      <article><small>CLIENTS REACHED</small><strong id="notificationClients">0</strong><p>Unique clients</p></article>
+    </div>
+    <section class="dashboard-card module-data-card">
+      <div class="module-toolbar">
+        <label class="module-search"><span>Search</span><input id="notificationSearch" placeholder="Client, title or message"></label>
+        <label><span>Status</span><select id="notificationStatusFilter"><option value="">All</option><option value="unread">Unread</option><option value="read">Read</option></select></label>
+        <label><span>Type</span><select id="notificationTypeFilter"><option value="">All types</option></select></label>
+      </div>
+      <div class="module-table-wrap">
+        <table class="module-table">
+          <thead><tr><th>Client</th><th>Notification</th><th>Type</th><th>Status</th><th>Sent</th><th></th></tr></thead>
+          <tbody id="notificationTableBody"><tr><td colspan="6" class="table-empty">Loading notifications…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+    <dialog class="admin-modal wide-modal" id="notificationDialog">
+      <form method="dialog" class="modal-shell" id="notificationForm">
+        <div class="modal-header"><div><span>SEND NOTIFICATION</span><h2>Notify a client</h2><p>The message appears immediately in the client's Notifications screen.</p></div><button class="modal-close" value="cancel" aria-label="Close">×</button></div>
+        <div class="form-grid">
+          <label class="span-2"><span>Client *</span><select name="clientId" id="notificationClientSelect" required></select></label>
+          <label class="span-2"><span>Title *</span><input name="title" maxlength="80" required></label>
+          <label class="span-2"><span>Message *</span><textarea name="message" rows="5" maxlength="500" required></textarea></label>
+          <label class="span-2"><span>Type</span><select name="type"><option value="general">General</option><option value="account_update">Account update</option><option value="payment_update">Payment update</option><option value="document_update">Document update</option><option value="service_update">Service update</option></select></label>
+        </div>
+        <div class="modal-status" id="notificationFormMessage" hidden></div>
+        <div class="modal-actions"><button class="secondary-action" value="cancel">Cancel</button><button class="primary-action" id="sendNotificationButton" type="submit" value="default">Send notification</button></div>
+      </form>
+    </dialog>
+  </template>
+  <script type="module" src="./notifications.js?v=55"></script>
+</body>
+</html>

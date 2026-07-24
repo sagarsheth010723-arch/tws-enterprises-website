@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./admin-style.css?v=54">
+  <link rel="stylesheet" href="./admin-style.css?v=55">
 </head>
 <body class="admin-dashboard-page">
   <div class="auth-gate" id="authGate">
@@ -26,15 +26,15 @@
       <nav class="sidebar-nav" aria-label="Admin navigation">
         <a class="active" href="./dashboard.html"><i>⌂</i><span>Dashboard</span></a>
         <a href="./clients.html"><i>◎</i><span>Clients</span></a>
-        <a href="#" data-coming-soon><i>◇</i><span>Services</span></a>
-        <a href="#" data-coming-soon><i>₹</i><span>Payments</span></a>
-        <a href="#" data-coming-soon><i>▤</i><span>Documents</span></a>
-        <a href="#" data-coming-soon><i>◉</i><span>Notifications</span></a>
-        <a href="#" data-coming-soon><i>?</i><span>Support</span></a>
-        <a href="#" data-coming-soon><i>⌁</i><span>Reports</span></a>
+        <a href="./services.html"><i>◇</i><span>Services</span></a>
+        <a href="./payments.html"><i>₹</i><span>Payments</span></a>
+        <a href="./documents.html"><i>▤</i><span>Documents</span></a>
+        <a href="./notifications.html"><i>◉</i><span>Notifications</span></a>
+        <a href="./support.html"><i>?</i><span>Support</span></a>
+        <a href="./reports.html"><i>⌁</i><span>Reports</span></a>
         <div class="nav-divider"></div>
-        <a href="#" data-coming-soon><i>⚙</i><span>Settings</span></a>
-        <a href="#" data-coming-soon><i>↺</i><span>Activity Logs</span></a>
+        <a href="./settings.html"><i>⚙</i><span>Settings</span></a>
+        <a href="./activity-logs.html"><i>↺</i><span>Activity Logs</span></a>
       </nav>
       <div class="sidebar-footer"><span>Secure Firebase access</span><small>TWS Connect only</small></div>
     </aside>
@@ -72,19 +72,20 @@
             <div class="action-grid">
               <button onclick="window.location.href='./clients.html'"><span>＋</span><strong>Add client</strong><small>Manual entry or Excel upload</small></button>
               <button onclick="window.location.href='./clients.html'"><span>↗</span><strong>Update client app</strong><small>Open a client and edit live app data</small></button>
-              <button onclick="window.location.href='./clients.html'"><span>▤</span><strong>Manage documents</strong><small>Open a client document workspace</small></button>
+              <button onclick="window.location.href='./documents.html'"><span>▤</span><strong>Manage documents</strong><small>Open the live document registry</small></button>
               <button onclick="window.location.href='./clients.html'"><span>◉</span><strong>Review pending clients</strong><small>Approve or update client status</small></button>
             </div>
           </section>
 
           <section class="dashboard-card build-status">
-            <div class="card-heading"><div><small>IMPLEMENTATION STATUS</small><h3>Admin platform rollout</h3></div><span>Phase 1</span></div>
+            <div class="card-heading"><div><small>IMPLEMENTATION STATUS</small><h3>Admin platform rollout</h3></div><span>V55 Live</span></div>
             <ol>
               <li class="done"><i>✓</i><div><strong>Secure email login</strong><small>Approved email accounts and Firestore verification</small></div></li>
               <li class="done"><i>✓</i><div><strong>Admin dashboard shell</strong><small>Responsive navigation and protected session</small></div></li>
               <li class="done"><i>✓</i><div><strong>Client management</strong><small>Live Firebase list, manual entry and Excel import</small></div></li>
               <li class="done"><i>✓</i><div><strong>Automatic service assignment</strong><small>Selected service is created during registration or import</small></div></li>
-              <li class="current"><i>5</i><div><strong>Live app data sync</strong><small>Admin updates write directly to the client app collections</small></div></li>
+              <li class="done"><i>✓</i><div><strong>Live app data sync</strong><small>Admin updates write directly to the client app collections</small></div></li>
+              <li class="current"><i>6</i><div><strong>All sidebar modules live</strong><small>Services, Payments, Documents, Notifications, Support, Reports, Settings and Activity Logs</small></div></li>
             </ol>
           </section>
         </div>
@@ -98,12 +99,6 @@
       </section>
     </main>
   </div>
-
-  <dialog id="moduleNotice" class="module-dialog">
-    <button onclick="this.closest('dialog').close()" aria-label="Close">×</button>
-    <span>MODULE LOCKED</span><h2>Coming in the next build phase</h2><p>The secure admin foundation is ready. We will now implement each operational module one by one, beginning with Client Management.</p>
-    <button onclick="this.closest('dialog').close()">Understood</button>
-  </dialog>
-  <script type="module" src="./dashboard.js?v=54"></script>
+<script type="module" src="./dashboard.js?v=55"></script>
 </body>
 </html>

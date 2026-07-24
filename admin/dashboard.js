@@ -341,12 +341,6 @@ document.addEventListener("visibilitychange", () => {
 logoutButton.addEventListener("click", logoutAdmin);
 menuButton.addEventListener("click", () => sidebar.classList.toggle("open"));
 
-document.querySelectorAll("[data-coming-soon]").forEach((button) => {
-  button.addEventListener("click", (event) => {
-    event.preventDefault();
-    document.getElementById("moduleNotice").showModal();
-  });
-});
 
 window.addEventListener("beforeunload", () => {
   window.clearTimeout(dateRolloverTimer);

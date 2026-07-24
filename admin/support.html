@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Support | TWS Connect Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./admin-style.css?v=55">
+</head>
+<body class="admin-dashboard-page">
+  <div id="adminPage"></div>
+  <template id="pageContent">
+    <div class="module-header-row">
+      <div><h2>Support Desk</h2><p>Live client directory with direct WhatsApp, email and profile access.</p></div>
+      <a class="primary-action row-action" href="mailto:support@twsenterprises.in">Email support</a>
+    </div>
+    <div class="support-contact-grid">
+      <a href="https://wa.me/919833344392" target="_blank" rel="noopener"><span>WhatsApp</span><strong>+91 98333 44392</strong><small>Open TWS support chat</small></a>
+      <a href="mailto:support@twsenterprises.in"><span>Email</span><strong>support@twsenterprises.in</strong><small>Send a support email</small></a>
+      <a href="tel:+918828167181"><span>Call</span><strong>+91 88281 67181</strong><small>Call TWS support</small></a>
+    </div>
+    <div class="module-metric-grid support-metrics">
+      <article><small>TOTAL CLIENTS</small><strong id="supportTotal">0</strong><p>Registered clients</p></article>
+      <article><small>ACTIVE CLIENTS</small><strong id="supportActive">0</strong><p>Active status</p></article>
+      <article><small>PENDING CLIENTS</small><strong id="supportPending">0</strong><p>Awaiting approval</p></article>
+      <article><small>CONTACTABLE</small><strong id="supportContactable">0</strong><p>Email or mobile available</p></article>
+    </div>
+    <section class="dashboard-card module-data-card">
+      <div class="module-toolbar">
+        <label class="module-search"><span>Search client</span><input id="supportSearch" placeholder="Name, email, mobile or city"></label>
+        <label><span>Status</span><select id="supportStatusFilter"><option value="">All statuses</option><option value="active">Active</option><option value="pending">Pending</option><option value="inactive">Inactive</option><option value="exited">Exited</option><option value="rejected">Rejected</option></select></label>
+      </div>
+      <div class="module-table-wrap">
+        <table class="module-table">
+          <thead><tr><th>Client</th><th>Mobile</th><th>Email</th><th>City</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="supportTableBody"><tr><td colspan="6" class="table-empty">Loading client directory…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </template>
+  <script type="module" src="./support.js?v=55"></script>
+</body>
+</html>

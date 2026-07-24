@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Reports | TWS Connect Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./admin-style.css?v=55">
+</head>
+<body class="admin-dashboard-page">
+  <div id="adminPage"></div>
+  <template id="pageContent">
+    <div class="module-header-row">
+      <div><h2>Reports</h2><p>Live operational summaries and CSV exports from the existing Firestore data.</p></div>
+      <span class="live-data-pill">● Live data</span>
+    </div>
+    <div class="module-metric-grid">
+      <article><small>TOTAL CLIENTS</small><strong id="reportClients">0</strong><p>All registrations</p></article>
+      <article><small>TOTAL INVESTMENT</small><strong id="reportInvestment">₹0</strong><p>Exited clients included</p></article>
+      <article><small>TOTAL RECEIVED</small><strong id="reportReceived">₹0</strong><p>Commission paid</p></article>
+      <article><small>PENDING AMOUNT</small><strong id="reportPending">₹0</strong><p>Outstanding payments</p></article>
+    </div>
+    <section class="export-grid">
+      <article><span>CLIENTS REPORT</span><h3>Client master</h3><p>Profile, registration, status and investment details.</p><button class="primary-action" id="exportClients" type="button">Export clients CSV</button></article>
+      <article><span>PAYMENTS REPORT</span><h3>Commission & dues</h3><p>Today's commission, received and pending amounts.</p><button class="primary-action" id="exportPayments" type="button">Export payments CSV</button></article>
+      <article><span>SERVICES REPORT</span><h3>Service assignments</h3><p>Assigned service, status, dates, investment and fee.</p><button class="primary-action" id="exportServices" type="button">Export services CSV</button></article>
+      <article><span>DOCUMENTS REPORT</span><h3>Document registry</h3><p>Document status, visibility, issue and expiry dates.</p><button class="primary-action" id="exportDocuments" type="button">Export documents CSV</button></article>
+    </section>
+    <div class="dashboard-grid reports-grid">
+      <section class="dashboard-card">
+        <div class="card-heading"><div><small>SERVICE BREAKDOWN</small><h3>Assignments by service</h3></div></div>
+        <div class="summary-list" id="serviceBreakdown"><div class="timeline-empty">Loading services…</div></div>
+      </section>
+      <section class="dashboard-card">
+        <div class="card-heading"><div><small>PAYMENT STATUS</small><h3>Clients by payment status</h3></div></div>
+        <div class="summary-list" id="paymentBreakdown"><div class="timeline-empty">Loading payments…</div></div>
+      </section>
+    </div>
+    <div class="modal-status" id="reportMessage" hidden></div>
+  </template>
+  <script type="module" src="./reports.js?v=55"></script>
+</body>
+</html>

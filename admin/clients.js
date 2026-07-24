@@ -821,11 +821,5 @@ downloadErrorReportButton.addEventListener("click", () => {
 
 document.getElementById("closeDetailsButton").addEventListener("click", () => detailsDialog.close());
 document.getElementById("saveStatusButton").addEventListener("click", updateClientStatus);
-document.querySelectorAll("[data-coming-soon]").forEach((button) => {
-  button.addEventListener("click", (event) => {
-    event.preventDefault();
-    document.getElementById("moduleNotice").showModal();
-  });
-});
 
 window.addEventListener("beforeunload", () => unsubscribeClients?.());

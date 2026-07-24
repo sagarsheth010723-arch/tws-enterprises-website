@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Services | TWS Connect Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./admin-style.css?v=55">
+</head>
+<body class="admin-dashboard-page">
+  <div id="adminPage"></div>
+  <template id="pageContent">
+    <div class="module-header-row">
+      <div><h2>Client Services</h2><p>All automatically assigned client services, live from Firestore.</p></div>
+      <a class="primary-action row-action" href="./clients.html">Open clients</a>
+    </div>
+    <div class="module-metric-grid">
+      <article><small>TOTAL ASSIGNMENTS</small><strong id="serviceTotal">0</strong><p>All service records</p></article>
+      <article><small>ACTIVE</small><strong id="serviceActive">0</strong><p>Currently active</p></article>
+      <article><small>PAUSED / PENDING</small><strong id="serviceAttention">0</strong><p>Need review</p></article>
+      <article><small>EXPIRING SOON</small><strong id="serviceExpiring">0</strong><p>Within 30 days</p></article>
+    </div>
+    <section class="dashboard-card module-data-card">
+      <div class="module-toolbar">
+        <label class="module-search"><span>Search</span><input id="serviceSearch" placeholder="Client or service name"></label>
+        <label><span>Status</span><select id="serviceStatusFilter"><option value="">All statuses</option><option value="active">Active</option><option value="pending">Pending</option><option value="paused">Paused</option><option value="expired">Expired</option><option value="cancelled">Cancelled</option></select></label>
+        <button class="secondary-action" id="serviceRefresh" type="button">Refresh view</button>
+      </div>
+      <div class="module-table-wrap">
+        <table class="module-table">
+          <thead><tr><th>Client</th><th>Service</th><th>Status</th><th>Start</th><th>Expiry</th><th>Investment</th><th>Fee</th><th></th></tr></thead>
+          <tbody id="serviceTableBody"><tr><td colspan="8" class="table-empty">Loading service assignments…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+    <dialog class="admin-modal wide-modal" id="serviceDialog">
+      <form method="dialog" class="modal-shell" id="serviceForm">
+        <div class="modal-header"><div><span>EDIT SERVICE</span><h2 id="serviceDialogTitle">Service assignment</h2><p>Update the existing assignment only. New services continue to come from registration.</p></div><button class="modal-close" value="cancel" aria-label="Close">×</button></div>
+        <input type="hidden" name="recordPath">
+        <input type="hidden" name="clientId">
+        <div class="form-grid">
+          <label><span>Status</span><select name="status"><option value="active">Active</option><option value="pending">Pending</option><option value="paused">Paused</option><option value="expired">Expired</option><option value="cancelled">Cancelled</option></select></label>
+          <label><span>Expiry date</span><input type="date" name="expiryDate"></label>
+          <label><span>Investment amount</span><input name="investmentAmount" inputmode="decimal"></label>
+          <label><span>Service fee</span><input name="serviceFee" inputmode="decimal"></label>
+          <label class="span-2"><span>Assigned advisor</span><input name="assignedAdvisor"></label>
+          <label class="span-2"><span>Internal remarks</span><textarea name="internalRemarks" rows="4"></textarea></label>
+        </div>
+        <div class="modal-status" id="serviceFormMessage" hidden></div>
+        <div class="modal-actions"><button class="secondary-action" value="cancel">Cancel</button><button class="primary-action" id="saveServiceButton" type="submit" value="default">Save changes</button></div>
+      </form>
+    </dialog>
+  </template>
+  <script type="module" src="./services.js?v=55"></script>
+</body>
+</html>

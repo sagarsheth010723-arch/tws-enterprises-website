@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Activity Logs | TWS Connect Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./admin-style.css?v=55">
+</head>
+<body class="admin-dashboard-page">
+  <div id="adminPage"></div>
+  <template id="pageContent">
+    <div class="module-header-row">
+      <div><h2>Activity Logs</h2><p>Read-only audit trail across all client records and admin operations.</p></div>
+      <button class="primary-action" id="exportActivityLogs" type="button">Export CSV</button>
+    </div>
+    <div class="module-metric-grid">
+      <article><small>TOTAL EVENTS</small><strong id="activityTotal">0</strong><p>All recorded actions</p></article>
+      <article><small>TODAY</small><strong id="activityToday">0</strong><p>Current India date</p></article>
+      <article><small>ACTION TYPES</small><strong id="activityTypes">0</strong><p>Unique operations</p></article>
+      <article><small>CLIENTS AFFECTED</small><strong id="activityClients">0</strong><p>Unique client records</p></article>
+    </div>
+    <section class="dashboard-card module-data-card">
+      <div class="module-toolbar">
+        <label class="module-search"><span>Search</span><input id="activitySearch" placeholder="Client, action or description"></label>
+        <label><span>Action</span><select id="activityActionFilter"><option value="">All actions</option></select></label>
+        <label><span>Date</span><input id="activityDateFilter" type="date"></label>
+      </div>
+      <div class="module-table-wrap">
+        <table class="module-table">
+          <thead><tr><th>Date & time</th><th>Client</th><th>Action</th><th>Description</th><th>Admin</th></tr></thead>
+          <tbody id="activityTableBody"><tr><td colspan="5" class="table-empty">Loading activity logs…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+    <div class="modal-status" id="activityMessage" hidden></div>
+  </template>
+  <script type="module" src="./activity-logs.js?v=55"></script>
+</body>
+</html>

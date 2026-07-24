@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Settings | TWS Connect Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./admin-style.css?v=55">
+</head>
+<body class="admin-dashboard-page">
+  <div id="adminPage"></div>
+  <template id="pageContent">
+    <div class="module-header-row">
+      <div><h2>Admin Settings</h2><p>Manage the admin profile and dashboard privacy preferences.</p></div>
+      <span class="live-data-pill">Firebase project: tws-client-portal-47b1e</span>
+    </div>
+    <div class="settings-grid">
+      <section class="dashboard-card">
+        <div class="card-heading"><div><small>ADMIN PROFILE</small><h3>Account details</h3></div></div>
+        <form id="adminProfileForm">
+          <div class="form-grid single-column-form">
+            <label><span>Display name</span><input name="name" id="settingsAdminName"></label>
+            <label><span>Email</span><input id="settingsAdminEmail" disabled></label>
+            <label><span>Role</span><input id="settingsAdminRole" disabled></label>
+            <label><span>Account status</span><input id="settingsAdminStatus" disabled></label>
+          </div>
+          <div class="modal-status" id="adminProfileMessage" hidden></div>
+          <button class="primary-action" id="saveAdminProfile" type="submit">Save profile</button>
+        </form>
+      </section>
+      <section class="dashboard-card">
+        <div class="card-heading"><div><small>DASHBOARD PRIVACY</small><h3>Financial card visibility</h3></div></div>
+        <p class="settings-help">These preferences apply only in this browser. Firestore values are never changed.</p>
+        <div class="settings-toggle-list">
+          <label><input type="checkbox" data-privacy-key="totalInvestment"><span><strong>Hide Total Investment</strong><small>Show ***** on the dashboard</small></span></label>
+          <label><input type="checkbox" data-privacy-key="todayCommission"><span><strong>Hide Today's Commission</strong><small>Show ***** on the dashboard</small></span></label>
+          <label><input type="checkbox" data-privacy-key="totalCommissionReceived"><span><strong>Hide Total Commission Received</strong><small>Show ***** on the dashboard</small></span></label>
+          <label><input type="checkbox" data-privacy-key="pendingPaymentAmount"><span><strong>Hide Pending Payment Amount</strong><small>Show ***** on the dashboard</small></span></label>
+        </div>
+        <div class="settings-actions"><button class="primary-action" id="savePrivacySettings" type="button">Save privacy settings</button><button class="secondary-action" id="showAllFinancialCards" type="button">Show all amounts</button></div>
+        <div class="modal-status" id="privacySettingsMessage" hidden></div>
+      </section>
+      <section class="dashboard-card settings-full-width">
+        <div class="card-heading"><div><small>SYSTEM INFORMATION</small><h3>Connected environment</h3></div></div>
+        <div class="system-info-grid">
+          <div><small>Firebase Project</small><strong>tws-client-portal-47b1e</strong></div>
+          <div><small>Admin Access</small><strong>admins/{uid}</strong></div>
+          <div><small>Client Records</small><strong>users/{uid}</strong></div>
+          <div><small>App Dashboard</small><strong>dashboard/{uid}</strong></div>
+          <div><small>Payments</small><strong>payments/{uid}</strong></div>
+          <div><small>Build</small><strong>V55 — All Admin Modules Live</strong></div>
+        </div>
+      </section>
+    </div>
+  </template>
+  <script type="module" src="./settings.js?v=55"></script>
+</body>
+</html>

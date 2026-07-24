@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>Documents | TWS Connect Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./admin-style.css?v=55">
+</head>
+<body class="admin-dashboard-page">
+  <div id="adminPage"></div>
+  <template id="pageContent">
+    <div class="module-header-row">
+      <div><h2>Documents</h2><p>Manage every client statement and document record from one live workspace.</p></div>
+      <button class="primary-action" id="addDocumentButton" type="button">+ Add document</button>
+    </div>
+    <div class="module-metric-grid">
+      <article><small>TOTAL DOCUMENTS</small><strong id="documentTotal">0</strong><p>All client records</p></article>
+      <article><small>VERIFIED</small><strong id="documentVerified">0</strong><p>Verified documents</p></article>
+      <article><small>CLIENT VISIBLE</small><strong id="documentVisible">0</strong><p>Shown in Statements tab</p></article>
+      <article><small>ACTION REQUIRED</small><strong id="documentAction">0</strong><p>Requested or rejected</p></article>
+    </div>
+    <section class="dashboard-card module-data-card">
+      <div class="module-toolbar">
+        <label class="module-search"><span>Search</span><input id="documentSearch" placeholder="Client, title or document type"></label>
+        <label><span>Status</span><select id="documentStatusFilter"><option value="">All statuses</option><option value="requested">Requested</option><option value="received">Received</option><option value="verified">Verified</option><option value="rejected">Rejected</option></select></label>
+        <label><span>Visibility</span><select id="documentVisibilityFilter"><option value="">All</option><option value="visible">Client visible</option><option value="hidden">Admin only</option></select></label>
+      </div>
+      <div class="module-table-wrap">
+        <table class="module-table">
+          <thead><tr><th>Client</th><th>Document</th><th>Status</th><th>Visibility</th><th>Issue / Expiry</th><th>Updated</th><th></th></tr></thead>
+          <tbody id="documentTableBody"><tr><td colspan="7" class="table-empty">Loading document records…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+    <dialog class="admin-modal wide-modal" id="documentDialog">
+      <form method="dialog" class="modal-shell" id="documentForm">
+        <div class="modal-header"><div><span id="documentDialogEyebrow">ADD DOCUMENT</span><h2 id="documentDialogTitle">Add document record</h2><p>Client-visible records appear instantly in the Statements tab.</p></div><button class="modal-close" value="cancel" aria-label="Close">×</button></div>
+        <input type="hidden" name="recordPath">
+        <div class="form-grid">
+          <label class="span-2"><span>Client *</span><select name="clientId" id="documentClientSelect" required></select></label>
+          <label><span>Document type *</span><input name="documentType" placeholder="Statement, Agreement, KYC" required></label>
+          <label><span>Status</span><select name="documentStatus"><option value="requested">Requested</option><option value="received">Received</option><option value="verified">Verified</option><option value="rejected">Rejected</option></select></label>
+          <label class="span-2"><span>Document title *</span><input name="documentTitle" required></label>
+          <label class="span-2"><span>Secure document URL</span><input name="documentUrl" type="url" placeholder="https://"></label>
+          <label><span>Issue date</span><input name="issueDate" type="date"></label>
+          <label><span>Expiry date</span><input name="documentExpiryDate" type="date"></label>
+          <label class="span-2 checkbox-field"><input name="clientVisible" type="checkbox"><span>Show this document in the client app</span></label>
+          <label class="span-2"><span>Admin notes</span><textarea name="documentNotes" rows="4"></textarea></label>
+        </div>
+        <div class="modal-status" id="documentFormMessage" hidden></div>
+        <div class="modal-actions"><button class="secondary-action" value="cancel">Cancel</button><button class="primary-action" id="saveDocumentButton" type="submit" value="default">Save document</button></div>
+      </form>
+    </dialog>
+  </template>
+  <script type="module" src="./documents.js?v=55"></script>
+</body>
+</html>

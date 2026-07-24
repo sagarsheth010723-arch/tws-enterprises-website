@@ -372,6 +372,11 @@ document.querySelectorAll("[data-tab]").forEach((button) => {
   });
 });
 
+const requestedProfileTab = new URLSearchParams(window.location.search).get("tab");
+if (requestedProfileTab) {
+  document.querySelector(`[data-tab="${CSS.escape(requestedProfileTab)}"]`)?.click();
+}
+
 document.getElementById("approveClientButton").addEventListener("click", async () => {
   try {
     await updateStatus("active", "Approved from client profile.");
@@ -541,12 +546,6 @@ document.getElementById("editProfileForm").addEventListener("submit", async (eve
   }
 });
 
-document.querySelectorAll("[data-coming-soon]").forEach((button) => {
-  button.addEventListener("click", (event) => {
-    event.preventDefault();
-    document.getElementById("moduleNotice").showModal();
-  });
-});
 
 
 
