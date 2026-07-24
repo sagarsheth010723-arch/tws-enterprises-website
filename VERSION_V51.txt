@@ -1,0 +1,16 @@
+TWS Enterprises Website / TWS Connect Admin V51
+
+Build focus:
+- Client app data editor
+- Live company dashboard totals
+- Firestore notification creation
+- Automatic dashboard/payment document setup for manual and Excel clients
+- Removal of manual service assignment entry points
+
+Core collections used:
+- users/{clientId}
+- dashboard/{clientId}
+- payments/{clientId}
+- notifications/{clientId}/items/{notificationId}
+- users/{clientId}/services/{serviceId}
+- users/{clientId}/documents/{documentId}

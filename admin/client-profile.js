@@ -9,7 +9,8 @@ import {
   serverTimestamp,
   updateDoc,
   setDoc,
-  deleteDoc
+  deleteDoc,
+  writeBatch
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 import { db, logoutAdmin, observeAuth, verifyAdmin } from "./admin-auth.js";
 
@@ -31,6 +32,10 @@ let unsubscribeServices = null;
 let serviceRecords = new Map();
 let unsubscribeDocuments = null;
 let documentRecords = new Map();
+let unsubscribeDashboardRecord = null;
+let unsubscribePaymentRecord = null;
+let dashboardData = {};
+let paymentData = {};
 
 function text(value) {
   return String(value ?? "").trim();
@@ -203,7 +208,10 @@ async function logActivity(action, details = "", metadata = {}) {
 
 async function updateStatus(nextStatus, reason = "") {
   const previousStatus = text(firstValue(clientData, ["accountStatus", "profileStatus", "status"], "pending")).toLowerCase();
-  await updateDoc(doc(db, "users", clientId), {
+  const batch = writeBatch(db);
+  const notificationRef = doc(collection(db, "notifications", clientId, "items"));
+
+  batch.update(doc(db, "users", clientId), {
     accountStatus: nextStatus,
     statusReason: text(reason),
     statusUpdatedAt: serverTimestamp(),
@@ -211,6 +219,20 @@ async function updateStatus(nextStatus, reason = "") {
     approvedAt: nextStatus === "active" ? serverTimestamp() : firstValue(clientData, ["approvedAt"], null),
     approvedBy: nextStatus === "active" ? currentAdmin?.email || "" : firstValue(clientData, ["approvedBy"], "")
   });
+  batch.set(doc(db, "dashboard", clientId), {
+    accountStatus: nextStatus,
+    updatedAt: serverTimestamp()
+  }, { merge: true });
+  batch.set(notificationRef, {
+    targetUserId: clientId,
+    title: "Account Status Updated",
+    message: `Your TWS Connect account status is now ${nextStatus}.`,
+    type: "account_status",
+    isRead: false,
+    createdAt: serverTimestamp()
+  });
+
+  await batch.commit();
   await logActivity("account_status_changed", `Status changed from ${previousStatus} to ${nextStatus}.`, {
     previousStatus, nextStatus, reason: text(reason)
   });
@@ -310,6 +332,7 @@ function subscribeClient() {
   subscribeActivity();
   subscribeServices();
   subscribeDocuments();
+  subscribeAppData();
 }
 
 observeAuth(async (user) => {
@@ -469,7 +492,14 @@ document.getElementById("editProfileForm").addEventListener("submit", async (eve
   saveButton.disabled = true;
   setMessage(message, "Saving profile changes…", "info");
   try {
-    await updateDoc(doc(db, "users", clientId), {
+    const investmentAmount = parseSignedAmount(formData.get("investmentAmount"), 0);
+    if (!Number.isFinite(investmentAmount) || investmentAmount < 0) {
+      throw new Error("Investment amount must be a valid positive number.");
+    }
+
+    const batch = writeBatch(db);
+    const notificationRef = doc(collection(db, "notifications", clientId, "items"));
+    batch.update(doc(db, "users", clientId), {
       firstName,
       lastName,
       fullName: `${firstName} ${lastName}`.trim(),
@@ -482,11 +512,25 @@ document.getElementById("editProfileForm").addEventListener("submit", async (eve
       riskTolerance: text(formData.get("riskTolerance")),
       broker: text(formData.get("broker")),
       tradingBroker: text(formData.get("tradingBroker")),
-      investmentAmount: text(formData.get("investmentAmount")),
+      investmentAmount,
       address: text(formData.get("address")),
       updatedAt: serverTimestamp(),
       updatedBy: currentAdmin?.email || ""
     });
+    batch.set(doc(db, "dashboard", clientId), {
+      userName: `${firstName} ${lastName}`.trim(),
+      investmentAmount,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+    batch.set(notificationRef, {
+      targetUserId: clientId,
+      title: "Profile Updated",
+      message: "Your TWS Connect profile information has been updated.",
+      type: "profile_update",
+      isRead: false,
+      createdAt: serverTimestamp()
+    });
+    await batch.commit();
     await logActivity("client_profile_updated", "Client profile information was updated.");
     setMessage(message, "Profile updated successfully.", "success");
     setTimeout(() => document.getElementById("editProfileDialog").close(), 700);
@@ -504,6 +548,79 @@ document.querySelectorAll("[data-coming-soon]").forEach((button) => {
   });
 });
 
+
+
+function parseSignedAmount(value, fallback = 0) {
+  const cleaned = String(value ?? "").replace(/[₹,\s]/g, "");
+  if (!cleaned) return fallback;
+  const parsed = Number(cleaned);
+  return Number.isFinite(parsed) ? parsed : NaN;
+}
+
+function currentDateTimeLabel() {
+  return new Intl.DateTimeFormat("en-IN", {
+    dateStyle: "medium",
+    timeStyle: "short"
+  }).format(new Date());
+}
+
+function setFormValue(form, name, value) {
+  if (!form?.elements?.[name]) return;
+  form.elements[name].value = value ?? "";
+}
+
+function updateAppDataPreview() {
+  const form = document.getElementById("appDataForm");
+  if (!form) return;
+  const values = {
+    previewTodayPL: parseSignedAmount(form.elements.todayPL.value, 0),
+    previewTodayCommission: parseSignedAmount(form.elements.todayCommission.value, 0),
+    previewTotalProfit: parseSignedAmount(form.elements.totalProfit.value, 0),
+    previewTotalPaid: parseSignedAmount(form.elements.totalPaid.value, 0)
+  };
+  Object.entries(values).forEach(([id, value]) => {
+    document.getElementById(id).textContent = formatCurrency(Number.isFinite(value) ? value : 0);
+  });
+}
+
+function renderAppDataForm() {
+  const form = document.getElementById("appDataForm");
+  if (!form) return;
+  const activeElement = document.activeElement;
+  if (activeElement && form.contains(activeElement)) return;
+
+  setFormValue(form, "investmentAmount", firstValue(dashboardData, ["investmentAmount"], firstValue(clientData, ["investmentAmount"], 0)));
+  setFormValue(form, "todayPL", firstValue(dashboardData, ["todayPL"], 0));
+  setFormValue(form, "todayCommission", firstValue(dashboardData, ["todayCommission"], firstValue(paymentData, ["todayCommission"], 0)));
+  setFormValue(form, "totalProfit", firstValue(dashboardData, ["totalProfit"], 0));
+  setFormValue(form, "totalPaid", firstValue(paymentData, ["totalPaid"], 0));
+  setFormValue(form, "totalPending", firstValue(paymentData, ["totalPending"], 0));
+  setFormValue(form, "paymentStatus", firstValue(dashboardData, ["paymentStatus"], firstValue(paymentData, ["paymentStatus"], "Not Available")));
+  setFormValue(form, "lastUpdated", firstValue(dashboardData, ["lastUpdated"], firstValue(paymentData, ["lastUpdated"], "Not Updated")));
+  setFormValue(form, "remarks", firstValue(dashboardData, ["remarks"], ""));
+  updateAppDataPreview();
+}
+
+function subscribeAppData() {
+  unsubscribeDashboardRecord?.();
+  unsubscribePaymentRecord?.();
+
+  unsubscribeDashboardRecord = onSnapshot(doc(db, "dashboard", clientId), (snapshot) => {
+    dashboardData = snapshot.exists() ? snapshot.data() : {};
+    renderAppDataForm();
+  }, (error) => {
+    console.warn("Dashboard app data could not be loaded:", error);
+    setMessage(document.getElementById("appDataMessage"), "Client dashboard data could not be loaded.", "error");
+  });
+
+  unsubscribePaymentRecord = onSnapshot(doc(db, "payments", clientId), (snapshot) => {
+    paymentData = snapshot.exists() ? snapshot.data() : {};
+    renderAppDataForm();
+  }, (error) => {
+    console.warn("Payment app data could not be loaded:", error);
+    setMessage(document.getElementById("appDataMessage"), "Client payment data could not be loaded.", "error");
+  });
+}
 
 const ALLOWED_SERVICES = new Set([
   "Portfolio Management Service",
@@ -580,11 +697,9 @@ function renderServices(records) {
       <div class="empty-service-state">
         <span>◇</span>
         <h3>No service assigned</h3>
-        <p>Assign Portfolio Management Service, Wealth Management or Compounding Strategy to this client.</p>
-        <button class="primary-action" type="button" data-open-service>Assign first service</button>
+        <p>The service is assigned automatically from the client registration or Excel import record.</p>
       </div>
     `;
-    container.querySelector("[data-open-service]")?.addEventListener("click", openNewServiceDialog);
     return;
   }
 
@@ -790,7 +905,7 @@ async function changeServiceStatus(recordId, nextStatus) {
   }
 }
 
-document.getElementById("assignServiceButton").addEventListener("click", openNewServiceDialog);
+document.getElementById("assignServiceButton")?.addEventListener("click", openNewServiceDialog);
 
 document.getElementById("serviceForm").addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -874,6 +989,104 @@ document.getElementById("serviceForm").addEventListener("submit", async (event) 
 });
 
 
+
+
+document.getElementById("appDataForm")?.addEventListener("input", updateAppDataPreview);
+
+document.getElementById("appDataForm")?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const formData = new FormData(form);
+  const message = document.getElementById("appDataMessage");
+  const saveButton = document.getElementById("saveAppDataButton");
+
+  const investmentAmount = parseSignedAmount(formData.get("investmentAmount"), 0);
+  const todayPL = parseSignedAmount(formData.get("todayPL"), 0);
+  const todayCommission = parseSignedAmount(formData.get("todayCommission"), 0);
+  const totalProfit = parseSignedAmount(formData.get("totalProfit"), 0);
+  const totalPaid = parseSignedAmount(formData.get("totalPaid"), 0);
+  const totalPending = parseSignedAmount(formData.get("totalPending"), 0);
+  const numericValues = [investmentAmount, todayPL, todayCommission, totalProfit, totalPaid, totalPending];
+
+  if (numericValues.some((value) => !Number.isFinite(value))) {
+    setMessage(message, "Enter valid numbers in all amount fields.", "error");
+    return;
+  }
+  if ([investmentAmount, todayCommission, totalPaid, totalPending].some((value) => value < 0)) {
+    setMessage(message, "Investment, commission and payment amounts cannot be negative.", "error");
+    return;
+  }
+
+  const paymentStatus = text(formData.get("paymentStatus")) || "Not Available";
+  const lastUpdated = text(formData.get("lastUpdated")) || currentDateTimeLabel();
+  const remarks = text(formData.get("remarks"));
+  const userName = currentFullName(clientData);
+
+  saveButton.disabled = true;
+  setMessage(message, "Saving client app data…", "info");
+
+  try {
+    const batch = writeBatch(db);
+    const notificationRef = doc(collection(db, "notifications", clientId, "items"));
+
+    batch.set(doc(db, "dashboard", clientId), {
+      userName,
+      accountStatus: text(firstValue(clientData, ["accountStatus", "status"], "pending")).toLowerCase(),
+      investmentAmount,
+      todayPL,
+      todayCommission,
+      totalProfit,
+      paymentStatus,
+      lastUpdated,
+      remarks,
+      updatedAt: serverTimestamp(),
+      updatedBy: currentAdmin?.email || ""
+    }, { merge: true });
+
+    batch.set(doc(db, "payments", clientId), {
+      todayCommission,
+      paymentStatus,
+      totalPaid,
+      totalPending,
+      lastUpdated,
+      updatedAt: serverTimestamp(),
+      updatedBy: currentAdmin?.email || ""
+    }, { merge: true });
+
+    batch.update(doc(db, "users", clientId), {
+      investmentAmount,
+      updatedAt: serverTimestamp(),
+      updatedBy: currentAdmin?.email || ""
+    });
+
+    batch.set(notificationRef, {
+      targetUserId: clientId,
+      title: "Portfolio Update Available",
+      message: "Your latest profit, commission and payment details have been updated in TWS Connect.",
+      type: "client_data_update",
+      isRead: false,
+      createdAt: serverTimestamp()
+    });
+
+    await batch.commit();
+    await logActivity("client_app_data_updated", "Client dashboard and payment values were updated.", {
+      investmentAmount,
+      todayPL,
+      todayCommission,
+      totalProfit,
+      totalPaid,
+      totalPending,
+      paymentStatus
+    });
+
+    form.elements.lastUpdated.value = lastUpdated;
+    setMessage(message, "Client app data saved and notification created.", "success");
+  } catch (error) {
+    setMessage(message, error.message || "Client app data could not be saved.", "error");
+  } finally {
+    saveButton.disabled = false;
+  }
+});
 
 function documentStatusClass(status) {
   return ["requested", "received", "verified", "rejected"].includes(status)
@@ -1081,4 +1294,6 @@ window.addEventListener("beforeunload", () => {
   unsubscribeActivity?.();
   unsubscribeServices?.();
   unsubscribeDocuments?.();
+  unsubscribeDashboardRecord?.();
+  unsubscribePaymentRecord?.();
 });

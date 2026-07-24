@@ -60,6 +60,39 @@ function serviceRecordPayload(serviceName, startDate, investmentAmount, source) 
     updatedBy: currentAdmin?.email || ""
   };
 }
+function amountNumber(value) {
+  const parsed = Number(String(value ?? "").replace(/[₹,\s]/g, ""));
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
+}
+
+function dashboardRecordPayload(fullName, investmentAmount, accountStatus) {
+  return {
+    userName: normalizeText(fullName),
+    accountStatus: normalizeText(accountStatus || "pending").toLowerCase(),
+    investmentAmount: amountNumber(investmentAmount),
+    todayPL: 0,
+    todayCommission: 0,
+    totalProfit: 0,
+    paymentStatus: "Not Available",
+    lastUpdated: "Not Updated",
+    remarks: "Welcome to TWS Connect.",
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  };
+}
+
+function paymentRecordPayload() {
+  return {
+    todayCommission: 0,
+    paymentStatus: "Not Available",
+    totalPaid: 0,
+    totalPending: 0,
+    lastUpdated: "Not Updated",
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp()
+  };
+}
+
 
 
 const gate = document.getElementById("authGate");
@@ -354,6 +387,11 @@ async function saveManualClient(formData) {
     doc(db, "users", documentId, "services", serviceId),
     serviceRecordPayload(serviceName, registrationDate, investmentAmount, "manual client creation")
   );
+  batch.set(
+    doc(db, "dashboard", documentId),
+    dashboardRecordPayload(`${firstName} ${lastName}`.trim(), investmentAmount, "pending")
+  );
+  batch.set(doc(db, "payments", documentId), paymentRecordPayload());
 
   await batch.commit();
 }
@@ -508,7 +546,9 @@ async function importValidRows() {
 
   const batchId = `excel_${Date.now()}`;
   let imported = 0;
-  const chunkSize = 400;
+  // Four Firestore writes are created for each imported client.
+  // Keep the batch safely below Firestore's 500-write limit.
+  const chunkSize = 100;
 
   for (let start = 0; start < candidates.length; start += chunkSize) {
     const batch = writeBatch(db);
@@ -555,6 +595,11 @@ async function importValidRows() {
           "Excel import"
         )
       );
+      batch.set(
+        doc(db, "dashboard", documentId),
+        dashboardRecordPayload(row.fullName, row.investmentAmount, row.accountStatus)
+      );
+      batch.set(doc(db, "payments", documentId), paymentRecordPayload());
     });
 
     await batch.commit();

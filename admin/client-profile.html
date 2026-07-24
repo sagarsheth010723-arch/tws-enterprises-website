@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./admin-style.css?v=50">
+  <link rel="stylesheet" href="./admin-style.css?v=51">
 </head>
 <body class="admin-dashboard-page">
   <div class="auth-gate" id="authGate">
@@ -95,7 +95,7 @@
           <div class="profile-tabs" role="tablist">
             <button class="active" data-tab="overview" type="button">Overview</button>
             <button data-tab="services" type="button">Services</button>
-            <button data-tab="payments" type="button">Payments</button>
+            <button data-tab="payments" type="button">App Data</button>
             <button data-tab="documents" type="button">Documents</button>
             <button data-tab="notes" type="button">Internal Notes</button>
             <button data-tab="activity" type="button">Activity</button>
@@ -164,7 +164,7 @@
             <section class="dashboard-card profile-section">
               <div class="card-heading services-heading">
                 <div><small>CLIENT SERVICES</small><h3>Assigned services</h3></div>
-                <button class="primary-action" id="assignServiceButton" type="button">+ Assign service</button>
+                <span class="auto-assignment-note">Assigned automatically from registration</span>
               </div>
 
               <div class="service-list" id="serviceList">
@@ -174,10 +174,72 @@
           </section>
 
           <section class="profile-tab-panel" id="tab-payments">
-            <div class="empty-module-card">
-              <span>₹</span><h3>Payment records coming later</h3>
-              <p>Payments remain intentionally deferred until the non-payment modules are completed.</p>
-            </div>
+            <section class="dashboard-card profile-section app-data-card">
+              <div class="card-heading">
+                <div><small>CLIENT APP DATA</small><h3>Update exactly what the client sees</h3></div>
+                <span>Live Firestore sync</span>
+              </div>
+
+              <form id="appDataForm">
+                <div class="form-grid">
+                  <label>
+                    <span>Investment amount</span>
+                    <input name="investmentAmount" inputmode="decimal" placeholder="Example: 500000">
+                  </label>
+                  <label>
+                    <span>Today's profit / loss</span>
+                    <input name="todayPL" inputmode="decimal" placeholder="Use minus for a loss">
+                  </label>
+                  <label>
+                    <span>Today's commission</span>
+                    <input name="todayCommission" inputmode="decimal" placeholder="Example: 1500">
+                  </label>
+                  <label>
+                    <span>Total profit</span>
+                    <input name="totalProfit" inputmode="decimal" placeholder="Example: 85000">
+                  </label>
+                  <label>
+                    <span>Total commission paid</span>
+                    <input name="totalPaid" inputmode="decimal" placeholder="Example: 25000">
+                  </label>
+                  <label>
+                    <span>Pending payment amount</span>
+                    <input name="totalPending" inputmode="decimal" placeholder="Example: 5000">
+                  </label>
+                  <label>
+                    <span>Payment status</span>
+                    <select name="paymentStatus">
+                      <option value="Not Available">Not Available</option>
+                      <option value="Pending">Pending</option>
+                      <option value="Paid">Paid</option>
+                      <option value="Partially Paid">Partially Paid</option>
+                      <option value="Overdue">Overdue</option>
+                    </select>
+                  </label>
+                  <label>
+                    <span>Last updated</span>
+                    <input name="lastUpdated" placeholder="Example: 24 Jul 2026, 4:30 PM">
+                  </label>
+                  <label class="span-2">
+                    <span>Remarks shown in client app</span>
+                    <textarea name="remarks" rows="4" placeholder="Short update for the client"></textarea>
+                  </label>
+                </div>
+
+                <div class="app-data-preview" id="appDataPreview">
+                  <article><small>TODAY'S PROFIT</small><strong id="previewTodayPL">₹0</strong></article>
+                  <article><small>TODAY'S COMMISSION</small><strong id="previewTodayCommission">₹0</strong></article>
+                  <article><small>TOTAL PROFIT</small><strong id="previewTotalProfit">₹0</strong></article>
+                  <article><small>TOTAL COMMISSION PAID</small><strong id="previewTotalPaid">₹0</strong></article>
+                </div>
+
+                <div class="modal-status" id="appDataMessage" hidden></div>
+                <div class="app-data-actions">
+                  <p>Save writes to <code>dashboard/{clientId}</code> and <code>payments/{clientId}</code>, then creates a client notification.</p>
+                  <button class="primary-action" id="saveAppDataButton" type="submit">Save &amp; notify client</button>
+                </div>
+              </form>
+            </section>
           </section>
 
           <section class="profile-tab-panel" id="tab-documents">
@@ -437,6 +499,6 @@
     <button onclick="this.closest('dialog').close()">Understood</button>
   </dialog>
 
-  <script type="module" src="./client-profile.js?v=50"></script>
+  <script type="module" src="./client-profile.js?v=51"></script>
 </body>
 </html>

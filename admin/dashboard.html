@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./admin-style.css?v=50">
+  <link rel="stylesheet" href="./admin-style.css?v=51">
 </head>
 <body class="admin-dashboard-page">
   <div class="auth-gate" id="authGate">
@@ -56,11 +56,14 @@
           <span>Last checked: <strong id="lastUpdated">—</strong></span>
         </div>
 
-        <div class="metric-grid">
-          <article><span class="metric-icon">◎</span><div><small>TOTAL CLIENTS</small><strong id="clientCount">…</strong><p>Registered TWS Connect users</p></div></article>
+        <div class="metric-grid dashboard-metric-grid">
+          <article><span class="metric-icon">◎</span><div><small>TOTAL CLIENTS</small><strong id="clientCount">…</strong><p>All registered client records</p></div></article>
+          <article><span class="metric-icon">✓</span><div><small>ACTIVE CLIENTS</small><strong id="activeClientCount">…</strong><p>Clients with active status</p></div></article>
           <article><span class="metric-icon">!</span><div><small>PENDING CLIENTS</small><strong id="pendingClientCount">…</strong><p>Awaiting approval or review</p></div></article>
-          <article><span class="metric-icon">₹</span><div><small>PAYMENTS</small><strong>—</strong><p>Payment module activates later</p></div></article>
-          <article><span class="metric-icon">?</span><div><small>OPEN SUPPORT</small><strong>—</strong><p>Support module activates later</p></div></article>
+          <article><span class="metric-icon">₹</span><div><small>TOTAL INVESTMENT</small><strong id="totalInvestment">…</strong><p>Includes active, inactive and exited clients</p></div></article>
+          <article><span class="metric-icon">↗</span><div><small>TODAY'S COMMISSION</small><strong id="todayCommission">…</strong><p>Combined across all clients</p></div></article>
+          <article><span class="metric-icon">₹</span><div><small>TOTAL COMMISSION RECEIVED</small><strong id="totalCommissionReceived">…</strong><p>Lifetime total paid by all clients</p></div></article>
+          <article><span class="metric-icon">⌛</span><div><small>PENDING PAYMENT AMOUNT</small><strong id="pendingPaymentAmount">…</strong><p>Combined unpaid amount</p></div></article>
         </div>
 
         <div class="dashboard-grid">
@@ -68,9 +71,9 @@
             <div class="card-heading"><div><small>QUICK ACTIONS</small><h3>Client operations</h3></div></div>
             <div class="action-grid">
               <button onclick="window.location.href='./clients.html'"><span>＋</span><strong>Add client</strong><small>Manual entry or Excel upload</small></button>
-              <button data-coming-soon><span>◇</span><strong>Assign service</strong><small>Update client service access</small></button>
-              <button data-coming-soon><span>▤</span><strong>Upload document</strong><small>Share reports and records</small></button>
-              <button data-coming-soon><span>◉</span><strong>Send update</strong><small>Publish an official notification</small></button>
+              <button onclick="window.location.href='./clients.html'"><span>↗</span><strong>Update client app</strong><small>Open a client and edit live app data</small></button>
+              <button onclick="window.location.href='./clients.html'"><span>▤</span><strong>Manage documents</strong><small>Open a client document workspace</small></button>
+              <button onclick="window.location.href='./clients.html'"><span>◉</span><strong>Review pending clients</strong><small>Approve or update client status</small></button>
             </div>
           </section>
 
@@ -80,7 +83,8 @@
               <li class="done"><i>✓</i><div><strong>Secure email login</strong><small>Approved email accounts and Firestore verification</small></div></li>
               <li class="done"><i>✓</i><div><strong>Admin dashboard shell</strong><small>Responsive navigation and protected session</small></div></li>
               <li class="done"><i>✓</i><div><strong>Client management</strong><small>Live Firebase list, manual entry and Excel import</small></div></li>
-              <li class="current"><i>4</i><div><strong>Services and operations</strong><small>Planned after client management</small></div></li>
+              <li class="done"><i>✓</i><div><strong>Automatic service assignment</strong><small>Selected service is created during registration or import</small></div></li>
+              <li class="current"><i>5</i><div><strong>Live app data sync</strong><small>Admin updates write directly to the client app collections</small></div></li>
             </ol>
           </section>
         </div>
@@ -100,6 +104,6 @@
     <span>MODULE LOCKED</span><h2>Coming in the next build phase</h2><p>The secure admin foundation is ready. We will now implement each operational module one by one, beginning with Client Management.</p>
     <button onclick="this.closest('dialog').close()">Understood</button>
   </dialog>
-  <script type="module" src="./dashboard.js?v=50"></script>
+  <script type="module" src="./dashboard.js?v=51"></script>
 </body>
 </html>
