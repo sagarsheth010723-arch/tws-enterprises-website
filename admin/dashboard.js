@@ -17,6 +17,7 @@ const menuButton = document.getElementById("sidebarToggle");
 const sidebar = document.getElementById("adminSidebar");
 const lastUpdated = document.getElementById("lastUpdated");
 const recentClientList = document.getElementById("recentClientList");
+const todayCommissionDateLabel = document.getElementById("todayCommissionDateLabel");
 
 const metricElements = {
   totalClients: document.getElementById("clientCount"),
@@ -108,8 +109,13 @@ function commissionDateKey(record) {
     const parsed = dateValue(explicitDate);
     if (parsed) return indiaDateKey(parsed);
   }
-  const fallbackTimestamp = record?.todayCommissionUpdatedAt || record?.updatedAt;
-  return fallbackTimestamp ? indiaDateKey(fallbackTimestamp) : "";
+  // Strict rule: records without an explicit commission date never count as today's commission.
+  return "";
+}
+
+function formatDateKeyForDisplay(dateKey) {
+  const [year, month, day] = String(dateKey || "").split("-");
+  return year && month && day ? `${day}-${month}-${year}` : "—";
 }
 
 function loadFinancialVisibility() {
@@ -239,6 +245,9 @@ function renderMetrics() {
     pendingPaymentAmount
   };
   Object.keys(financialMetricValues).forEach(renderFinancialMetric);
+  if (todayCommissionDateLabel) {
+    todayCommissionDateLabel.textContent = formatDateKeyForDisplay(activeIndiaDateKey);
+  }
   updateTimestamp();
 }
 

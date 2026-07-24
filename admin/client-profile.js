@@ -579,8 +579,7 @@ function commissionDateKey(record) {
     const parsed = dateValue(explicitDate);
     if (parsed) return indiaDateKey(parsed);
   }
-  const fallbackTimestamp = record?.todayCommissionUpdatedAt || record?.updatedAt;
-  return fallbackTimestamp ? indiaDateKey(fallbackTimestamp) : "";
+  return "";
 }
 
 function currentTodayCommission() {

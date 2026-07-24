@@ -39,8 +39,7 @@ function indiaDateKey(value = new Date()) {
 
 function recordDateKey(record = {}) {
   if (typeof record.todayCommissionDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(record.todayCommissionDate)) return record.todayCommissionDate;
-  const fallback = record.todayCommissionUpdatedAt || record.updatedAt;
-  return fallback ? indiaDateKey(fallback) : "";
+  return "";
 }
 
 function currentLabel() {

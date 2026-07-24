@@ -60,6 +60,7 @@
           <div class="page-actions">
             <button class="secondary-action" id="downloadTemplateButton" type="button">Download Excel template</button>
             <button class="secondary-action" id="openImportButton" type="button">Upload Excel</button>
+            <button class="danger-action" id="deleteSelectedClientsButton" type="button" disabled>Delete selected (0)</button>
             <button class="primary-action" id="openAddClientButton" type="button">＋ Add client</button>
           </div>
         </div>
@@ -90,6 +91,11 @@
               <option value="excel_import">Excel imported</option>
               <option value="manual_admin">Manual entry</option>
             </select>
+            <label class="bulk-select-control" title="Select every client matching the current filters">
+              <input id="selectAllFilteredClients" type="checkbox">
+              <span>Select all filtered</span>
+            </label>
+            <span class="selection-count" id="selectionCount">0 selected</span>
             <span class="result-count" id="resultCount">0 clients</span>
           </div>
 
@@ -112,6 +118,7 @@
             <table class="client-table">
               <thead>
                 <tr>
+                  <th class="select-column"><input id="selectCurrentPageClients" type="checkbox" aria-label="Select all clients on this page"></th>
                   <th>Client</th>
                   <th>Contact</th>
                   <th>Source</th>
@@ -238,6 +245,6 @@
     </div>
   </dialog>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script type="module" src="./clients.js?v=55"></script>
+  <script type="module" src="./clients.js?v=56"></script>
 </body>
 </html>

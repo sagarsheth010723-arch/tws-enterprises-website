@@ -1,5 +1,6 @@
 import {
   collection,
+  deleteDoc,
   doc,
   getDocs,
   onSnapshot,
@@ -118,6 +119,10 @@ const nextPageButton = document.getElementById("nextPageButton");
 const searchInput = document.getElementById("clientSearchInput");
 const statusFilter = document.getElementById("statusFilter");
 const sourceFilter = document.getElementById("sourceFilter");
+const selectAllFilteredClients = document.getElementById("selectAllFilteredClients");
+const selectCurrentPageClients = document.getElementById("selectCurrentPageClients");
+const deleteSelectedClientsButton = document.getElementById("deleteSelectedClientsButton");
+const selectionCount = document.getElementById("selectionCount");
 
 const totalMetric = document.getElementById("totalClientsMetric");
 const appMetric = document.getElementById("appClientsMetric");
@@ -155,6 +160,8 @@ let currentPage = 1;
 let importRows = [];
 let selectedClient = null;
 let unsubscribeClients = null;
+const selectedClientIds = new Set();
+let bulkDeleteInProgress = false;
 
 function initials(name, email) {
   const source = String(name || email || "TWS Admin").trim();
@@ -271,11 +278,47 @@ function applyFilters() {
   renderClients();
 }
 
+function currentPageClients() {
+  const start = (currentPage - 1) * PAGE_SIZE;
+  return filteredClients.slice(start, start + PAGE_SIZE);
+}
+
+function updateSelectionControls() {
+  const validIds = new Set(allClients.map((client) => client.id));
+  [...selectedClientIds].forEach((id) => {
+    if (!validIds.has(id)) selectedClientIds.delete(id);
+  });
+
+  const selectedCountValue = selectedClientIds.size;
+  selectionCount.textContent = `${selectedCountValue.toLocaleString("en-IN")} selected`;
+  deleteSelectedClientsButton.textContent = `Delete selected (${selectedCountValue.toLocaleString("en-IN")})`;
+  deleteSelectedClientsButton.disabled = selectedCountValue === 0 || bulkDeleteInProgress;
+
+  const filteredIds = filteredClients.map((client) => client.id);
+  const filteredSelected = filteredIds.filter((id) => selectedClientIds.has(id)).length;
+  selectAllFilteredClients.checked = filteredIds.length > 0 && filteredSelected === filteredIds.length;
+  selectAllFilteredClients.indeterminate = filteredSelected > 0 && filteredSelected < filteredIds.length;
+  selectAllFilteredClients.disabled = filteredIds.length === 0 || bulkDeleteInProgress;
+
+  const pageIds = currentPageClients().map((client) => client.id);
+  const pageSelected = pageIds.filter((id) => selectedClientIds.has(id)).length;
+  selectCurrentPageClients.checked = pageIds.length > 0 && pageSelected === pageIds.length;
+  selectCurrentPageClients.indeterminate = pageSelected > 0 && pageSelected < pageIds.length;
+  selectCurrentPageClients.disabled = pageIds.length === 0 || bulkDeleteInProgress;
+}
+
+function setClientSelected(clientId, selected) {
+  if (selected) selectedClientIds.add(clientId);
+  else selectedClientIds.delete(clientId);
+  updateSelectionControls();
+}
+
 function renderClients() {
   resultCount.textContent = `${filteredClients.length.toLocaleString("en-IN")} client${filteredClients.length === 1 ? "" : "s"}`;
 
   if (!filteredClients.length) {
     setTableState("empty");
+    updateSelectionControls();
     return;
   }
 
@@ -286,7 +329,8 @@ function renderClients() {
   const pageRows = filteredClients.slice(start, start + PAGE_SIZE);
 
   tableBody.innerHTML = pageRows.map((client) => `
-    <tr>
+    <tr data-client-row="${escapeHtml(client.id)}">
+      <td class="select-column"><input class="client-row-checkbox" type="checkbox" data-client-select="${escapeHtml(client.id)}" aria-label="Select ${escapeHtml(client.fullName)}" ${selectedClientIds.has(client.id) ? "checked" : ""}></td>
       <td>
         <div class="client-identity">
           <span class="client-avatar">${escapeHtml(initials(client.fullName, client.email))}</span>
@@ -301,9 +345,14 @@ function renderClients() {
     </tr>
   `).join("");
 
+  tableBody.querySelectorAll("[data-client-select]").forEach((checkbox) => {
+    checkbox.addEventListener("change", () => setClientSelected(checkbox.dataset.clientSelect, checkbox.checked));
+  });
+
   paginationInfo.textContent = `Showing ${start + 1}–${Math.min(start + PAGE_SIZE, filteredClients.length)} of ${filteredClients.length}`;
   previousPageButton.disabled = currentPage <= 1;
   nextPageButton.disabled = currentPage >= totalPages;
+  updateSelectionControls();
 }
 
 function subscribeToClients() {
@@ -678,6 +727,69 @@ async function updateClientStatus() {
   }
 }
 
+async function collectCollectionDocumentRefs(collectionReference) {
+  const snapshot = await getDocs(collectionReference);
+  return snapshot.docs.map((item) => item.ref);
+}
+
+async function commitDeleteRefs(documentRefs) {
+  const chunkSize = 400;
+  for (let start = 0; start < documentRefs.length; start += chunkSize) {
+    const batch = writeBatch(db);
+    documentRefs.slice(start, start + chunkSize).forEach((reference) => batch.delete(reference));
+    await batch.commit();
+  }
+}
+
+async function collectClientDeleteRefs(clientId) {
+  const refs = [];
+  const userSubcollections = ["services", "admin_notes", "activity_logs", "documents"];
+  for (const subcollection of userSubcollections) {
+    refs.push(...await collectCollectionDocumentRefs(collection(db, "users", clientId, subcollection)));
+  }
+  refs.push(...await collectCollectionDocumentRefs(collection(db, "notifications", clientId, "items")));
+  refs.push(
+    doc(db, "dashboard", clientId),
+    doc(db, "payments", clientId),
+    doc(db, "client_meta", clientId),
+    doc(db, "notifications", clientId),
+    doc(db, "users", clientId)
+  );
+  return refs;
+}
+
+async function deleteSelectedClients() {
+  const ids = [...selectedClientIds];
+  if (!ids.length || bulkDeleteInProgress) return;
+
+  const confirmed = window.confirm(
+    `Delete ${ids.length} selected client${ids.length === 1 ? "" : "s"} and their related services, payments, documents, notifications and activity records?\n\nThis cannot be undone.`
+  );
+  if (!confirmed) return;
+
+  bulkDeleteInProgress = true;
+  updateSelectionControls();
+  deleteSelectedClientsButton.textContent = "Deleting…";
+
+  try {
+    let completed = 0;
+    for (const clientId of ids) {
+      const refs = await collectClientDeleteRefs(clientId);
+      await commitDeleteRefs(refs);
+      completed += 1;
+      deleteSelectedClientsButton.textContent = `Deleting ${completed}/${ids.length}`;
+    }
+    selectedClientIds.clear();
+    window.alert(`${completed} client${completed === 1 ? "" : "s"} deleted successfully.`);
+  } catch (error) {
+    console.error("Bulk client deletion failed:", error);
+    window.alert(error.message || "Some client records could not be deleted. Check Firestore permissions and try again.");
+  } finally {
+    bulkDeleteInProgress = false;
+    updateSelectionControls();
+  }
+}
+
 observeAuth(async (user) => {
   if (!user) {
     window.location.replace("./");
@@ -703,6 +815,21 @@ menuButton.addEventListener("click", () => sidebar.classList.toggle("open"));
 searchInput.addEventListener("input", applyFilters);
 statusFilter.addEventListener("change", applyFilters);
 sourceFilter.addEventListener("change", applyFilters);
+selectAllFilteredClients.addEventListener("change", () => {
+  filteredClients.forEach((client) => {
+    if (selectAllFilteredClients.checked) selectedClientIds.add(client.id);
+    else selectedClientIds.delete(client.id);
+  });
+  renderClients();
+});
+selectCurrentPageClients.addEventListener("change", () => {
+  currentPageClients().forEach((client) => {
+    if (selectCurrentPageClients.checked) selectedClientIds.add(client.id);
+    else selectedClientIds.delete(client.id);
+  });
+  renderClients();
+});
+deleteSelectedClientsButton.addEventListener("click", deleteSelectedClients);
 
 previousPageButton.addEventListener("click", () => {
   if (currentPage > 1) { currentPage -= 1; renderClients(); }
