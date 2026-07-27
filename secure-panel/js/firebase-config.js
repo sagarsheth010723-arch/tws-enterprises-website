@@ -1,15 +1,15 @@
 /**
  * Secure Panel Firebase configuration.
- * This module is intentionally separate from /admin/ and can be pointed to a
- * dedicated Firebase project without changing any public-site files.
+ * This module is intentionally separate from /admin/ and uses the authorised
+ * TWS Enterprise Control Center production Firebase project.
  */
 export const firebaseConfig = Object.freeze({
-  apiKey: "AIzaSyB67RUoBf0V90tT8INMMFmo6QPqldfnztU",
-  authDomain: "tws-client-portal-47b1e.firebaseapp.com",
-  projectId: "tws-client-portal-47b1e",
-  storageBucket: "tws-client-portal-47b1e.firebasestorage.app",
-  messagingSenderId: "609733718211",
-  appId: "1:609733718211:web:ef340cbeb83169e8fdb276"
+  apiKey: "AIzaSyAeK7Fevlo5A_yyxYzEtoXuBkEeejyLs5I",
+  authDomain: "tws-enterprise-control-center.firebaseapp.com",
+  projectId: "tws-enterprise-control-center",
+  storageBucket: "tws-enterprise-control-center.firebasestorage.app",
+  messagingSenderId: "463963574265",
+  appId: "1:463963574265:web:366a1f5321f38e7da93728"
 });
 
 export const AUTHORIZED_EMAIL = "director@twsenterprises.in";

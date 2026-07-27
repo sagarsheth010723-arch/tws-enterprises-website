@@ -1,33 +1,42 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function signedIn() { return request.auth != null; }
-    function isOwner(userId) { return signedIn() && request.auth.uid == userId; }
+    function isDirector() {
+      return request.auth != null
+        && request.auth.token.email == "director@twsenterprises.in";
+    }
 
-    // Director identity records are maintained outside the browser application.
-    match /securePanelUsers/{userId} {
-      allow get: if isOwner(userId);
+    // Created and maintained outside the browser application.
+    match /securePanelUsers/{uid} {
+      allow get: if isDirector() && request.auth.uid == uid;
       allow list, create, update, delete: if false;
     }
 
+    // Session records are limited to the authenticated director's own records.
     match /securePanelSessions/{sessionId} {
-      allow create: if signedIn()
+      allow create: if isDirector()
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.email == request.auth.token.email
         && request.resource.data.role == "director";
-      allow get, update: if signedIn() && resource.data.uid == request.auth.uid
-        && request.auth.token.email == "director@twsenterprises.in";
-      allow list: if signedIn() && request.auth.token.email == "director@twsenterprises.in";
+      allow get, update: if isDirector()
+        && resource.data.uid == request.auth.uid;
+      allow list: if isDirector();
       allow delete: if false;
     }
 
+    // Director-managed non-sensitive Secure Panel settings.
     match /securePanelSettings/{settingId} {
-      allow read, write: if signedIn()
-        && request.auth.token.email == "director@twsenterprises.in";
+      allow read, write: if isDirector();
     }
 
-    // Telegram credentials and channel records are only handled by Firebase Functions.
+    // Bot tokens, Telegram channels, and module settings stay server-only.
+    // Firebase Functions uses the Admin SDK and bypasses these client rules.
     match /securePanelTelegram/{document=**} {
+      allow read, write: if false;
+    }
+
+    // Default-deny policy for every other document.
+    match /{document=**} {
       allow read, write: if false;
     }
   }

@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.3.1 Debug Build — 27 July 2026
+
+- Switched Secure Panel authentication to the supplied tws-enterprise-control-center Firebase production project configuration.
+- Added the least-privilege Firestore rule set required for director profile verification, sessions, and non-sensitive settings.
+- Added browser-console diagnostics for Firebase configuration loading, app initialization, Auth binding, observer state, login context, and director-profile verification.
+- Added explicit Firebase error code and error object logging for failed sign-in attempts.
+- Temporarily displays the raw Firebase error code below the login button for troubleshooting.
+
 ## v1.3.0 — 27 July 2026
 
 - Added a fully functional director-only Telegram workspace at telegram.html.

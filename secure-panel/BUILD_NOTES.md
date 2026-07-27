@@ -1,4 +1,19 @@
-# Build notes — v1.3.0
+# Build notes — v1.3.1 Debug Build
+
+## Authentication diagnostics
+
+The debug build logs Firebase project configuration, current browser URL, app and Auth identity, current Firebase user, Firestore role lookup, and raw sign-in errors in the browser console. The login page temporarily displays the original Firebase error code below the sign-in button. Remove this diagnostic behavior after resolving the authentication issue.
+
+## Production authentication checklist
+
+The Secure Panel uses the existing tws-enterprise-control-center Firebase project. No new Firebase project or client configuration is required.
+
+1. In Firebase Authentication, enable Email/Password and create only director@twsenterprises.in.
+2. Add www.twsenterprises.in and twsenterprises.in to Firebase Authentication authorised domains.
+3. Create the Firestore document securePanelUsers/DIRECTOR_AUTH_UID using the director account UID. The document fields must be email = director@twsenterprises.in, role = director, and isActive = true.
+4. Deploy the secure-panel firestore.rules file before using the panel.
+
+The currently deployed deny-all Firestore rules prevent the panel from reading the required director profile document and from recording sessions. The supplied replacement remains default-deny: it allows only the authenticated director to read their own role record, write their own session records, and manage non-sensitive panel settings. Telegram token and channel documents remain inaccessible to browser clients.
 
 ## Scope
 
