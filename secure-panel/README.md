@@ -1,4 +1,4 @@
-# TWS Secure Panel v1.3.0
+# TWS Secure Panel v1.3.2 Authentication Fixed
 
 secure-panel is a self-contained, director-only workspace. It has no imports from, links to, or changes within the public website or the existing admin TWS Connect system.
 
@@ -18,7 +18,7 @@ secure-panel is a self-contained, director-only workspace. It has no imports fro
 1. Enable Email/Password in Firebase Authentication.
 2. Create the Firebase Authentication account director@twsenterprises.in.
 3. Add twsenterprises.in to Firebase Authentication's authorised domains.
-4. In Firestore, create a document at securePanelUsers/DIRECTOR_AUTH_UID. Use the UID of the director authentication account as DIRECTOR_AUTH_UID. Its required fields are: email = director@twsenterprises.in, role = director, and isActive = true.
+4. Confirm the single existing Firestore access profile is securePanelUsers/CfcTen6kMHObMMQjcWHiwizt6Fz2. Its required fields are: email = director@twsenterprises.in, role = director, and isActive = true. This document ID is intentionally not the Firebase Auth UID.
 5. Deploy firestore.rules using the Firebase CLI or Firebase Console Rules editor.
 6. For Telegram, follow BUILD_NOTES.md to deploy the callable function and encryption secret.
 

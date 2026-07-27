@@ -11,6 +11,7 @@ const REGION = "asia-south1";
 const CONFIG = db.doc("securePanelTelegram/config");
 const CHANNELS = CONFIG.collection("channels");
 const SETTINGS = CONFIG.collection("settings").doc("preferences");
+const DIRECTOR_PROFILE = db.doc("securePanelUsers/CfcTen6kMHObMMQjcWHiwizt6Fz2");
 
 function requireString(value, field, maxLength = 4096) {
   if (typeof value !== "string" || !value.trim() || value.length > maxLength) {
@@ -23,7 +24,7 @@ async function assertDirector(request) {
   if (!request.auth?.uid || request.auth.token.email !== "director@twsenterprises.in") {
     throw new HttpsError("permission-denied", "Director authentication is required.");
   }
-  const profile = await db.doc(`securePanelUsers/${request.auth.uid}`).get();
+  const profile = await DIRECTOR_PROFILE.get();
   if (!profile.exists || profile.data().role !== "director" || profile.data().isActive !== true) {
     throw new HttpsError("permission-denied", "Director authorisation could not be verified.");
   }

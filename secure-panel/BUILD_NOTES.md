@@ -1,19 +1,25 @@
-# Build notes — v1.3.1 Debug Build
+# Build notes — v1.3.2 Authentication Fixed
+
+## Authentication flow
+
+The director account authenticates with Firebase Email/Password and browserLocalPersistence. After Firebase resolves the auth state, the panel reads exactly securePanelUsers/CfcTen6kMHObMMQjcWHiwizt6Fz2. It validates email = director@twsenterprises.in, role = director, and isActive = true before granting access.
+
+The fixed profile document is not the Firebase Auth UID. Do not create any UID-named access document and do not create users or director collections.
 
 ## Authentication diagnostics
 
-The debug build logs Firebase project configuration, current browser URL, app and Auth identity, current Firebase user, Firestore role lookup, and raw sign-in errors in the browser console. The login page temporarily displays the original Firebase error code below the sign-in button. Remove this diagnostic behavior after resolving the authentication issue.
+The build logs Firebase project configuration, current browser URL, app and Auth identity, current Firebase user, Firestore role lookup, and raw sign-in errors in the browser console. The login page temporarily displays the original Firebase error code below the sign-in button.
 
 ## Production authentication checklist
 
 The Secure Panel uses the existing tws-enterprise-control-center Firebase project. No new Firebase project or client configuration is required.
 
-1. In Firebase Authentication, enable Email/Password and create only director@twsenterprises.in.
-2. Add www.twsenterprises.in and twsenterprises.in to Firebase Authentication authorised domains.
-3. Create the Firestore document securePanelUsers/DIRECTOR_AUTH_UID using the director account UID. The document fields must be email = director@twsenterprises.in, role = director, and isActive = true.
+1. Confirm Firebase Email/Password is enabled and director@twsenterprises.in is the only authorised account.
+2. Confirm the already configured authorised domain list contains www.twsenterprises.in and twsenterprises.in.
+3. Confirm the existing Firestore document securePanelUsers/CfcTen6kMHObMMQjcWHiwizt6Fz2 contains email = director@twsenterprises.in, role = director, and isActive = true.
 4. Deploy the secure-panel firestore.rules file before using the panel.
 
-The currently deployed deny-all Firestore rules prevent the panel from reading the required director profile document and from recording sessions. The supplied replacement remains default-deny: it allows only the authenticated director to read their own role record, write their own session records, and manage non-sensitive panel settings. Telegram token and channel documents remain inaccessible to browser clients.
+The currently deployed deny-all Firestore rules prevent the panel from reading the required director profile document. The supplied replacement remains default-deny: it allows only the authenticated director email to read the one fixed profile document, protects all other profiles, and keeps Telegram token and channel documents inaccessible to browser clients.
 
 ## Scope
 

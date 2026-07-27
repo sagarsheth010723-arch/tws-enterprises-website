@@ -6,10 +6,14 @@ service cloud.firestore {
         && request.auth.token.email == "director@twsenterprises.in";
     }
 
-    // Created and maintained outside the browser application.
-    match /securePanelUsers/{uid} {
-      allow get: if isDirector() && request.auth.uid == uid;
+    // This is the one fixed director profile; it is not an Auth UID document.
+    match /securePanelUsers/CfcTen6kMHObMMQjcWHiwizt6Fz2 {
+      allow get: if isDirector();
       allow list, create, update, delete: if false;
+    }
+
+    match /securePanelUsers/{documentId} {
+      allow read, write: if false;
     }
 
     // Session records are limited to the authenticated director's own records.

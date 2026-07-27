@@ -1,77 +1,87 @@
 import { getApp, getApps, initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { EmailAuthProvider, browserLocalPersistence, getAuth, onAuthStateChanged, reauthenticateWithCredential, setPersistence, signInWithEmailAndPassword, signOut, updatePassword } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-import { doc, getDoc, getFirestore, onSnapshot } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+import { doc, getDoc, getFirestore } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 import { AUTHORIZED_EMAIL, firebaseConfig } from "./firebase-config.js";
 
 const APP_NAME = "tws-secure-panel";
-console.info("[TWS Auth Debug] firebase-config.js loaded.", {
-  projectId: firebaseConfig.projectId,
-  authDomain: firebaseConfig.authDomain
-});
-console.info("[TWS Auth Debug] Firebase apps before initialization:", getApps().map((item) => item.name));
-export const app = getApps().some((item) => item.name === APP_NAME) ? getApp(APP_NAME) : initializeApp(firebaseConfig, APP_NAME);
-console.info("[TWS Auth Debug] Firebase app resolved.", {
+export const DIRECTOR_PROFILE_ID = "CfcTen6kMHObMMQjcWHiwizt6Fz2";
+
+console.info("[TWS Auth] firebase-config.js loaded", { projectId: firebaseConfig.projectId, authDomain: firebaseConfig.authDomain });
+const existingApp = getApps().find((item) => item.name === APP_NAME);
+export const app = existingApp || initializeApp(firebaseConfig, APP_NAME);
+console.info("[TWS Auth] Firebase initialized", {
   appName: app.name,
-  projectId: app.options.projectId,
   initializedOnce: getApps().filter((item) => item.name === APP_NAME).length === 1
 });
+
 export const auth = getAuth(app);
-console.info("[TWS Auth Debug] getAuth(app) completed.", {
-  authAppName: auth.app.name,
-  sameFirebaseApp: auth.app === app
-});
 export const db = getFirestore(app);
+console.info("[TWS Auth] getAuth(app) verified", { authAppName: auth.app.name, sameFirebaseApp: auth.app === app });
+
 export const normaliseEmail = (email) => String(email || "").trim().toLowerCase();
 export const isApprovedEmail = (user) => normaliseEmail(user?.email) === AUTHORIZED_EMAIL;
 
-export async function getAccessProfile(user) {
-  console.info("[TWS Auth Debug] getAccessProfile() starting.", { uid: user?.uid || null, email: user?.email || null, approvedEmail: isApprovedEmail(user) });
-  if (!user?.uid || !isApprovedEmail(user)) return null;
-  const snapshot = await getDoc(doc(db, "securePanelUsers", user.uid));
-  console.info("[TWS Auth Debug] Firestore director profile document loaded.", { exists: snapshot.exists() });
-  if (!snapshot.exists()) return null;
-  const profile = snapshot.data();
-  const allowed = profile.isActive === true
-    && profile.role === "director"
-    && normaliseEmail(profile.email) === AUTHORIZED_EMAIL;
-  console.info("[TWS Auth Debug] Director profile validation completed.", { allowed, role: profile.role, isActive: profile.isActive });
-  return allowed ? { ...profile, uid: user.uid } : null;
-}
-
-export async function signIn(email, password) {
-  console.info("[TWS Auth Debug] signIn() invoked.", { email: normaliseEmail(email) });
-  if (normaliseEmail(email) !== AUTHORIZED_EMAIL) {
-    const error = new Error("This email is not authorised for the Secure Panel.");
-    error.code = "secure-panel/not-authorised";
-    throw error;
-  }
-  await setPersistence(auth, browserLocalPersistence);
-  console.info("[TWS Auth Debug] Browser local persistence enabled.");
-  const credential = await signInWithEmailAndPassword(auth, normaliseEmail(email), password);
-  console.info("[TWS Auth Debug] signInWithEmailAndPassword succeeded.", { uid: credential.user.uid, email: credential.user.email });
-  const profile = await getAccessProfile(credential.user);
-  if (!profile) {
-    await signOut(auth);
-    const error = new Error("Your director access record is missing, inactive, or invalid.");
-    error.code = "secure-panel/access-denied";
-    throw error;
-  }
-  return { user: credential.user, profile };
-}
-
-export function observeAuth(callback) {
-  console.info("[TWS Auth Debug] Registering onAuthStateChanged observer.", { authAppName: auth.app.name });
-  return onAuthStateChanged(auth, (user) => {
-    console.info("[TWS Auth Debug] onAuthStateChanged fired. Current Firebase user:", user);
-    callback(user);
+export function waitForAuthState() {
+  console.info("[TWS Auth] Waiting for Firebase authentication state");
+  return new Promise((resolve) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe();
+      console.info("[TWS Auth] Current authenticated user", user);
+      resolve(user);
+    });
   });
 }
 
-export function observeAccessProfile(uid, callback, onError) {
-  return onSnapshot(doc(db, "securePanelUsers", uid), callback, onError);
+export async function getAccessProfile(user) {
+  if (!user?.uid) {
+    console.error("[TWS Auth] Firestore profile validation failed: no authenticated Firebase user.");
+    return null;
+  }
+  if (!isApprovedEmail(user)) {
+    console.error("[TWS Auth] Firestore profile validation failed: email is not authorised.", { email: user.email });
+    return null;
+  }
+  console.info("[TWS Auth] Loading Firestore profile", { document: `securePanelUsers/${DIRECTOR_PROFILE_ID}` });
+  const snapshot = await getDoc(doc(db, "securePanelUsers", DIRECTOR_PROFILE_ID));
+  if (!snapshot.exists()) {
+    console.error("[TWS Auth] Firestore profile missing.", { document: DIRECTOR_PROFILE_ID });
+    return null;
+  }
+  const profile = snapshot.data();
+  console.info("[TWS Auth] Firestore profile loaded", profile);
+  const allowed = normaliseEmail(profile.email) === AUTHORIZED_EMAIL
+    && profile.role === "director"
+    && profile.isActive === true;
+  if (!allowed) {
+    console.error("[TWS Auth] Director profile validation failed.", {
+      emailMatches: normaliseEmail(profile.email) === AUTHORIZED_EMAIL,
+      role: profile.role,
+      isActive: profile.isActive
+    });
+    return null;
+  }
+  console.info("[TWS Auth] Director profile validated");
+  return { ...profile, id: DIRECTOR_PROFILE_ID };
 }
 
-export const signOutSecurePanel = () => signOut(auth);
+export async function signIn(email, password) {
+  const normalisedEmail = normaliseEmail(email);
+  console.info("[TWS Auth] Starting Firebase login", { email: normalisedEmail });
+  if (normalisedEmail !== AUTHORIZED_EMAIL) {
+    const error = new Error("Only the director email is authorised for this panel.");
+    error.code = "secure-panel/email-not-authorised";
+    throw error;
+  }
+  await setPersistence(auth, browserLocalPersistence);
+  const credential = await signInWithEmailAndPassword(auth, normalisedEmail, password);
+  console.info("[TWS Auth] Firebase login successful", credential.user);
+  return credential.user;
+}
+
+export async function signOutSecurePanel() {
+  await signOut(auth);
+  console.info("[TWS Auth] Logout completed");
+}
 
 export async function changePassword(currentPassword, nextPassword) {
   if (!auth.currentUser?.email) throw new Error("No authenticated user is available.");

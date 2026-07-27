@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.3.2 Authentication Fixed — 27 July 2026
+
+- Fixed director profile loading to use securePanelUsers/CfcTen6kMHObMMQjcWHiwizt6Fz2 rather than a Firebase Auth UID document.
+- Replaced competing auth callbacks with one awaited Firebase auth-state initialization flow per page.
+- Made protected pages validate Firebase state and the fixed director profile before rendering.
+- Removed Firestore session writes from authentication; browser-local session metadata now avoids creating collections or documents during login.
+- Added explicit TWS Auth logging for every login, profile, redirect, protected-route, and logout decision.
+- Updated Firestore rules to allow only the one approved director to read the one fixed access profile while retaining default-deny security.
+
 ## v1.3.1 Debug Build — 27 July 2026
 
 - Switched Secure Panel authentication to the supplied tws-enterprise-control-center Firebase production project configuration.
