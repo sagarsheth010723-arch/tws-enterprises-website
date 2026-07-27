@@ -15,7 +15,7 @@ export function showToast(message, type = "success") {
 export function renderShell({ activePage, user, content }) {
   const firstName = (user.displayName || "Director").trim().split(/\s+/)[0] || "Director";
   const initials = (user.displayName || "Director").split(/\s+/).map((word) => word[0]).join("").slice(0, 2).toUpperCase();
-  const pageName = activePage === "dashboard" ? "Overview" : "Settings";
+  const pageName = activePage === "dashboard" ? "Overview" : activePage === "telegram" ? "Telegram" : "Settings";
   document.querySelector("#app").innerHTML = `
     <div class="app-shell">
       <aside class="sidebar" id="sidebar">
@@ -23,7 +23,7 @@ export function renderShell({ activePage, user, content }) {
         <nav aria-label="Secure panel navigation"><p class="nav-label">WORKSPACE</p>
           <a class="nav-link ${activePage === "dashboard" ? "active" : ""}" href="dashboard.html"><span class="nav-icon">OVR</span>Overview</a>
           <a class="nav-link ${activePage === "settings" ? "active" : ""}" href="settings.html"><span class="nav-icon">SET</span>Settings</a>
-          <span class="nav-link nav-link-disabled" aria-disabled="true"><span class="nav-icon">TG</span>Telegram <small>COMING SOON</small></span>
+          <a class="nav-link ${activePage === "telegram" ? "active" : ""}" href="telegram.html"><span class="nav-icon">TG</span>Telegram</a>
         </nav>
         <div class="sidebar-status"><span class="status-dot"></span><p><b>Protected workspace</b><small>Director access verified</small></p></div>
       </aside>

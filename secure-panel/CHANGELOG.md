@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.3.0 — 27 July 2026
+
+- Added a fully functional director-only Telegram workspace at telegram.html.
+- Added secure bot verification and AES-256-GCM encrypted token storage through Firebase callable functions.
+- Added channel add, verification, deletion, channel directory, and live test-message delivery flows.
+- Added Telegram delivery preferences and a live Telegram status widget on the enterprise dashboard.
+- Added Firebase Functions deployment configuration and BUILD_NOTES.md.
+
 ## v1.2.0 — 27 July 2026
 
 - Refined the dashboard with responsive spacing, modern glass cards, polished typography, hover states, transitions, shimmer skeletons, and improved loading feedback.

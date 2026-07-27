@@ -1,11 +1,15 @@
-# Telegram module foundation
+# Telegram module
 
-This directory is a dormant module boundary for a future Telegram integration.
+The Telegram module provides director-only bot configuration, encrypted token storage, channel management, verification, and test delivery.
 
-- dashboard.js supplies a module-local dashboard descriptor.
-- routing.js reserves the route identity.
-- config contains non-secret module configuration.
-- services contains API and session service boundaries.
-- assets is reserved for module-local assets.
+Browser code never calls Telegram directly and cannot read a bot token. The browser invokes the securePanelTelegram Firebase callable function. The function validates the Firebase director role, encrypts token data before saving it, and is the only layer that communicates with Telegram.
 
-The Secure Panel navigation correctly identifies this feature as Coming Soon. No Telegram Bot API calls, credentials, webhook handlers, or message processing are included.
+## Structure
+
+- dashboard.js and routing.js provide the module route boundary.
+- config contains client-safe configuration.
+- services contains the callable-function wrapper and session boundary.
+- functions contains the server-side Firebase Functions implementation.
+- assets is reserved for module-local visual assets.
+
+Deploy the function and Firestore rules according to BUILD_NOTES.md before configuring a bot.

@@ -4,7 +4,7 @@ import { doc, getDoc, getFirestore, onSnapshot } from "https://www.gstatic.com/f
 import { AUTHORIZED_EMAIL, firebaseConfig } from "./firebase-config.js";
 
 const APP_NAME = "tws-secure-panel";
-const app = getApps().some((item) => item.name === APP_NAME) ? getApp(APP_NAME) : initializeApp(firebaseConfig, APP_NAME);
+export const app = getApps().some((item) => item.name === APP_NAME) ? getApp(APP_NAME) : initializeApp(firebaseConfig, APP_NAME);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const normaliseEmail = (email) => String(email || "").trim().toLowerCase();

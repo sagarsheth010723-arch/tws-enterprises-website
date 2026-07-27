@@ -25,5 +25,10 @@ service cloud.firestore {
       allow read, write: if signedIn()
         && request.auth.token.email == "director@twsenterprises.in";
     }
+
+    // Telegram credentials and channel records are only handled by Firebase Functions.
+    match /securePanelTelegram/{document=**} {
+      allow read, write: if false;
+    }
   }
 }

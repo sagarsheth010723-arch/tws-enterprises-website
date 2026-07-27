@@ -1,6 +1,7 @@
 import { bindLogout, protectPage } from "./guard.js";
 import { renderShell } from "./components.js";
 import { getUserSessions } from "./session.js";
+import { TelegramApiService } from "../modules/telegram/services/telegram-api-service.js";
 
 function dateTime(value) {
   return value?.toDate?.() ? new Intl.DateTimeFormat(undefined, { dateStyle: "medium", timeStyle: "short" }).format(value.toDate()) : "Current session";
@@ -8,6 +9,7 @@ function dateTime(value) {
 
 protectPage(async ({ user, profile }) => {
   const sessions = await getUserSessions(user.uid).catch(() => []);
+  const telegramStatus = await new TelegramApiService().getStatus().catch(() => ({ configured: false }));
   const activeSessions = sessions.filter((session) => session.isActive).length;
   const recentSession = sessions[0];
   const name = (user.displayName || "Director").split(/\s+/)[0];
@@ -20,6 +22,7 @@ protectPage(async ({ user, profile }) => {
       <article class="metric-card glass-card"><div class="metric-icon violet">◆</div><div><span>Access profile</span><strong>${profile.role}</strong><small>Firestore-verified role</small></div></article>
       <article class="metric-card glass-card"><div class="metric-icon amber">◷</div><div><span>Active sessions</span><strong>${activeSessions}</strong><small>Tracked securely</small></div></article>
     </section>
+    <section class="telegram-widget glass-card"><div><p class="eyebrow">TELEGRAM MODULE</p><h2>${telegramStatus.configured ? "Bot connected and ready." : "Telegram setup is required."}</h2><p>${telegramStatus.configured ? `Connected as @${telegramStatus.bot?.username || "telegram-bot"}. Manage destinations and test delivery from the Telegram workspace.` : "Configure and verify the Telegram bot to enable channel management and test delivery."}</p></div><a class="secondary-button" href="telegram.html">${telegramStatus.configured ? "Open Telegram" : "Configure Telegram"}</a></section>
     <section class="dashboard-grid"><article class="overview-card glass-card"><div class="card-heading"><div><p class="eyebrow">WORKSPACE STATUS</p><h2>Secure panel operational.</h2></div><span class="live-pill"><i></i>LIVE</span></div><p class="overview-copy">Firebase Authentication, Firestore role verification, protected routes and session monitoring are all active for this director-only workspace.</p><div class="progress-wrap"><div><span>Latest session activity</span><b>${dateTime(recentSession?.lastActivityAt)}</b></div><div class="progress-track"><i></i></div><small>Activity is updated while this secure panel is in use.</small></div></article>
     <article class="identity-card glass-card"><p class="eyebrow">ACTIVE IDENTITY</p><div class="identity-row"><span class="identity-avatar">${(user.displayName || "Director").slice(0, 1).toUpperCase()}</span><div><h2>${user.displayName || "Director"}</h2><p>${user.email}</p></div></div><div class="identity-meta"><span><small>ACCESS LEVEL</small><b>Director only</b></span><span><small>LAST SIGN-IN</small><b>${dateTime(recentSession?.startedAt)}</b></span></div></article></section>
     <section class="security-card glass-card"><div class="security-icon">✓</div><div><p class="eyebrow">SECURITY STATUS</p><h2>Live role monitoring is enabled.</h2><p>If the corresponding Firestore access record becomes inactive or loses the director role, the panel automatically ends the session.</p></div><button class="logout-secondary" data-logout type="button">End session <span>→</span></button></section>` });

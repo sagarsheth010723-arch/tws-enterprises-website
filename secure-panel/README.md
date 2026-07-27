@@ -1,21 +1,17 @@
-# TWS Secure Panel v1.2.0
+# TWS Secure Panel v1.3.0
 
 secure-panel is a self-contained, director-only workspace. It has no imports from, links to, or changes within the public website or the existing admin TWS Connect system.
 
 ## Module layout
 
 - index.html — Firebase email/password sign-in entry point
-- dashboard.html — protected, dynamic director overview
+- dashboard.html — protected director overview with Telegram status
 - settings.html — protected company, appearance, security, profile, system, and session settings
+- telegram.html — protected Telegram configuration and operations workspace
 - css — isolated base, component, authentication, and page styling
-- js/firebase-config.js — local Firebase project settings and approved email
-- js/firebase.js — Firebase application, authentication, password update, and Firestore role service
-- js/guard.js — protected-route and automatic access-revocation handling
-- js/session.js — Firestore-backed browser-session activity tracking
-- js/settings-service.js — company settings persistence and interface preferences
-- js/components.js — reusable loading, toast, header, and sidebar components
-- firestore.rules — deployable Firestore security rules for this module's collections
-- modules/telegram — dormant module foundation; it makes no Telegram API calls
+- js — authentication, route guard, components, settings, session, dashboard, and Telegram page modules
+- firestore.rules — deployable Firestore security rules for the module collections
+- modules/telegram — callable API wrapper and Firebase Functions backend
 
 ## Required Firebase configuration
 
@@ -24,11 +20,12 @@ secure-panel is a self-contained, director-only workspace. It has no imports fro
 3. Add twsenterprises.in to Firebase Authentication's authorised domains.
 4. In Firestore, create a document at securePanelUsers/DIRECTOR_AUTH_UID. Use the UID of the director authentication account as DIRECTOR_AUTH_UID. Its required fields are: email = director@twsenterprises.in, role = director, and isActive = true.
 5. Deploy firestore.rules using the Firebase CLI or Firebase Console Rules editor.
+6. For Telegram, follow BUILD_NOTES.md to deploy the callable function and encryption secret.
 
 The browser cannot create or elevate director profiles. Role documents are intentionally read-only to the browser application. The panel accepts access only when Firebase Authentication, the approved email, and the Firestore document all agree. A role change or deactivation is observed live and immediately signs out the active user.
 
-## Settings and sessions
+## Data and session behavior
 
-Company settings are stored at securePanelSettings/company and restricted by the supplied Firestore rules to the verified director. Interface preferences are local to the director's browser. Firebase uses local browser persistence for authentication. The panel records minimal session activity in securePanelSessions and marks the current session closed on logout.
+Company settings are stored at securePanelSettings/company and restricted by the supplied Firestore rules to the verified director. Interface preferences are local to the director browser. Firebase uses local browser persistence for authentication. The panel records minimal session activity in securePanelSessions and marks the current session closed on logout.
 
-Global logout is intentionally not available from browser code. Implement it only through a trusted Firebase Admin endpoint that revokes refresh tokens.
+Telegram credentials and channel records are never available to the browser through Firestore. The secure callable function is the only component that can access the encrypted token and communicate with Telegram.
