@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#070b14">
+  <title>Secure Panel | TWS Enterprises</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body class="auth-page">
+  <main class="auth-shell">
+    <section class="auth-intro" aria-label="TWS Secure Panel">
+      <a class="brand" href="./" aria-label="TWS Secure Panel home"><span class="brand-mark">T</span><span>TWS <em>ENTERPRISES</em></span></a>
+      <div class="intro-copy">
+        <p class="eyebrow">RESTRICTED ACCESS</p>
+        <h1>Enterprise controls, <span>protected by design.</span></h1>
+        <p>Access is reserved for authorised TWS leadership and protected through Firebase Authentication.</p>
+      </div>
+      <div class="security-signal"><span></span><p><b>Secure session gateway</b><small>Email/password authentication enabled</small></p></div>
+      <p class="legal-note">© <span data-current-year></span> TWS Enterprises Private Limited</p>
+    </section>
+
+    <section class="login-panel" aria-label="Secure sign in">
+      <div class="login-card glass-card">
+        <div class="login-heading"><p class="eyebrow">IDENTITY VERIFICATION</p><h2>Welcome back.</h2><p>Sign in using your authorised TWS account.</p></div>
+        <form id="loginForm" novalidate>
+          <label for="email">Email address</label>
+          <div class="field"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4zM4 7l8 6 8-6"/></svg><input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="name@twsenterprises.in" required></div>
+          <label for="password">Password</label>
+          <div class="field"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required><button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg></button></div>
+          <p id="formMessage" class="form-message" role="alert" aria-live="polite"></p>
+          <button id="submitButton" class="primary-button" type="submit"><span>Sign in securely</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        </form>
+        <div class="login-footer"><span class="lock-icon">⌁</span> Firebase-secured authentication <span class="divider"></span> TWS internal access</div>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="js/login.js"></script>
+</body>
+</html>

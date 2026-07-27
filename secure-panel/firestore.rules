@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isOwner(userId) { return signedIn() && request.auth.uid == userId; }
+
+    // Director identity records are maintained outside the browser application.
+    match /securePanelUsers/{userId} {
+      allow get: if isOwner(userId);
+      allow list, create, update, delete: if false;
+    }
+
+    match /securePanelSessions/{sessionId} {
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.role == "director";
+      allow get, update: if signedIn() && resource.data.uid == request.auth.uid
+        && request.auth.token.email == "director@twsenterprises.in";
+      allow list: if signedIn() && request.auth.token.email == "director@twsenterprises.in";
+      allow delete: if false;
+    }
+
+    match /securePanelSettings/{settingId} {
+      allow read, write: if signedIn()
+        && request.auth.token.email == "director@twsenterprises.in";
+    }
+  }
+}

@@ -1,0 +1,22 @@
+# Changelog
+
+## v1.2.0 — 27 July 2026
+
+- Refined the dashboard with responsive spacing, modern glass cards, polished typography, hover states, transitions, shimmer skeletons, and improved loading feedback.
+- Expanded Settings into General, Appearance, Security, Profile, System, and Session Information sections.
+- Added Firestore-ready company settings persistence, local interface preferences, and secure Firebase password updates.
+- Added an isolated Telegram module foundation with routing, configuration, service boundaries, and disabled Coming Soon navigation.
+- Kept Telegram inactive: no credentials, Bot API calls, webhooks, or message functionality were introduced.
+
+## v1.1.0 — 27 July 2026
+
+- Added Firestore-backed director-role verification through securePanelUsers.
+- Added protected route guard with live access-profile monitoring and automatic logout.
+- Added Firestore-backed secure session activity records and a session-management settings page.
+- Refactored shared header, sidebar, loading, and toast UI into reusable JavaScript components.
+- Replaced static dashboard values with authenticated identity, role, and session data.
+- Added deployable Firestore security rules and Firebase setup documentation.
+
+## v1.0.0
+
+- Introduced the isolated secure-panel module with Firebase email/password sign-in and a protected dashboard.
