@@ -1,0 +1,4 @@
+UPLOAD ONLY THE CONTENTS OF THIS PATCH TO THE EXISTING GITHUB REPOSITORY ROOT.
+Replace index.html, live-performance.html, and style.css.
+Upload the assets/verified-pnl folder files and VERSION_V59.txt.
+Do not delete the repository or the admin/ secure panel folder.

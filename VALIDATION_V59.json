@@ -1,0 +1,19 @@
+{
+  "index.html": {
+    "contains_client_names": false,
+    "contains_numbered_labels": false,
+    "pnl_card_count": 20,
+    "pnl_gallery_card_count": 0,
+    "uses_v59_css": true,
+    "uses_generic_filenames": true
+  },
+  "live-performance.html": {
+    "contains_client_names": false,
+    "contains_numbered_labels": false,
+    "pnl_card_count": 0,
+    "pnl_gallery_card_count": 10,
+    "uses_v59_css": true,
+    "uses_generic_filenames": true
+  },
+  "file_count": 15
+}

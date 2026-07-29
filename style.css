@@ -221,3 +221,63 @@ body.video-modal-open{overflow:hidden}
   .pnl-count{margin-top:15px}
   .pnl-gallery-image{aspect-ratio:1.9/1}
 }
+
+
+/* V59 — clean, larger verified P&L screenshots */
+.verified-pnl-home .performance-track{gap:24px}
+.performance-card.pnl-card{
+  width:560px;
+  padding:10px;
+  border-radius:20px;
+}
+.performance-thumb.pnl-thumb{
+  width:100%;
+  aspect-ratio:2.05/1;
+  border-radius:14px;
+}
+.performance-thumb.pnl-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  border-radius:14px;
+}
+.performance-card.pnl-card>small,
+.performance-card.pnl-card>h3,
+.performance-card.pnl-card>p,
+.performance-gallery-card.pnl-gallery-card>small,
+.performance-gallery-card.pnl-gallery-card>h3,
+.performance-gallery-card.pnl-gallery-card>p{display:none!important}
+#verified-pnl-gallery .container{width:min(100% - 40px,1440px)}
+.performance-gallery-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:24px;
+}
+.performance-gallery-card.pnl-gallery-card{
+  padding:10px;
+  border-radius:20px;
+}
+.pnl-gallery-image{
+  width:100%;
+  aspect-ratio:2.05/1;
+  border-radius:14px;
+}
+.performance-gallery-card.pnl-gallery-card .pnl-gallery-image img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  border-radius:14px;
+}
+@media(max-width:980px){
+  .performance-card.pnl-card{width:470px}
+  .performance-gallery-grid{grid-template-columns:1fr}
+  #verified-pnl-gallery .container{width:min(100% - 32px,900px)}
+}
+@media(max-width:720px){
+  .verified-pnl-home .performance-track{gap:16px}
+  .performance-card.pnl-card{width:calc(100vw - 38px);max-width:430px;padding:8px;border-radius:16px}
+  .performance-thumb.pnl-thumb{border-radius:11px}
+  .performance-thumb.pnl-thumb img{border-radius:11px}
+  .performance-gallery-grid{gap:18px}
+  .performance-gallery-card.pnl-gallery-card{padding:8px;border-radius:16px}
+  .pnl-gallery-image,.performance-gallery-card.pnl-gallery-card .pnl-gallery-image img{border-radius:11px}
+}

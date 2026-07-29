@@ -1,0 +1,3 @@
+TWS V59 — CLEAN LARGE VERIFIED P&L SCREENSHOTS
+Changes: client names removed, numbered card labels removed, screenshot cards enlarged.
+Scope: performance section only. Secure panel and all other website files are untouched.
