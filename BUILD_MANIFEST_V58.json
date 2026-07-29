@@ -1,0 +1,31 @@
+{
+  "version": "V58",
+  "source_zip": "tws-enterprises-website-main.zip",
+  "screenshots": 10,
+  "links": 10,
+  "modified_root_html_files": 50,
+  "new_assets": [
+    "assets/verified-pnl/01-leena-rathod.png",
+    "assets/verified-pnl/02-neha.png",
+    "assets/verified-pnl/03-rahul-jha.png",
+    "assets/verified-pnl/04-shivam-verma.png",
+    "assets/verified-pnl/05-pulkit.png",
+    "assets/verified-pnl/06-sameer.png",
+    "assets/verified-pnl/07-rachita.png",
+    "assets/verified-pnl/08-tanishq.png",
+    "assets/verified-pnl/09-paramjit.png",
+    "assets/verified-pnl/10-raghu.png"
+  ],
+  "scope": [
+    "root HTML mobile performance card",
+    "index performance section",
+    "live-performance page",
+    "style.css P&L overrides"
+  ],
+  "unmodified": [
+    "admin directory",
+    "other assets",
+    "script.js",
+    "all unrelated website content"
+  ]
+}

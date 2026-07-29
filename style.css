@@ -181,3 +181,43 @@ body.video-modal-open{overflow:hidden}
 /* V42: secure TWS Connect admin entry */
 .header-admin-link{padding:11px 14px;border-radius:10px;border:1px solid #bfd3c8;color:#244438;background:#fff;font-size:11px;font-weight:600;transition:transform .22s,border-color .22s,color .22s}.header-admin-link:hover{transform:translateY(-2px);border-color:var(--green);color:var(--green)}
 @media(max-width:1100px){.header-admin-link{display:none}.mobile-menu-actions{grid-template-columns:1fr 1fr}.mobile-menu-actions a:last-child{grid-column:1/-1;background:#fff;color:var(--green);border:1px solid var(--green)}}
+
+
+/* V58 — Verified P&L gallery (replaces performance videos only) */
+.verified-pnl-home .performance-heading{align-items:flex-end}
+.performance-intro{max-width:680px;margin:10px 0 0;color:#aebfb6;font-size:12px}
+.performance-track{align-items:stretch}
+.performance-card.pnl-card{width:360px;padding:13px;overflow:hidden;transition:transform .28s ease,box-shadow .28s ease}
+.performance-card.pnl-card:hover{transform:translateY(-7px);box-shadow:0 22px 55px rgba(0,0,0,.22)}
+.pnl-thumb,.pnl-gallery-image{position:relative;overflow:hidden;background:#eff4f1;border-radius:12px}
+.performance-thumb.pnl-thumb img{width:100%;height:185px;object-fit:contain;border-radius:12px;background:#f5f8f6;transition:transform .38s ease,filter .38s ease}
+.pnl-hover{position:absolute;inset:0;display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:linear-gradient(180deg,rgba(3,18,12,.12),rgba(3,18,12,.86));color:#fff!important;opacity:0;transform:none!important;text-shadow:none!important;transition:opacity .28s ease;pointer-events:none}
+.pnl-hover b{display:inline-flex;align-items:center;justify-content:center;padding:10px 17px;border-radius:999px;background:#fff;color:#096443;font-family:Poppins,sans-serif;font-size:12px;font-weight:600}
+.pnl-hover em{font-style:normal;font-size:10px;color:#dcf4e7}
+.pnl-card:hover .pnl-hover,.pnl-gallery-card:hover .pnl-hover{opacity:1}
+.pnl-card:hover img,.pnl-gallery-card:hover img{transform:scale(1.025);filter:brightness(.72)}
+.performance-card.pnl-card small,.pnl-gallery-card small{letter-spacing:.11em}
+.pnl-disclaimer{margin:25px auto 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.13);color:#aebfb6;font-size:10px;line-height:1.75}
+.verified-pnl-hero{background:radial-gradient(circle at 82% 22%,#11704e 0,#0b3d2b 34%,#061710 72%)}
+.pnl-count{align-self:flex-end;display:inline-flex;padding:10px 15px;border:1px solid #d8e6de;border-radius:999px;color:#0a6544;background:#f2faf6;font-size:11px;font-weight:600;white-space:nowrap}
+.performance-gallery-card.pnl-gallery-card{padding:13px;transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease}
+.performance-gallery-card.pnl-gallery-card:hover{transform:translateY(-7px);border-color:#a7d8c0;box-shadow:0 22px 55px rgba(10,57,39,.13)}
+.pnl-gallery-image{aspect-ratio:2/1}
+.performance-gallery-card.pnl-gallery-card .pnl-gallery-image img{width:100%;height:100%;object-fit:contain;border-radius:11px;background:#f5f8f6;transition:transform .38s ease,filter .38s ease}
+.performance-gallery-card.pnl-gallery-card p{margin:5px 0 2px;font-size:11px;color:#66756d}
+.pnl-disclaimer-light{margin-top:28px;padding:18px 20px;border:1px solid #d9e7df;border-radius:13px;background:#f5faf7;color:#596b62;font-size:11px}
+.mobile-performance a{position:relative;overflow:hidden}
+.mobile-performance img{object-fit:contain!important;background:#f5f8f6}
+.mobile-performance i{position:absolute!important;inset:auto 9px 9px auto!important;display:inline-flex!important;width:auto!important;height:auto!important;padding:7px 10px;border-radius:999px;background:#fff;color:#096443!important;font-family:Poppins,sans-serif;font-size:9px!important;font-style:normal;font-weight:600;text-shadow:none!important}
+@media(max-width:720px){
+  .performance-heading{display:block}
+  .performance-heading>a{display:inline-flex;margin-top:16px}
+  .performance-intro{font-size:11px}
+  .performance-card.pnl-card{width:300px}
+  .performance-thumb.pnl-thumb img{height:155px}
+  .pnl-hover{opacity:1;justify-content:flex-end;align-items:flex-start;padding:12px;background:linear-gradient(180deg,transparent 40%,rgba(3,18,12,.82))}
+  .pnl-hover b{padding:8px 12px;font-size:10px}
+  .pnl-hover em{display:none}
+  .pnl-count{margin-top:15px}
+  .pnl-gallery-image{aspect-ratio:1.9/1}
+}

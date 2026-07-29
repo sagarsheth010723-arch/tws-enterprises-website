@@ -1,0 +1,4 @@
+TWS V58 — VERIFIED P&L SCREENSHOT GALLERY
+10 screenshots matched to 10 individual verification links.
+Performance videos removed from homepage, performance page and mobile performance card.
+All other website/admin content remains based on the uploaded GitHub ZIP.
