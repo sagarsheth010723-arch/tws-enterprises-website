@@ -1,0 +1,10 @@
+IMPORTANT — UPLOAD TO REPOSITORY ROOT
+
+1. Extract this ZIP.
+2. Open the extracted folder.
+3. Select ALL items visible there, including the folder named tws-one.
+4. Upload those items to the GitHub repository root.
+5. DO NOT open the tws-one folder and upload its contents to the root.
+6. DO NOT delete admin, secure-panel, assets, or any existing files.
+
+This patch restores the main TWS website pages that may have been overwritten and keeps TWS ONE at /tws-one/.

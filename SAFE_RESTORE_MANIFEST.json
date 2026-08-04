@@ -1,0 +1,16 @@
+{
+  "total_files": 64,
+  "root_restore_files": [
+    "index.html",
+    "services.html",
+    "privacy-policy.html",
+    "risk-disclaimer.html",
+    "terms-and-conditions.html",
+    "cancellation-policy.html",
+    "refund-policy.html",
+    "style.css"
+  ],
+  "contains_admin": false,
+  "contains_secure_panel": false,
+  "tws_one_files": 53
+}
