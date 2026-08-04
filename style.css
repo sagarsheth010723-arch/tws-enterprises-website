@@ -281,3 +281,11 @@ body.video-modal-open{overflow:hidden}
   .performance-gallery-card.pnl-gallery-card{padding:8px;border-radius:16px}
   .pnl-gallery-image,.performance-gallery-card.pnl-gallery-card .pnl-gallery-image img{border-radius:11px}
 }
+
+/* TWS ONE microsite entry */
+.desktop-nav .tws-one-entry{background:linear-gradient(135deg,#061a3a,#0c315d)!important;color:#fff!important;border:1px solid rgba(4,213,207,.35);box-shadow:0 8px 24px rgba(3,22,49,.14);margin-left:3px}
+.desktop-nav .tws-one-entry:hover{background:linear-gradient(135deg,#07325f,#075f70)!important;color:#37f0e8!important;transform:translateY(-1px)}
+.mobile-menu .mobile-tws-one{margin-top:9px;padding:14px 15px!important;border:1px solid rgba(4,213,207,.35)!important;border-radius:14px;background:linear-gradient(135deg,#061a3a,#0b3a62);color:#fff!important}
+.mobile-menu .mobile-tws-one:after{content:'Build. Launch. Scale.';display:block;margin-left:auto;color:#54e6df;font-size:8px;letter-spacing:.08em}
+.site-footer .footer-tws-one{color:#18c9c4!important;font-weight:600}
+@media(max-width:1180px){.desktop-nav .tws-one-entry{padding-left:9px!important;padding-right:9px!important;font-size:11px!important}}
