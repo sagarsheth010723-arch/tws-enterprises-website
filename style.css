@@ -282,10 +282,8 @@ body.video-modal-open{overflow:hidden}
   .pnl-gallery-image,.performance-gallery-card.pnl-gallery-card .pnl-gallery-image img{border-radius:11px}
 }
 
+
 /* TWS ONE microsite entry */
-.desktop-nav .tws-one-entry{background:linear-gradient(135deg,#061a3a,#0c315d)!important;color:#fff!important;border:1px solid rgba(4,213,207,.35);box-shadow:0 8px 24px rgba(3,22,49,.14);margin-left:3px}
-.desktop-nav .tws-one-entry:hover{background:linear-gradient(135deg,#07325f,#075f70)!important;color:#37f0e8!important;transform:translateY(-1px)}
-.mobile-menu .mobile-tws-one{margin-top:9px;padding:14px 15px!important;border:1px solid rgba(4,213,207,.35)!important;border-radius:14px;background:linear-gradient(135deg,#061a3a,#0b3a62);color:#fff!important}
-.mobile-menu .mobile-tws-one:after{content:'Build. Launch. Scale.';display:block;margin-left:auto;color:#54e6df;font-size:8px;letter-spacing:.08em}
-.site-footer .footer-tws-one{color:#18c9c4!important;font-weight:600}
-@media(max-width:1180px){.desktop-nav .tws-one-entry{padding-left:9px!important;padding-right:9px!important;font-size:11px!important}}
+.desktop-nav .tws-one-entry{display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:999px;background:linear-gradient(135deg,#061a3a,#0d315e);color:#fff!important;box-shadow:0 8px 20px rgba(6,26,58,.16);transition:transform .2s ease,box-shadow .2s ease}
+.desktop-nav .tws-one-entry span{color:#26ddd8;font-size:10px}.desktop-nav .tws-one-entry:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(6,26,58,.23)}
+.mobile-menu .mobile-tws-one{display:flex!important;align-items:center;justify-content:space-between;border:1px solid #bdeeea!important;background:linear-gradient(135deg,#eefdfc,#f7fbff)!important;color:#061a3a!important}.mobile-menu .mobile-tws-one span{font-size:9px;color:#008f8a;font-weight:600;letter-spacing:.04em}

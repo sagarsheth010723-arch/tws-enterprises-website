@@ -1,3 +1,2 @@
-TWS ONE V1 — Independent Digital Technology Microsite
-Build date: 2026-08-04
-Base: latest uploaded GitHub website ZIP
+TWS ONE V1 — Independent technology microsite with QicApp-inspired original portfolio experience
+Built from latest master ZIP. Existing admin and secure-panel folders are not modified.
